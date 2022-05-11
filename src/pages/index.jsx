@@ -3,8 +3,13 @@
 export default function(){
   
   return(
-    <div >
-
+    <div className="d-flex">
+      <div>
+        1
+      </div>
+      <div>
+        2
+      </div>
     </div>
   )
 }
