@@ -1,22 +1,22 @@
 import { query } from "../helpers/config";
 import { conditionConverter } from "../helpers/functions";
 
+type Fields = {
+  name: string;
+  type: string;
+  dependency?: {
+    type: string;
+    table: string;
+    field: string;
+  };
+};
 export default class ActionRecord {
   tableName = "";
-  fields: {
-    name: string;
-    type: string;
-    dependency?:{
-      type: string;
-      table: string;
-      field: string;
-    }
-  }[];
+  fields: Fields[];
   async Find(
     tables: {
       type: string;
-      name: string;
-      condition: string;
+      fieldName: string;
     }[] = [],
     conditions: string = "",
     fields: string[] = [],
@@ -31,14 +31,24 @@ export default class ActionRecord {
     } else {
       sql += "* ";
     }
+    sql += `FROM ${this.tableName} `;
     if (tables.length > 0) {
-      sql += `FROM ${tables[0].name} `;
-      tables = tables.splice(0, 1);
       sql += tables.reduce((total, table) => {
-        return total + `${table.type} JOIN ${table.name} ON ${table.condition}`;
+        let theField: Fields | undefined = this.fields.find(
+          (value) => value.name == table.fieldName
+        );
+        if (
+          typeof theField === "undefined" ||
+          !"isfk,multifk".includes(theField.dependency.type)
+        )
+          return total;
+        return (
+          total +
+          `${table.type} JOIN ${
+            theField.dependency.table
+          } ON ${`\`${this.tableName}\`.\`${theField.name}\` = \`${theField.dependency.table}\`.\`${theField.dependency.field}\` `}`
+        );
       }, "");
-    } else {
-      sql += `FROM ${this.tableName} `;
     }
     if (conditions.length > 0) {
       let con = conditionConverter(conditions);
@@ -56,23 +66,19 @@ export default class ActionRecord {
     if (orderType !== "") {
       sql += orderType + " ";
     }
-    console.log(sql);
     let r = await query(sql);
     return r;
   }
 
-  async Insert(fields: string[], values: string[] | number[]) {
-    let index = fields.findIndex((val) => val.toLowerCase() === "id");
-    if (index !== -1) {
-      fields.splice(index, 1);
-      values.splice(index, 1);
-    }
-    let sql = `INSERT INTO ${this.tableName}(${fields
-      .map((value: string) => "`" + value + "`")
-      .join(", ")}) VALUES (${values
-      .map((value: string | number) => `"${value.toString()}"`)
+  async Insert(data: object) {
+    try {
+      delete data["id"];
+    } catch (e) {}
+    let sql = `INSERT INTO ${this.tableName}(${Object.keys(data)
+      .map((value: string) => `\`${value}\``)
+      .join(", ")}) VALUES (${Object.keys(data)
+      .map((value: string) => `"${data[value].toString()}"`)
       .join(", ")})`;
-    console.log(sql);
     let r = await query(sql);
     r = { id: r.insertId };
     return r;
@@ -87,7 +93,6 @@ export default class ActionRecord {
       return `\`${value}\` = '${keyvalues[value]}'`;
     });
     let sql = `UPDATE ${this.tableName} SET ${kv.join(", ")}${con}`;
-    console.log(sql);
     await query(sql);
     return true;
   }
@@ -98,7 +103,6 @@ export default class ActionRecord {
       con = " WHERE " + conditionConverter(conditions);
     }
     let sql = `DELETE FROM ${this.tableName}${con}`;
-    console.log(sql);
     await query(sql);
     return true;
   }
