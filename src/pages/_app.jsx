@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
 import "bootstrap/dist/css/bootstrap.css";
-import "./login.scss";
+import "./style.scss";
 export default function MyApp({ Component, pageProps }) {
   useEffect(() => {
     import("bootstrap/dist/js/bootstrap");

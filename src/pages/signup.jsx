@@ -1,17 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import closeEye from "../Front-End/assets/images/icons8-closed-eye-24.png";
 import openEye from "../Front-End/assets/images/icons8-eye-24.png";
-const Signup = () => {
+const Signup = ({ setShowFirst }) => {
+  const [eye, setEye] = useState(true);
   function showPassword() {
     var x = document.getElementById("password");
     if (x.type === "password") {
       x.type = "text";
+      setEye(false);
     } else {
       x.type = "password";
+      setEye(true);
     }
   }
   return (
-    <div className="col-4 signup">
+    <div className="col-12 col-md-4 col-lg-4 signup">
       <form>
         <div className="mb-3">
           <label for="firstname" className="form-label">
@@ -43,9 +46,20 @@ const Signup = () => {
           />
         </div>
         <div className="mb-3">
-          <label for="password" className="form-label">
-            رمز عبور
-          </label>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <label for="password" className="form-label">
+              رمز عبور
+            </label>
+            {eye ? (
+              <span>
+                <img src={openEye.src} alt="openEye" onClick={showPassword} />
+              </span>
+            ) : (
+              <span>
+                <img src={closeEye.src} alt="closeEye" onClick={showPassword} />
+              </span>
+            )}
+          </div>
           <input
             type="password"
             className="form-control"
@@ -67,6 +81,7 @@ const Signup = () => {
         حساب کاربری دارید؟{" "}
         <span
           style={{ cursor: "pointer", color: "#827397", fontWeight: "500" }}
+          onClick={(e) => setShowFirst(false)}
         >
           وارد شوید
         </span>

@@ -1,15 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import pic from "../Front-End/assets/images/blog-wp-login.png";
 import Signup from "./signup";
 import Signin from "./signin";
 const Login = () => {
+  const [showFirst, setShowFirst] = useState(true);
   return (
     <>
-      <div>
-        <img src={pic} alt="picture login" />
+      <div className="col-4 col-md-6">
+        <img
+          src={pic.src}
+          alt="picture login"
+          style={{ marginTop: "150px" }}
+          className="col-7"
+        />
       </div>
-      <Signup />
-      <Signin />
+      {showFirst ? (
+        <Signup setShowFirst={setShowFirst} />
+      ) : (
+        <Signin setShowFirst={setShowFirst} />
+      )}
     </>
   );
 };

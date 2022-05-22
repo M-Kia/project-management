@@ -1,9 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import closeEye from "../Front-End/assets/images/icons8-closed-eye-24.png";
 import openEye from "../Front-End/assets/images/icons8-eye-24.png";
-const Singin = () => {
+const Singin = ({ setShowFirst }) => {
+  const [eye, setEye] = useState(true);
+  function showPassword() {
+    var x = document.getElementById("password");
+    if (x.type === "password") {
+      x.type = "text";
+      setEye(false);
+    } else {
+      x.type = "password";
+      setEye(true);
+    }
+  }
   return (
-    <div className="col-4 signin">
+    <div className="col-12 col-md-4 col-lg-4 signin">
       <form>
         <div className="mb-3">
           <label for="username" className="form-label">
@@ -12,9 +23,20 @@ const Singin = () => {
           <input type="text" className="form-control" id="username" />
         </div>
         <div className="mb-3">
-          <label for="password" className="form-label">
-            رمز عبور
-          </label>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <label for="password" className="form-label">
+              رمز عبور
+            </label>
+            {eye ? (
+              <span>
+                <img src={openEye.src} alt="openEye" onClick={showPassword} />
+              </span>
+            ) : (
+              <span>
+                <img src={closeEye.src} alt="closeEye" onClick={showPassword} />
+              </span>
+            )}
+          </div>
           <input
             type="password"
             className="form-control"
@@ -30,6 +52,7 @@ const Singin = () => {
         حساب کاربری ندارید؟{" "}
         <span
           style={{ cursor: "pointer", color: "#827397", fontWeight: "500" }}
+          onClick={(e) => setShowFirst(true)}
         >
           ثبت نام کنید
         </span>
