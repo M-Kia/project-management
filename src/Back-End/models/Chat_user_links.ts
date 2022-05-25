@@ -24,6 +24,7 @@ export default class Chat_user_links extends ActionRecord {
       },
     },
     { name: "type", type: "int" }, // 0 => pending, 1 => joined
+    { name: "user_type", type: "int" }, // 0 => member, 1 => admin, 2 => owner
     {
       name: "last_message_saw",
       type: "int",
