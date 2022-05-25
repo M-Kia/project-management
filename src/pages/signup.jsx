@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-
-import apihandler from "../Front-End/utilities/apihandler";
+import ImageInput from "./ImageInput";
+import { apihandler } from "../Front-End/utilities/apihandler";
 import "react-toastify/dist/ReactToastify.css";
 import closeEye from "../Front-End/assets/images/icons8-closed-eye-24.png";
 import openEye from "../Front-End/assets/images/icons8-eye-24.png";
@@ -29,7 +29,7 @@ const Signup = ({ setShowFirst }) => {
   const onClickHandlerSubmit = (e) => {
     e.preventDefault();
     if (username == "" && password == "" && passwordConfirm == "") {
-      toast.error("فیلد های ضروری را پر کنید.", {
+      toast.error("فیلد های ضروری را پر کنید", {
         position: "top-center",
         autoClose: 3000,
         hideProgressBar: false,
@@ -93,11 +93,28 @@ const Signup = ({ setShowFirst }) => {
       lastname: lastname,
       username: username,
       email: email,
+      password: password,
     });
   };
   return (
     <div className="col-12 col-md-4 col-lg-4 signup">
       <form>
+        {/* <div
+          className="mb-3"
+          style={{
+            width: 120,
+            height: 120,
+            fontSize: "20px",
+            margin: "0px auto",
+          }}
+        >
+          <ImageInput
+            src="https://static.toiimg.com/photo/75503656.cms"
+            radiusPercentage={50}
+            width={300}
+            height={300}
+          />
+        </div> */}
         <div className="mb-3">
           <label for="firstname" className="form-label">
             نام
