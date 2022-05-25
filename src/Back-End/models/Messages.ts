@@ -6,7 +6,7 @@ export default class Messages extends ActionRecord {
   fields = [
     { name: "id", type: "int" },
     {
-      name: "group_id",
+      name: "chat_id",
       type: "int",
       dependency: {
         type: "isfk",
@@ -54,5 +54,6 @@ export default class Messages extends ActionRecord {
         field: "id",
       },
     },
+    { name: "mtm", type: "varchar(255)" },
   ];
 }

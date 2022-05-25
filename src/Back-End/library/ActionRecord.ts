@@ -1,6 +1,9 @@
 import { query } from "../helpers/config";
 import { conditionConverter } from "../helpers/functions";
 
+// export class types for insert and update inputs and find exports
+// find dependency set name for fields to diagnose
+
 type Fields = {
   name: string;
   type: string;
@@ -13,13 +16,14 @@ type Fields = {
 export default class ActionRecord {
   tableName = "";
   fields: Fields[];
-  async Find(
+  
+  async find(
+    conditions: string = "",
+    fields: string[] = [],
     tables: {
       type: string;
       fieldName: string;
     }[] = [],
-    conditions: string = "",
-    fields: string[] = [],
     page: number = 0,
     count: number = 0,
     orderBy: string[] = [],
@@ -70,7 +74,7 @@ export default class ActionRecord {
     return r;
   }
 
-  async Insert(data: object) {
+  async insert(data: Object) {
     try {
       delete data["id"];
     } catch (e) {}
@@ -84,7 +88,7 @@ export default class ActionRecord {
     return r;
   }
 
-  async Update(keyvalues: Object, conditions: string = "") {
+  async update(keyvalues: Object, conditions: string = "") {
     let con = "";
     if (conditions.length > 0) {
       con = " WHERE " + conditionConverter(conditions);
@@ -97,7 +101,7 @@ export default class ActionRecord {
     return true;
   }
 
-  async Delete(conditions: string = "") {
+  async delete(conditions: string = "") {
     let con = "";
     if (conditions.length > 0) {
       con = " WHERE " + conditionConverter(conditions);

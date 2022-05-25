@@ -2,15 +2,25 @@ import { capitalize } from "../helpers/functions";
 import type ActionRecord from "./ActionRecord";
 import { query } from "../helpers/config";
 
-import Customers from "../models/Customers";
 import Images from "../models/Images";
+import Chat_user_links from "../models/Chat_user_links";
+import Chats from "../models/Chats";
+import Messages from "../models/Messages";
+import Users from "../models/Users";
 
 export const CLASSES = {
-  Customers: () => new Customers(),
   Images: () => new Images(),
+  Chat_user_links: () => new Chat_user_links(),
+  Chats: () => new Chats(),
+  Messages: () => new Messages(),
+  Users: () => new Users(),
 };
 
-async function tablesChecker() {
+export function pathMaker(path) {
+  return `http://localhost:300/${path}`;
+}
+
+export async function tablesChecker() {
   let tables = await query(
     `SELECT TABLE_NAME as tablename, COLUMN_NAME as column_name, COLUMN_TYPE as column_type FROM information_schema.columns WHERE TABLE_SCHEMA = 'test';`
   );
@@ -62,8 +72,6 @@ async function tablesChecker() {
   });
 }
 
-tablesChecker();
-
 export default class Controler {
   async Action(query: string, posts: any) {
     let q = query.split("_");
@@ -107,7 +115,7 @@ export default class Controler {
         if (posts.orderType) {
           orderType = posts.orderType;
         }
-        result = await x.Find(
+        result = await x.find(
           [],
           conditions,
           fields,
@@ -120,13 +128,13 @@ export default class Controler {
       case "Insert":
         let keys = Object.keys(posts),
           values = keys.map((value) => posts[value]);
-        result = await x.Insert(keys, values);
+        result = await x.insert(keys, values);
         break;
       case "Update":
-        result = await x.Update(posts.keyvalues, posts.conditions);
+        result = await x.update(posts.keyvalues, posts.conditions);
         break;
       case "Delete":
-        result = await x.Delete(posts.conditions);
+        result = await x.delete(posts.conditions);
         break;
       default:
         throw new Error("Wrong Action!?");
