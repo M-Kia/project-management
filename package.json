@@ -28,7 +28,7 @@
     "react-dom": "^18.1.0",
     "react-gradient-progress": "^1.0.3",
     "react-scripts": "5.0.1",
-    "sass": "^1.49.9",
+    "sass": "^1.51.0",
     "suneditor": "^2.42.0",
     "suneditor-react": "^3.4.0",
     "types-suneditor": "^1.0.0",
