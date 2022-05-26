@@ -38,7 +38,7 @@ const Singin = ({ setShowFirst }) => {
     });
   };
   return (
-    <div className="col-12 col-md-4 col-lg-4 signin">
+    <div className="col-12 col-md-4 col-lg-3 signin">
       <form>
         <div className="mb-3">
           <label for="username" className="form-label">
