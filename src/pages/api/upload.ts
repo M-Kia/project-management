@@ -39,7 +39,6 @@ export default async function hander(
         
         if (files.files.filepath) {
           let id = await controller.upload(files.files);
-          console.log(id);
           answer.push(id);
         } else {
           answer = await controller.groupUpload(files.files);
@@ -47,7 +46,6 @@ export default async function hander(
         resolve({ err, fields, files });
       });
     });
-    console.log(data);
     result = {
       status: true,
       result: {
