@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import Controler from "../../BackEnd/library/Controler";
+import Controler from "../../Back-End/library/Controler";
 
 type Data = {
   status: boolean;

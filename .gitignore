@@ -56,3 +56,6 @@ yarn-error.log*
 # vercel
 .vercel
 /doc
+
+# images
+src/Back-End/uploads

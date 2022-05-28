@@ -20,6 +20,8 @@ export function pathMaker(path) {
   return `http://localhost:300/${path}`;
 }
 
+// TODO: set and check primary and foreign keys
+
 export async function tablesChecker() {
   let tables = await query(
     `SELECT TABLE_NAME as tablename, COLUMN_NAME as column_name, COLUMN_TYPE as column_type FROM information_schema.columns WHERE TABLE_SCHEMA = 'test';`
