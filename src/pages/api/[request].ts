@@ -12,11 +12,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
+  let result: Data;
   const request =
     typeof req.query.request === "string"
       ? req.query.request
       : req.query.request[0];
-  let result: Data;
   try {
     let act = new Controler();
     let answer = await act.Action(request, req.body);

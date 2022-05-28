@@ -11,6 +11,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
+  let result: Data;
   try {
     let { username, password } = req.body;
     if (!(username && password)) throw new Error("missing argument");

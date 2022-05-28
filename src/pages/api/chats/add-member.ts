@@ -11,6 +11,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
+  let result: Data;
   try {
     let { userId, chat_id } = req.body;
     if (!(userId, chat_id)) throw new Error("missing argument");

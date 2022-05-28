@@ -12,6 +12,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
+  let result: Data;
   try {
     let { userIds, ownerId, profile_id, title, type } = req.body;
     if (!(userIds && ownerId && profile_id && title && type))

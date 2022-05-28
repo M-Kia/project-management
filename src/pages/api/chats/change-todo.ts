@@ -14,6 +14,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
+  let result: Data;
   try {
     let { message_id, todo_status } = req.body;
     if (!(message_id, todo_status)) throw new Error("missing argument");
