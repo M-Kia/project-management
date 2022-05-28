@@ -3,9 +3,9 @@ import { ToastContainer, toast } from "react-toastify";
 import ImageInput from "./ImageInput";
 import { apiHandler, formApiHandler } from "../utilities/apihandler";
 import "react-toastify/dist/ReactToastify.css";
-import closeEye from "../Front-End/assets/images/icons8-closed-eye-24.png";
-import openEye from "../Front-End/assets/images/icons8-eye-24.png";
-import defaultImage from "../Front-End/assets/images/173-1731325_person-icon-png-transparent-png.png";
+import closeEye from "../assets/images/icons8-closed-eye-24.png";
+import openEye from "../assets/images/icons8-eye-24.png";
+import defaultImage from "../assets/images/173-1731325_person-icon-png-transparent-png.png";
 
 const Signup = ({ setShowFirst }) => {
   const [eye, setEye] = useState(true);
@@ -98,6 +98,29 @@ const Signup = ({ setShowFirst }) => {
       email: email,
       password: password,
       profile_img_id: fileId,
+    }).then((res) => {
+      if (res.data.status) {
+        toast.success("ثبت نام شما با موفقیت انجام شد", {
+          position: "top-left",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        setShowFirst(false);
+      } else {
+        toast.error("مشکلی در ثبت نام شما به وجود آمده است", {
+          position: "top-left",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
     });
   };
 
@@ -235,7 +258,6 @@ const Signup = ({ setShowFirst }) => {
           وارد شوید
         </span>
       </div>
-      <ToastContainer />
     </div>
   );
 };

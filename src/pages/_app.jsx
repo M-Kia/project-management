@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { ToastContainer } from "react-toastify";
 
 import "bootstrap/dist/css/bootstrap.css";
 import "./style.scss";
@@ -9,6 +10,7 @@ export default function MyApp({ Component, pageProps }) {
   return (
     <div dir="rtl">
       <Component {...pageProps} />
+      <ToastContainer />
     </div>
   );
 }

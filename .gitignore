@@ -58,4 +58,4 @@ yarn-error.log*
 /doc
 
 # images
-src/Back-End/uploads
+src/Back-End/uploads/*

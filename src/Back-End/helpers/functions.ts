@@ -91,7 +91,7 @@ function checkInputs(
 } {
   let missings = [],
     status = true,
-    data: { [key: string]: string };
+    data: { [key: string]: string } = {};
   names.forEach((value) => {
     if (typeof post[value] === "undefined") {
       status = false;

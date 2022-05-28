@@ -20,27 +20,5 @@ export async function formApiHandler(functionName, data) {
 }
 
 export async function apiHandler(functionName, data) {
-  return axios
-    .post(`http://localhost:3000/api/${functionName}`, data)
-    .then((res) =>
-      res.data.status
-        ? toast.success("ثبت نام شما با موفقیت انجام شد", {
-            position: "top-left",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          })
-        : toast.error("مشکلی در ثبت نام شما به وجود آمده است", {
-            position: "top-left",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          })
-    );
+  return axios.post(`http://localhost:3000/api/${functionName}`, data);
 }

@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { apihandler } from "../utilities/apihandler";
 
-import closeEye from "../Front-End/assets/images/icons8-closed-eye-24.png";
-import openEye from "../Front-End/assets/images/icons8-eye-24.png";
+import closeEye from "../assets/images/icons8-closed-eye-24.png";
+import openEye from "../assets/images/icons8-eye-24.png";
 const Singin = ({ setShowFirst }) => {
   const [eye, setEye] = useState(true);
   const [username, setUsername] = useState("");
@@ -90,7 +90,6 @@ const Singin = ({ setShowFirst }) => {
           ثبت نام کنید
         </span>
       </div>
-      <ToastContainer />
     </div>
   );
 };
