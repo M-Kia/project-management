@@ -63,8 +63,6 @@ export default function () {
           className="row"
           style={{ margin: "0px", justifyContent: "center" }}
         >
-          {/* <SideBar data={data} />
-          <ShowPage /> */}
           <Login />
         </div>
       </MessangerContextProvider>

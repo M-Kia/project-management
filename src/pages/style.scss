@@ -25,6 +25,10 @@
   }
 }
 .sidebar {
+  border: 1px solid #827397;
+  border-radius: 15px;
+  height: 800px;
+
   & .card {
     display: flex;
     flex-direction: row;
@@ -66,6 +70,24 @@
       border-radius: 50%;
       text-align: center;
       color: white;
+    }
+  }
+  & .plus {
+    background-color: #363062;
+    border: 1px solid #363062;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    padding: 10px;
+    position: absolute;
+    bottom: 150px;
+    cursor: pointer;
+    & img {
+      width: 35px;
+      height: 35px;
+    }
+    &:hover {
+      background-color: #4d4c7d;
     }
   }
 }
