@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import closeEye from "../assets/images/icons8-closed-eye-24.png";
 import openEye from "../assets/images/icons8-eye-24.png";
 import defaultImage from "../assets/images/173-1731325_person-icon-png-transparent-png.png";
+import useToastify from "../hooks/useToastify";
 
 const Signup = ({ setShowFirst }) => {
   const [eye, setEye] = useState(true);
@@ -32,63 +33,23 @@ const Signup = ({ setShowFirst }) => {
   const onClickHandlerSubmit = (e) => {
     e.preventDefault();
     if (username == "" && password == "" && passwordConfirm == "") {
-      toast.error("فیلد های ضروری را پر کنید", {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      useToastify("فیلد های ضروری را پر کنید", "error");
       return;
     }
     if (username.trim() == "" || !regexUsername.test(username)) {
-      toast.error("نام کاربری را به درستی وارد نمایید", {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      useToastify("نام کاربری را به درستی وارد نمایید", "error");
       return;
     }
     if (email.trim() == "" || !regexEmail.test(email)) {
-      toast.error("ایمیل را به درستی وارد نمایید", {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      useToastify(("ایمیل را به درستی وارد نمایید", "error"));
       return;
     }
     if (password.trim == "" || !regexPassword.test(password)) {
-      toast.error("حداقل 8 رقم برای رمز عبور وارد کنید", {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      useToastify("حداقل 8 رقم برای رمز عبور وارد کنید", "error");
       return;
     }
     if (password != passwordConfirm) {
-      toast.error("تکرار رمز عبور صحیح نمیباشد", {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      useToastify("تکرار رمز عبور صحیح نمیباشد", "error");
       return;
     }
     apiHandler("auth/signup", {
@@ -100,26 +61,10 @@ const Signup = ({ setShowFirst }) => {
       profile_img_id: fileId,
     }).then((res) => {
       if (res.data.status) {
-        toast.success("ثبت نام شما با موفقیت انجام شد", {
-          position: "top-left",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        useToastify("ثبت نام شما با موفقیت انجام شد", "success");
         setShowFirst(false);
       } else {
-        toast.error("مشکلی در ثبت نام شما به وجود آمده است", {
-          position: "top-left",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        useToastify("مشکلی در ثبت نام شما به وجود آمده است", "error");
       }
     });
   };
