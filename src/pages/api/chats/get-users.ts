@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { makePath } from "../../../Back-End/helpers/functions";
 import Users from "../../../Back-End/models/Users";
 
 type Data = {
@@ -19,6 +20,9 @@ export default async function handler(
       [],
       [{ type: "LEFT", fieldName: "profile_img_id" }]
     );
+    for (let i = 0; i < res.length; i++) {
+      res[i].path = makePath(res[i].path);
+    }
     result = {
       status: true,
       result: {

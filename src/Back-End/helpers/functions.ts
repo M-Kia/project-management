@@ -109,4 +109,8 @@ function checkInputs(
   };
 }
 
-export { capitalize, conditionConverter, checkInputs };
+function makePath(path: string){
+  return `http://localhost:3000/files/${path}`;
+}
+
+export { capitalize, conditionConverter, checkInputs, makePath };
