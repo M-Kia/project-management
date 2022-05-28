@@ -1,8 +1,8 @@
-export function capitalize(text: string): string {
+function capitalize(text: string): string {
   return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
 }
 
-export function conditionConverter(text: string): string {
+function conditionConverter(text: string): string {
   let result: any = seprateParantheses(text);
   result = converter(result);
   result = mergeParantheses(result);
@@ -80,3 +80,33 @@ function converter(con: string | string[]) {
 
   return temp.join(" AND ");
 }
+
+function checkInputs(
+  names: string[],
+  post: { [key: string]: string }
+): {
+  status: boolean;
+  data: { [key: string]: string };
+  missings: string;
+} {
+  let missings = [],
+    status = true,
+    data: { [key: string]: string };
+  names.forEach((value) => {
+    if (typeof post[value] === "undefined") {
+      status = false;
+      missings.push(value);
+      return;
+    }
+    data[value] = post[value];
+  });
+
+  return {
+    status,
+    data,
+    missings:
+      missings.length > 0 ? `missing arguments: ${missings.join(", ")}` : "",
+  };
+}
+
+export { capitalize, conditionConverter, checkInputs };

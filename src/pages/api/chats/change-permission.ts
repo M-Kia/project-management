@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { checkInputs } from "../../../Back-End/helpers/functions";
 import Chat_user_links from "../../../Back-End/models/Chat_user_links";
 
 type Data = {
@@ -13,8 +14,9 @@ export default async function handler(
 ) {
   let result: Data;
   try {
-    let { userId, chat_id, user_type } = req.body;
-    if (!(userId, chat_id, user_type)) throw new Error("missing argument");
+    let checker = checkInputs(["userId", "chat_id", "user_type"], req.body);;
+    if (!checker.status) throw new Error(checker.missings);
+    let { userId, chat_id, user_type } = checker.data;
 
     let cul = new Chat_user_links();
 

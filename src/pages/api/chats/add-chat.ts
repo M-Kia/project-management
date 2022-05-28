@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { checkInputs } from "../../../Back-End/helpers/functions";
 import Chats from "../../../Back-End/models/Chats";
 import Chat_user_links from "../../../Back-End/models/Chat_user_links";
 
@@ -14,23 +15,29 @@ export default async function handler(
 ) {
   let result: Data;
   try {
-    let { userIds, ownerId, profile_id, title, type } = req.body;
-    if (!(userIds && ownerId && profile_id && title && type))
-      throw new Error("missing argument");
-    let c = new Chats(), cul = new Chat_user_links();
+    let checker = checkInputs(
+      ["userIds", "ownerId", "profile_id", "title", "type"],
+      req.body
+    );
+    if (!checker.status) throw new Error(checker.missings);
+    let { userIds, ownerId, profile_id, title, type } = checker.data;
+    let c = new Chats(),
+      cul = new Chat_user_links();
     let res = await c.insert({
       title,
       type,
       profile_id,
     });
-    await Promise.all(userIds.split(",").map(async value => {
-      await cul.insert({
-        chat_id: res.id,
-        user_id: value,
-        type: 1,
-        user_type: value == ownerId ? 2 : 0
+    await Promise.all(
+      userIds.split(",").map(async (value) => {
+        await cul.insert({
+          chat_id: res.id,
+          user_id: value,
+          type: 1,
+          user_type: value == ownerId ? 2 : 0,
+        });
       })
-    }))
+    );
     result = {
       status: true,
       result: {

@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { checkInputs } from "../../../Back-End/helpers/functions";
 import Users from "../../../Back-End/models/Users";
 
 type Data = {
@@ -13,8 +14,9 @@ export default async function handler(
 ) {
   let result: Data;
   try {
-    let { username, password } = req.body;
-    if (!(username && password)) throw new Error("missing argument");
+    let checker = checkInputs(["username", "password"], req.body);
+    if (!checker.status) throw new Error(checker.missings);
+    let { username, password } = checker.data;
 
     let u = new Users();
 

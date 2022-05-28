@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { checkInputs } from "../../../Back-End/helpers/functions";
 import Chats from "../../../Back-End/models/Chats";
 import Chat_user_links from "../../../Back-End/models/Chat_user_links";
 import Messages from "../../../Back-End/models/Messages";
@@ -16,15 +17,19 @@ export default async function handler(
 ) {
   let result: Data;
   try {
-    let { userId, chat_id, text, type, reply_id } = req.body;
-    if (!(userId, chat_id, text, type, reply_id))
-      throw new Error("missing argument");
+    let checker = checkInputs(
+      ["userId", "chat_id", "text", "type", "reply_id"],
+      req.body
+    );
+    if (!checker.status) throw new Error(checker.missings);
+    let { userId, chat_id, text, type, reply_id } = checker.data;
 
     let m = new Messages();
 
     await m.insert({
       chat_id,
       sender_id: userId,
+      text,
       type,
       reply_id,
     });

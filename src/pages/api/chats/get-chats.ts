@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { checkInputs } from "../../../Back-End/helpers/functions";
 import { pathMaker } from "../../../Back-End/library/Controler";
 import Chats from "../../../Back-End/models/Chats";
 import Chat_user_links from "../../../Back-End/models/Chat_user_links";
@@ -42,8 +43,9 @@ export default async function handler(
 ) {
   let result: Data;
   try {
-    let { userId } = req.body;
-    if (!userId) throw new Error("missing argument");
+    let checker = checkInputs(["userId"], req.body);
+    if (!checker.status) throw new Error(checker.missings);
+    let { userId } = checker.data;
 
     let cul = new Chat_user_links(),
       c = new Chats(),
@@ -51,7 +53,7 @@ export default async function handler(
       m = new Messages(),
       img = new Images();
 
-    let res, answer: Answer[];
+    let answer: Answer[];
 
     rrr = await cul.find(`user_id/=/${userId}`);
     for (let i = 0; i < rrr.lengh; i++) {
