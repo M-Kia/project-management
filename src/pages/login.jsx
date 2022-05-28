@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import pic from "../Front-End/assets/images/blog-wp-login.png";
-import Signup from "./signup";
-import Signin from "./signin";
+import Signup from "../Front-End/components/signup";
+import Signin from "../Front-End/components/signin";
 const Login = () => {
   const [showFirst, setShowFirst] = useState(false);
   return (

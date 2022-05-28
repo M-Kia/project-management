@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import ImageInput from "./ImageInput";
-import { apiHandler,formApiHandler } from "../Front-End/utilities/apihandler";
+import { apiHandler, formApiHandler } from "../utilities/apihandler";
 import "react-toastify/dist/ReactToastify.css";
 import closeEye from "../Front-End/assets/images/icons8-closed-eye-24.png";
 import openEye from "../Front-End/assets/images/icons8-eye-24.png";
@@ -102,11 +102,15 @@ const Signup = ({ setShowFirst }) => {
   };
 
   function fileChangeHandler(event) {
-    formApiHandler("upload", {
-      files: event.target.files[0],
-    }, true).then(res => {
+    formApiHandler(
+      "upload",
+      {
+        files: event.target.files[0],
+      },
+      true
+    ).then((res) => {
       if (res.data.status) {
-        setFileId(res.data.result.answer[0].id)
+        setFileId(res.data.result.answer[0].id);
       }
     });
   }
@@ -212,7 +216,12 @@ const Signup = ({ setShowFirst }) => {
         <button
           type="submit"
           className="btn btn-primary col-11 Mysubmit"
-          onClick={onClickHandlerSubmit}
+          onClick={
+            onClickHandlerSubmit
+            // setTimeout(() => {
+            //   setShowFirst(false);
+            // }, 2000);
+          }
         >
           ثبت نام
         </button>
