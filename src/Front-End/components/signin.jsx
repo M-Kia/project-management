@@ -1,10 +1,13 @@
 import React, { useState } from "react";
+import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
-import { apihandler } from "../utilities/apihandler";
+import { apiHandler } from "../utilities/apihandler";
 
 import closeEye from "../assets/images/icons8-closed-eye-24.png";
 import openEye from "../assets/images/icons8-eye-24.png";
+import useToastify from "../hooks/useToastify";
 const Singin = ({ setShowFirst }) => {
+  const router = useRouter();
   const [eye, setEye] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -21,20 +24,19 @@ const Singin = ({ setShowFirst }) => {
   const onClickHandlerSubmit = (e) => {
     e.preventDefault();
     if (username == "" && password == "") {
-      toast.error("فیلدها نمیتواند خالی باشد", {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      useToastify("فیلدها نمیتواند خالی باشد", "error");
       return;
     }
-    apihandler("auth/login", {
+    apiHandler("auth/login", {
       username: username,
       password: password,
+    }).then((res) => {
+      if (res.data.status) {
+        useToastify("ورود با موفقیت انجام شد", "success");
+        router.push("/panel");
+      } else {
+        useToastify("مشکلی در ورود به وجود آمده است", "error");
+      }
     });
   };
   return (

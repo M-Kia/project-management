@@ -7,6 +7,7 @@ import { conditionConverter } from "../helpers/functions";
 type Fields = {
   name: string;
   type: string;
+  size?: number;
   dependency?: {
     type: string;
     table: string;
@@ -16,7 +17,7 @@ type Fields = {
 export default class ActionRecord {
   tableName = "";
   fields: Fields[];
-  
+
   async find(
     conditions: string = "",
     fields: string[] = [],

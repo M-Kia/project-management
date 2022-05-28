@@ -4,7 +4,7 @@ export default class Chat_user_links extends ActionRecord {
   tableName = "chat_user_links";
 
   fields = [
-    { name: "id", type: "int" },
+    { name: "id", type: "int", config: "NOT NULL AUTO_INCREMENT PRIMARY KEY" },
     {
       name: "chat_id",
       type: "int",

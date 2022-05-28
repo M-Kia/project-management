@@ -4,7 +4,7 @@ export default class Images extends ActionRecord {
   tableName = "images";
 
   fields = [
-    { name: "id", type: "int" },
-    { name: "path", type: "varchar(255)" },
+    { name: "id", type: "int", config: "NOT NULL AUTO_INCREMENT PRIMARY KEY" },
+    { name: "path", type: "varchar", size: 255 },
   ];
 }
