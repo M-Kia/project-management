@@ -3,7 +3,8 @@ import path from "path";
 
 import Images from "../models/Images";
 
-const folderpath = path.join(process.cwd(), "src", "Back-End");
+const folderpath = "C:\\Users\\Hedi\\Desktop";
+// const folderpath = path.join(process.cwd(), "src", "Back-End");
 
 export default class FileController {
   checker = /^[a-zA-Z0-9\.\s\-_]+$/;
