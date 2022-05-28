@@ -5,6 +5,8 @@ import moshtaghi from "../Front-End/assets/images/photo_2022-05-22_09-37-49.jpg"
 import kia from "../Front-End/assets/images/photo_2022-05-22_09-38-07.jpg";
 import niko from "../Front-End/assets/images/photo_2022-05-22_09-37-57.jpg";
 import { MessangerContextProvider } from "../Front-End/context/MessangerContext";
+import WithPortal from "../Front-End/hoc/WithPortal"
+
 export default function () {
   const data = [
     {
