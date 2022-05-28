@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 import formidable from "formidable";
 
-import FileController from "../../BackEnd/library/FileControler";
+import FileController from "../../Back-End/library/FileControler";
 
 type Data = {
   status: boolean;
@@ -33,20 +33,21 @@ export default async function hander(
       form.parse(req, async (err, fields: formidable.Fields, files: any) => {
         theFields.push(fields);
         theFiles.push(files);
-
         if (err) reject({ err });
-        resolve({ err, fields, files });
-
+        
         if (!files.files) return;
-
+        
         if (files.files.filepath) {
           let id = await controller.upload(files.files);
+          console.log(id);
           answer.push(id);
         } else {
           answer = await controller.groupUpload(files.files);
         }
+        resolve({ err, fields, files });
       });
     });
+    console.log(data);
     result = {
       status: true,
       result: {

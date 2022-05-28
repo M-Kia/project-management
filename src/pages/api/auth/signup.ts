@@ -29,7 +29,7 @@ export default async function handler(
 
     let u = new Users();
 
-    await u.insert({
+    let data = await u.insert({
       firstname,
       lastname,
       username,
@@ -41,11 +41,16 @@ export default async function handler(
     result = {
       status: true,
       result: {
-        data: req.body,
+        data,
       },
+      arguments: req.body,
     };
   } catch (err) {
-    result = { status: false, errors: [err.message] };
+    result = {
+      status: false,
+      errors: [err.message],
+      arguments: req.body,
+    };
   }
   res.status(200).json(result);
 }

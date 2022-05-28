@@ -1,10 +1,9 @@
 import fs from "fs";
 import path from "path";
 
-import { query } from "../helpers/config";
 import Images from "../models/Images";
 
-const folderpath = path.join(process.cwd(), "src", "BackEnd");
+const folderpath = path.join(process.cwd(), "src", "Back-End");
 
 export default class FileController {
   checker = /^[a-zA-Z0-9\.\s\-_]+$/;
@@ -26,13 +25,12 @@ export default class FileController {
     let filepath = "uploads/" + filename;
     fs.renameSync(file.filepath, path.join(folderpath, filepath));
     let image = new Images();
-    let result = await image.Insert(["path"], [filepath]);
+    let result = await image.insert({ path: filepath });
     return result;
   }
 
   async groupUpload(files: any[]): Promise<number[]> {
     let result: number[] = [];
-    console.log(files);
     for (const value of files) {
       let id = await this.upload(value);
       result.push(id);

@@ -1,8 +1,8 @@
 import { query } from "../helpers/config";
 import { conditionConverter } from "../helpers/functions";
 
-// export class types for insert and update inputs and find exports
-// find dependency set name for fields to diagnose
+// TODO: export class types for insert and update inputs and find exports
+// TODO: find dependency set name for fields to diagnose
 
 type Fields = {
   name: string;

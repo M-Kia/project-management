@@ -5,7 +5,8 @@ const objToFormData = (object) => {
   Object.keys(object).forEach((key) => formData.append(key, object[key]));
   return formData;
 };
-export async function apihandler(functionName, data) {
+
+export async function formApiHandler(functionName, data) {
   let formData;
   if (data instanceof FormData) {
     formData = data;
@@ -16,4 +17,8 @@ export async function apihandler(functionName, data) {
   }
 
   return axios.post(`http://localhost:3000/api/${functionName}`, formData);
+}
+
+export async function apiHandler(functionName, data) {
+  return axios.post(`http://localhost:3000/api/${functionName}`, data);
 }

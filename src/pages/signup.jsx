@@ -1,15 +1,18 @@
 import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import ImageInput from "./ImageInput";
-import { apihandler } from "../Front-End/utilities/apihandler";
+import { apiHandler,formApiHandler } from "../Front-End/utilities/apihandler";
 import "react-toastify/dist/ReactToastify.css";
 import closeEye from "../Front-End/assets/images/icons8-closed-eye-24.png";
 import openEye from "../Front-End/assets/images/icons8-eye-24.png";
+import defaultImage from "../Front-End/assets/images/173-1731325_person-icon-png-transparent-png.png";
+
 const Signup = ({ setShowFirst }) => {
   const [eye, setEye] = useState(true);
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastname] = useState("");
   const [username, setUsername] = useState("");
+  const [fileId, setFileId] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
@@ -88,18 +91,29 @@ const Signup = ({ setShowFirst }) => {
       });
       return;
     }
-    apihandler("auth/signup", {
+    apiHandler("auth/signup", {
       firstname: firstname,
       lastname: lastname,
       username: username,
       email: email,
       password: password,
+      profile_img_id: fileId,
     });
   };
+
+  function fileChangeHandler(event) {
+    formApiHandler("upload", {
+      files: event.target.files[0],
+    }, true).then(res => {
+      if (res.data.status) {
+        setFileId(res.data.result.answer[0].id)
+      }
+    });
+  }
   return (
     <div className="col-12 col-md-4 col-lg-3 signup">
       <form>
-        {/* <div
+        <div
           className="mb-3"
           style={{
             width: 120,
@@ -109,12 +123,13 @@ const Signup = ({ setShowFirst }) => {
           }}
         >
           <ImageInput
-            src="https://static.toiimg.com/photo/75503656.cms"
+            src={defaultImage.src}
             radiusPercentage={50}
             width={300}
             height={300}
+            onChangeHandler={fileChangeHandler}
           />
-        </div> */}
+        </div>
         <div className="mb-3">
           <label for="firstname" className="form-label">
             نام
