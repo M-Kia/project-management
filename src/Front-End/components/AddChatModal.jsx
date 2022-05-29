@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { apiHandler } from "../utilities/apihandler";
+import { apiHandler, formApiHandler } from "../utilities/apihandler";
 import ImageInput from "./ImageInput";
 import defaultImage from "../assets/images/173-1731325_person-icon-png-transparent-png.png";
 
 const AddChatModal = () => {
-  const [type, setType] = useState("group");
+  const [type, setType] = useState("");
   const [users, setUsers] = useState([]);
+  const [selectedUsers, setSelectedUsers] = useState([]);
+
+  const [groupName, setGroupName] = useState("");
   function fileChangeHandler(event) {
     formApiHandler(
       "upload",
@@ -82,28 +85,50 @@ const AddChatModal = () => {
                 <div>
                   {users.map((value) => {
                     return (
-                      <div className="d-flex">
+                      <div
+                        className="d-flex"
+                        onClick={(e) =>
+                          setSelectedUsers(...selectedUsers, value.username)
+                        }
+                      >
                         <div>{value.username}</div>
                         <div>
-                          <img src="" alt="profile_pic" />
+                          <img src={value.path} alt="profile_pic" />
                         </div>
                       </div>
                     );
                   })}
                 </div>
-              ) : (
+              ) : type == "group" ? (
                 <div>
                   {users.map((value) => {
                     return (
                       <div className="d-flex">
                         <div>{value.username}</div>
                         <div>
-                          <img src="" alt="profile_pic" />
+                          <img src={value.path} alt="profile_pic" />
                         </div>
                       </div>
                     );
                   })}
                   <hr />
+                  <div
+                    className="mb-3"
+                    style={{
+                      width: 120,
+                      height: 120,
+                      fontSize: "20px",
+                      margin: "0px auto",
+                    }}
+                  >
+                    <ImageInput
+                      src={defaultImage.src}
+                      radiusPercentage={50}
+                      width={300}
+                      height={300}
+                      onChangeHandler={fileChangeHandler}
+                    />
+                  </div>
                   <div className="mb-3 row">
                     <label for="inputname" className="col-sm-3 col-form-label">
                       اسم گروه
@@ -113,10 +138,13 @@ const AddChatModal = () => {
                         type="text"
                         className="form-control"
                         id="inputname"
+                        onChange={(e) => setGroupName(e.target.value)}
                       />
                     </div>
                   </div>
                 </div>
+              ) : (
+                ""
               )}
             </div>
           </div>
