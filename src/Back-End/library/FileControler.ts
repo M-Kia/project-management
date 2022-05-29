@@ -3,7 +3,7 @@ import path from "path";
 
 import Images from "../models/Images";
 
-const folderpath = path.join(process.cwd(), "src", "pages");
+const folderpath = path.join(process.cwd(), "public");
 
 export default class FileController {
   checker = /^[a-zA-Z0-9\.\s\-_]+$/;
@@ -22,7 +22,8 @@ export default class FileController {
       filename = file.newFilename + "." + filename.split(".").pop();
     }
 
-    let filepath = "files/" + filename;
+    // let filepath = "files/" + filename;
+    let filepath = filename;
     fs.renameSync(file.filepath, path.join(folderpath, filepath));
     let image = new Images();
     let result = await image.insert({ path: filepath });

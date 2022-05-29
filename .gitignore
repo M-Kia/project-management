@@ -58,6 +58,6 @@ yarn-error.log*
 /doc
 
 # images
-src/pages/files/*.jpg
-src/pages/files/*.png
-src/pages/files/*.jfif
+public/*.jpg
+public/*.png
+public/*.jfif
