@@ -19,7 +19,7 @@ export default class Chat_user_links extends ActionRecord {
       type: "int",
       dependency: {
         type: "isfk",
-        table: "chats",
+        table: "users",
         field: "id",
       },
     },

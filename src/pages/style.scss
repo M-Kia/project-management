@@ -107,6 +107,10 @@
         background-color: whitesmoke;
         border-radius: 15px;
       }
+      &.selected {
+        background-color: whitesmoke;
+        border-radius: 15px;
+      }
       & .name {
         margin-left: 10px;
         font-weight: 500;
@@ -120,6 +124,20 @@
           object-fit: cover;
           border-radius: 50%;
         }
+      }
+    }
+  }
+  & .create {
+    text-align: center;
+    & .btn {
+      background-color: #363062;
+      border: 1px solid #363062;
+      border-radius: 15px;
+      padding: 5px 25px;
+      justify-content: center;
+      &:hover {
+        background-color: #4d4c7d;
+        border: 1px solid #4d4c7d;
       }
     }
   }
