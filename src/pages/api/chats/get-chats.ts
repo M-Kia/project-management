@@ -53,10 +53,11 @@ export default async function handler(
       m = new Messages(),
       img = new Images();
 
-    let answer: Answer[];
+    let answer: Answer[] = [];
 
-    rrr = await cul.find(`user_id/=/${userId}`);
-    for (let i = 0; i < rrr.lengh; i++) {
+    let rrr = await cul.find(`user_id/=/${userId}`);
+
+    for (let i = 0; i < rrr.length; i++) {
       let ans: Answer = {
         title: "",
         type: 0,
@@ -65,20 +66,20 @@ export default async function handler(
         messages: [],
         numberOfUnread: 0,
       };
-      let r = c.find(`id/=/${rrr[i].chat_id}`);
-      if (r.lengh > 0) {
+      let r = await c.find(`id/=/${rrr[i].chat_id}`);
+      if (r.length > 0) {
         ans = { ...ans, title: r[0].title, type: r[0].type };
 
-        let r1 = img.find(`id/=/${r[0].profile_id}`);
+        let r1 = await img.find(`id/=/${r[0].profile_id}`);
         ans.logo = r1.length > 0 ? pathMaker(r1[0].path) : "";
 
-        r = cul.find(
-          `chat_id/=/${rrr[i].id}`,
+        r = await cul.find(
+          `chat_id/=/${rrr[i].chat_id}`,
           [],
           [{ type: "LEFT", fieldName: "user_id" }]
         );
         let a: User[] | Message[] = [];
-        for (let j = 0; j < rrr.lengh; j++) {
+        for (let j = 0; j < r.length; j++) {
           let rr = img.find(`id/=/${r[j].profile_img_id}`);
           a.push({
             username: r[j].username,
@@ -88,17 +89,18 @@ export default async function handler(
         }
         ans.members = [...a];
 
-        r = m.find(`id/=/${rrr[i].last_message_saw}`);
+        r = await m.find(`id/=/${rrr[i].last_message_saw}`);
         let messageCount = 0,
           lastMessageTm = "";
         if (r.length > 0) lastMessageTm = r[0].mtm;
 
-        r = m.find(`chat_id/=/${rrr[i].chat_id}`);
+        r = await m.find(`chat_id/=/${rrr[i].chat_id}`);
 
+        a = [];
         for (let j = 0; j < r.length; j++) {
-          let rr1 = u.find(`id/=/${r[j].sender_id}`);
+          let rr1 = await u.find(`id/=/${r[j].sender_id}`);
           if (rr1.length == 0) continue;
-          let rr = img.find(`id/=/${rr1[0].profile_img_id}`);
+          let rr = await img.find(`id/=/${rr1[0].profile_img_id}`);
           a.push({
             parent_id: r[j].reply_id,
             type: r[j].type,

@@ -1,8 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import plus from "../assets/images/icons8-plus-32.png";
 import WithPortal from "../hoc/WithPortal";
+import { apiHandler } from "../utilities/apihandler";
 import AddChatModal from "./AddChatModal";
 const SideBar = () => {
+  const [updater, setUpdater] = useState(false);
+  const [chats, setChats] = useState();
+  useEffect(() => {
+    apiHandler("chats/get-chats", { userId: 1 }).then((res) =>
+      console.log(res)
+    );
+  }, [updater]);
   return (
     <div className="col-3 col-xxl-2 sidebar">
       {/* {data.map((value, index) => {
@@ -35,7 +43,7 @@ const SideBar = () => {
         <img src={plus.src} alt="add" />
       </button>
       <WithPortal>
-        <AddChatModal />
+        <AddChatModal updater={updater} setUpdater={setUpdater} />
       </WithPortal>
     </div>
     // <div className="col-3 col-xxl-2 sidebar">Sidebar</div>
