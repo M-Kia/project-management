@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import plus from "../assets/images/icons8-plus-32.png";
+import WithPortal from "../hoc/WithPortal";
 import AddChatModal from "./AddChatModal";
 const SideBar = () => {
   return (
@@ -25,9 +26,17 @@ const SideBar = () => {
           </div>
         );
       })} */}
-      <button className="plus" type="button">
+      <button
+        className="plus"
+        type="button"
+        data-bs-toggle="modal"
+        data-bs-target="#addChatModal"
+      >
         <img src={plus.src} alt="add" />
       </button>
+      <WithPortal>
+        <AddChatModal />
+      </WithPortal>
     </div>
     // <div className="col-3 col-xxl-2 sidebar">Sidebar</div>
   );
