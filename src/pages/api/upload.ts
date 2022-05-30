@@ -3,6 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import formidable from "formidable";
 
 import FileController from "../../Back-End/library/FileControler";
+import { makeResponse } from "../../Back-End/helpers/functions";
 
 type Data = {
   status: boolean;
@@ -34,9 +35,9 @@ export default async function hander(
         theFields.push(fields);
         theFiles.push(files);
         if (err) reject({ err });
-        
+
         if (!files.files) return;
-        
+
         if (files.files.filepath) {
           let id = await controller.upload(files.files);
           answer.push(id);
@@ -46,9 +47,9 @@ export default async function hander(
         resolve({ err, fields, files });
       });
     });
-  result = makeResponse(answer);
-} catch (err) {
-  result = makeResponse(err.message, "error");
-}
+    result = makeResponse(answer);
+  } catch (err) {
+    result = makeResponse(err.message, "error");
+  }
   res.status(200).json(result);
 }
