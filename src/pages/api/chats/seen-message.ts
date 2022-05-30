@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { checkInputs } from "../../../Back-End/helpers/functions";
 import Chats from "../../../Back-End/models/Chats";
-import Chat_user_links from "../../../Back-End/models/Chat_user_links";
+import ChatUserLinks from "../../../Back-End/models/ChatUserLinks";
 import Messages from "../../../Back-End/models/Messages";
 import Users from "../../../Back-End/models/Users";
 
@@ -21,7 +21,7 @@ export default async function handler(
     if (!checker.status) throw new Error(checker.missings);
     let { userId, chat_id, message_id } = checker.data;
 
-    let cul = new Chat_user_links();
+    let cul = new ChatUserLinks();
 
     await cul.update(
       {

@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import closeEye from "../assets/images/icons8-closed-eye-24.png";
 import openEye from "../assets/images/icons8-eye-24.png";
 import defaultImage from "../assets/images/173-1731325_person-icon-png-transparent-png.png";
-import useToastify from "../hooks/useToastify";
+import toastify from "../utilities/toustify.ts";
 
 const Signup = ({ setShowFirst }) => {
   const [eye, setEye] = useState(true);
@@ -33,23 +33,23 @@ const Signup = ({ setShowFirst }) => {
   const onClickHandlerSubmit = (e) => {
     e.preventDefault();
     if (username == "" && password == "" && passwordConfirm == "") {
-      useToastify("فیلد های ضروری را پر کنید", "error");
+      toastify("فیلد های ضروری را پر کنید", "error");
       return;
     }
     if (username.trim() == "" || !regexUsername.test(username)) {
-      useToastify("نام کاربری را به درستی وارد نمایید", "error");
+      toastify("نام کاربری را به درستی وارد نمایید", "error");
       return;
     }
     if (email.trim() == "" || !regexEmail.test(email)) {
-      useToastify(("ایمیل را به درستی وارد نمایید", "error"));
+      toastify(("ایمیل را به درستی وارد نمایید", "error"));
       return;
     }
     if (password.trim == "" || !regexPassword.test(password)) {
-      useToastify("حداقل 8 رقم برای رمز عبور وارد کنید", "error");
+      toastify("حداقل 8 رقم برای رمز عبور وارد کنید", "error");
       return;
     }
     if (password != passwordConfirm) {
-      useToastify("تکرار رمز عبور صحیح نمیباشد", "error");
+      toastify("تکرار رمز عبور صحیح نمیباشد", "error");
       return;
     }
     apiHandler("auth/signup", {
@@ -61,10 +61,10 @@ const Signup = ({ setShowFirst }) => {
       profile_img_id: fileId,
     }).then((res) => {
       if (res.data.status) {
-        useToastify("ثبت نام شما با موفقیت انجام شد", "success");
+        toastify("ثبت نام شما با موفقیت انجام شد", "success");
         setShowFirst(false);
       } else {
-        useToastify("مشکلی در ثبت نام شما به وجود آمده است", "error");
+        toastify("مشکلی در ثبت نام شما به وجود آمده است", "error");
       }
     });
   };
@@ -78,7 +78,7 @@ const Signup = ({ setShowFirst }) => {
       true
     ).then((res) => {
       if (res.data.status) {
-        setFileId(res.data.result.answer[0].id);
+        setFileId(res.data.result[0].id);
       }
     });
   }

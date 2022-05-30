@@ -3,17 +3,21 @@ import ActionRecord from "./ActionRecord";
 import { config, query } from "../helpers/config";
 
 import Images from "../models/Images";
-import Chat_user_links from "../models/Chat_user_links";
+import ChatUserLinks from "../models/ChatUserLinks";
 import Chats from "../models/Chats";
 import Messages from "../models/Messages";
 import Users from "../models/Users";
+import MessageImagesLinks from "../models/MessageImagesLinks";
+import TodoUserLinks from "../models/TodoUserLinks";
 
 export const CLASSES = {
   Images: () => new Images(),
-  Chat_user_links: () => new Chat_user_links(),
+  Users: () => new Users(),
   Chats: () => new Chats(),
   Messages: () => new Messages(),
-  Users: () => new Users(),
+  ChatUserLinks: () => new ChatUserLinks(),
+  MessageImagesLinks: () => new MessageImagesLinks(),
+  TodoUserLinks: () => new TodoUserLinks(),
 };
 
 // TODO: set and check primary and foreign keys
@@ -22,12 +26,13 @@ export async function tablesChecker() {
   let tables = await query(
     `SELECT TABLE_NAME as tablename, COLUMN_NAME as column_name, COLUMN_TYPE as column_type FROM information_schema.columns WHERE TABLE_SCHEMA = '${config.db.database}';`
   );
+  let queries = [];
   tables = tables.reduce(
     (
       total: object,
       value: { tablename: string; column_name: string; column_type: string }
     ) => {
-      let tablename = capitalize(value.tablename);
+      let tablename = value.tablename;
       let obj = total?.[tablename];
       if (!obj) obj = [];
       total[tablename] = [
@@ -41,7 +46,7 @@ export async function tablesChecker() {
   // NOT NULL AUTO_INCREMENT PRIMARY KEY
   Object.keys(CLASSES).forEach((theClass) => {
     let c: ActionRecord = CLASSES[theClass]();
-    if (Object.keys(tables).includes(theClass)) {
+    if (Object.keys(tables).includes(c.tableName)) {
       // c.fields.forEach((classField) => {
       //   let f = tables[theClass].find((v) => v.name === classField.name);
       //   if (!f) {
@@ -69,9 +74,9 @@ export async function tablesChecker() {
       // });
     } else {
       let keys = [];
-      let q = `CREATE TABLE ${theClass.toLowerCase()} (${c.fields
+      let q = `CREATE TABLE \`${c.tableName}\` (${c.fields
         .map((val) => {
-          let str = `${val.name} ${val.config.type}`;
+          let str = `\`${val.name}\` ${val.config.type}`;
           if (typeof val.config.size !== "undefined") {
             str += `(${val.config.size})`;
           }
@@ -80,22 +85,26 @@ export async function tablesChecker() {
           }
           if (typeof val.dependency !== "undefined") {
             if (val.dependency.type === "ispk") {
-              str += " AUTO_INCREMENT"
-              keys.push(`PRIMARY KEY (${val.name})`);
-            } else if (val.dependency.type === "isfk") {
+              str += " AUTO_INCREMENT";
+              keys.push(` PRIMARY KEY (\`${val.name}\`)`);
+            } else if (val.dependency.type === "isfk" && val.dependency.force) {
               keys.push(
-                `FOREIGN KEY (${val.name}) REFERENCES ${val.dependency.table}(${val.dependency.field})`
+                ` FOREIGN KEY (\`${val.name}\`) REFERENCES \`${val.dependency.table}\`(\`${val.dependency.field}\`)`
               );
             }
           }
           return str;
         })
         .join(", ")}`;
-      if (keys.length !== 0) q += " " + keys.join(", ");
+      if (keys.length !== 0) q += ", " + keys.join(", ");
       q += ");";
-      query(q);
+      queries.push(q);
     }
   });
+  for (let i = 0; i < queries.length; i++) {
+    await query(queries[i]);
+  }
+  return queries;
 }
 
 export default class Controler {

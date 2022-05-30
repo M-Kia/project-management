@@ -8,8 +8,8 @@ const Panel = () => {
   const [chats, setChats] = useState([]);
 
   useEffect(() => {
-    apiHandler("chats/get-chats", { userId: 1 }).then((res) =>
-      setChats(res.data.result.answer)
+    apiHandler("chats", { userId: 1 },"get").then((res) =>
+      setChats(res.data.result)
     );
   }, [updater]);
   // console.log(chats);

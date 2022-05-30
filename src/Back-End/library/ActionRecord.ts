@@ -4,7 +4,10 @@ import { Fields } from "../types/ActionRecordTypes";
 
 // TODO: export class types for insert and update inputs and find exports
 // TODO: find dependency set name for fields to diagnose
-// TODO: config multifk
+// config multifk => illegal in mysql
+// TODO: write comments
+// TODO: make config and secure passwords
+
 
 export default class ActionRecord {
   tableName = "";

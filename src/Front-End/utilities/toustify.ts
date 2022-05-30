@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 
-export default function useToastify(
+export default function toastify(
   text: string,
   type: "error" | "success" | "info" | "warn" | "default" = "default"
 ) {

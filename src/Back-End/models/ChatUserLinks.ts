@@ -1,7 +1,7 @@
 import ActionRecord from "../library/ActionRecord";
 import { Fields } from "../types/ActionRecordTypes";
 
-export default class Chat_user_links extends ActionRecord {
+export default class ChatUserLinks extends ActionRecord {
   tableName = "chat_user_links";
 
   fields: Fields[] = [
@@ -19,6 +19,7 @@ export default class Chat_user_links extends ActionRecord {
         type: "isfk",
         table: "chats",
         field: "id",
+        force: true
       },
     },
     {
@@ -28,13 +29,14 @@ export default class Chat_user_links extends ActionRecord {
         type: "isfk",
         table: "users",
         field: "id",
+        force: true
       },
     },
-    { name: "type", type: "int" }, // 0 => pending, 1 => joined
-    { name: "user_type", type: "int" }, // 0 => member, 1 => admin, 2 => owner
+    { name: "type", config: {type: "int"} }, // 0 => joined, 1 => pending
+    { name: "user_type", config: {type: "int"} }, // 0 => member, 1 => admin, 2 => owner
     {
       name: "last_message_saw",
-      config: { type: "int", notNull: true },
+      config: { type: "int" },
       dependency: {
         type: "isfk",
         table: "messages",

@@ -27,7 +27,7 @@ export async function apiHandler(
   data,
   method: "post" | "get" | "put" | "delete" = "post"
 ) {
-  if (method === "get") {
+  if (method.toLowerCase() === "get") {
     return axios.get(`http://localhost:3000/api/${functionName}`, {
       params: data,
     });

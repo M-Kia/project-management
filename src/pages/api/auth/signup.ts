@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { checkInputs } from "../../../Back-End/helpers/functions";
+import { checkInputs, makeResponse } from "../../../Back-End/helpers/functions";
 import Users from "../../../Back-End/models/Users";
 
 type Data = {
@@ -44,6 +44,6 @@ export default async function handler(
   } catch (err) {
     result = makeResponse(err.message, "error");
   }
-  
+
   res.status(200).json(result);
 }

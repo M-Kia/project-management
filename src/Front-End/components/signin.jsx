@@ -5,7 +5,7 @@ import { apiHandler } from "../utilities/apihandler.ts";
 
 import closeEye from "../assets/images/icons8-closed-eye-24.png";
 import openEye from "../assets/images/icons8-eye-24.png";
-import useToastify from "../hooks/useToastify";
+import toastify from "../utilities/toustify.ts";
 const Singin = ({ setShowFirst }) => {
   const router = useRouter();
   const [eye, setEye] = useState(true);
@@ -24,7 +24,7 @@ const Singin = ({ setShowFirst }) => {
   const onClickHandlerSubmit = (e) => {
     e.preventDefault();
     if (username == "" && password == "") {
-      useToastify("فیلدها نمیتواند خالی باشد", "error");
+      toastify("فیلدها نمیتواند خالی باشد", "error");
       return;
     }
     apiHandler("auth/login", {
@@ -32,10 +32,10 @@ const Singin = ({ setShowFirst }) => {
       password: password,
     }).then((res) => {
       if (res.data.status) {
-        useToastify("ورود با موفقیت انجام شد", "success");
+        toastify("ورود با موفقیت انجام شد", "success");
         router.push("/panel");
       } else {
-        useToastify("مشکلی در ورود به وجود آمده است", "error");
+        toastify("مشکلی در ورود به وجود آمده است", "error");
       }
     });
   };

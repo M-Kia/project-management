@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import "bootstrap/dist/css/bootstrap.css";
 import "./style.scss";
+import { MessangerContextProvider } from "../Front-End/context/MessangerContext";
 
 export default function MyApp({ Component, pageProps }) {
   useEffect(() => {
@@ -10,8 +11,10 @@ export default function MyApp({ Component, pageProps }) {
   }, []);
   return (
     <div dir="rtl">
-      <Component {...pageProps} />
-      <ToastContainer />
+      <MessangerContextProvider>
+        <Component {...pageProps} />
+        <ToastContainer />
+      </MessangerContextProvider>
     </div>
   );
 }

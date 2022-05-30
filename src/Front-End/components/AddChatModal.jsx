@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { apiHandler, formApiHandler } from "../utilities/apihandler.ts";
 import ImageInput from "./ImageInput";
 import defaultImage from "../assets/images/173-1731325_person-icon-png-transparent-png.png";
-import useToastify from "../hooks/useToastify";
+import toastify from "../utilities/toustify.ts";
 import MessangerContext from "../context/MessangerContext";
 const AddChatModal = () => {
   const { updater, setUpdater } = useContext(MessangerContext);
@@ -30,15 +30,15 @@ const AddChatModal = () => {
   }
   const onClickHandlerSubmit = () => {
     if (groupName == "") {
-      useToastify("اسم گروه را وارد کنید", "error");
+      toastify("اسم گروه را وارد کنید", "error");
       return;
     }
     if (ids == "") {
-      useToastify("کاربران را انتخاب کنید", "error");
+      toastify("کاربران را انتخاب کنید", "error");
       return;
     }
     // console.log("ids in api", ids);
-    apiHandler("chats/add-chat", {
+    apiHandler("chats", {
       userIds: ids,
       ownerId: 1,
       profile_id: fileId,

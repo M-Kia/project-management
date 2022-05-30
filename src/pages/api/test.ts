@@ -13,5 +13,6 @@ export default async function test(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  res.status(200).json({result: tablesChecker()});
+  let result = await tablesChecker();
+  res.status(200).json({result });
 }

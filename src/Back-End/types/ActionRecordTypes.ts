@@ -3,12 +3,13 @@ type Fields = {
   config: {
     type: "int" | "varchar";
     size?: number;
-    notNull?: true | undefined;
+    notNull?: true;
   };
   dependency?: {
-    type: "isfk" | "ispk" | "multifk";
+    type: "isfk" | "ispk"; // | "multifk";
     table?: string;
     field?: string;
+    force?: true
   };
 };
 

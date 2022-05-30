@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { checkInputs } from "../../../Back-End/helpers/functions";
-import Chat_user_links from "../../../Back-End/models/Chat_user_links";
+import ChatUserLinks from "../../../Back-End/models/ChatUserLinks";
 
 type Data = {
   status: boolean;
@@ -18,7 +18,7 @@ export default async function handler(
     if (!checker.status) throw new Error(checker.missings);
     let { userId, chat_id } = checker.data;
 
-    let cul = new Chat_user_links();
+    let cul = new ChatUserLinks();
 
     await cul.insert({
       chat_id,

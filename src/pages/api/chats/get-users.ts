@@ -14,10 +14,10 @@ export default async function handler(
 ) {
   let result: Data;
   try {
-    let c = new Users();
-    let res = await c.find(
+    let u = new Users();
+    let res = await u.find(
       "",
-      [],
+      ["`users`.`id`", "`users`.`firstname`", "`users`.`lastname`", "`users`.`username`", "`images`.`path`"],
       [{ type: "LEFT", fieldName: "profile_img_id" }]
     );
     for (let i = 0; i < res.length; i++) {

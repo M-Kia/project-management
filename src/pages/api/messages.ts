@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { checkInputs, makeResponse } from "../../../Back-End/helpers/functions";
-import Chat_user_links from "../../../Back-End/models/Chat_user_links";
+import ChatUserLinks from "../../../Back-End/models/ChatUserLinks";
 import Messages from "../../../Back-End/models/Messages";
 import { ResponseData } from "../../../Back-End/types/ActionRecordTypes";
 
@@ -31,7 +31,7 @@ export default async function handler(
     result = makeResponse(err.message, "error");
   }
 
-  response.status(200).json({ result, req });
+  response.status(200).json(result);
 }
 
 async function get(query) {}

@@ -17,6 +17,7 @@ export default class Messages extends ActionRecord {
         type: "isfk",
         table: "chats",
         field: "id",
+        force: true
       },
     },
     {
@@ -26,6 +27,7 @@ export default class Messages extends ActionRecord {
         type: "isfk",
         table: "users",
         field: "id",
+        force: true
       },
     },
     { name: "text", config: { type: "varchar", size: 255 } },
@@ -46,7 +48,7 @@ export default class Messages extends ActionRecord {
       config: { type: "varchar", size: 255 },
       dependency: {
         type: "multifk",
-        table: "messages",
+        table: "users",
         field: "id",
       },
     },
