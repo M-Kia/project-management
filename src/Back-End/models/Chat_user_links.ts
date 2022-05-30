@@ -1,13 +1,20 @@
 import ActionRecord from "../library/ActionRecord";
+import { Fields } from "../types/ActionRecordTypes";
 
 export default class Chat_user_links extends ActionRecord {
   tableName = "chat_user_links";
 
-  fields = [
-    { name: "id", type: "int", config: "NOT NULL AUTO_INCREMENT PRIMARY KEY" },
+  fields: Fields[] = [
+    {
+      name: "id",
+      config: { type: "int", notNull: true },
+      dependency: {
+        type: "ispk",
+      },
+    },
     {
       name: "chat_id",
-      type: "int",
+      config: { type: "int", notNull: true },
       dependency: {
         type: "isfk",
         table: "chats",
@@ -16,10 +23,10 @@ export default class Chat_user_links extends ActionRecord {
     },
     {
       name: "user_id",
-      type: "int",
+      config: { type: "int", notNull: true },
       dependency: {
         type: "isfk",
-        table: "chats",
+        table: "users",
         field: "id",
       },
     },
@@ -27,7 +34,7 @@ export default class Chat_user_links extends ActionRecord {
     { name: "user_type", type: "int" }, // 0 => member, 1 => admin, 2 => owner
     {
       name: "last_message_saw",
-      type: "int",
+      config: { type: "int", notNull: true },
       dependency: {
         type: "isfk",
         table: "messages",

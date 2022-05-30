@@ -1,16 +1,21 @@
 import ActionRecord from "../library/ActionRecord";
+import { Fields } from "../types/ActionRecordTypes";
 
 export default class Chats extends ActionRecord {
   tableName = "chats";
 
-  fields = [
-    { name: "id", type: "int", config: "NOT NULL AUTO_INCREMENT PRIMARY KEY" },
-    { name: "title", type: "varchar", size: 255 },
-    { name: "link", type: "varchar", size: 255 },
-    { name: "type", type: "varchar", size: 255 }, // pv => 0, group => 1
+  fields: Fields[] = [
+    {
+      name: "id",
+      config: { type: "int", notNull: true },
+      dependency: { type: "ispk" },
+    },
+    { name: "title", config: { type: "varchar", size: 255 } },
+    { name: "link", config: { type: "varchar", size: 255 } },
+    { name: "type", config: { type: "varchar", size: 255 } }, // pv => 0, group => 1
     {
       name: "profile_id",
-      type: "int",
+      config: { type: "int", notNull: true },
       dependency: {
         type: "isfk",
         table: "images",

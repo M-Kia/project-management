@@ -1,19 +1,11 @@
 import { query } from "../helpers/config";
 import { conditionConverter } from "../helpers/functions";
+import { Fields } from "../types/ActionRecordTypes";
 
 // TODO: export class types for insert and update inputs and find exports
 // TODO: find dependency set name for fields to diagnose
+// TODO: config multifk
 
-type Fields = {
-  name: string;
-  type: string;
-  size?: number;
-  dependency?: {
-    type: string;
-    table: string;
-    field: string;
-  };
-};
 export default class ActionRecord {
   tableName = "";
   fields: Fields[];
@@ -43,16 +35,24 @@ export default class ActionRecord {
           (value) => value.name == table.fieldName
         );
         if (
-          typeof theField === "undefined" ||
-          !"isfk,multifk".includes(theField.dependency.type)
+          typeof theField === "undefined"
         )
           return total;
-        return (
-          total +
-          `${table.type} JOIN ${
-            theField.dependency.table
-          } ON ${`\`${this.tableName}\`.\`${theField.name}\` = \`${theField.dependency.table}\`.\`${theField.dependency.field}\` `}`
-        );
+          if (theField.dependency.type === "isfk")
+          return (
+            total +
+            `${table.type} JOIN ${
+              theField.dependency.table
+            } ON ${`\`${this.tableName}\`.\`${theField.name}\` = \`${theField.dependency.table}\`.\`${theField.dependency.field}\` `}`
+          );
+          // if (theField.dependency.type === "multifk")
+          // return (
+          //   total +
+          //   `${table.type} JOIN ${
+          //     theField.dependency.table
+          //   } ON ${`\`${theField.dependency.table}\`.\`${theField.dependency.field}\` IN (\`${this.tableName}\`.\`${theField.name}\`) `}`
+          // );
+            return total;
       }, "");
     }
     if (conditions.length > 0) {

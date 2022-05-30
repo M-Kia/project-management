@@ -46,20 +46,9 @@ export default async function hander(
         resolve({ err, fields, files });
       });
     });
-    result = {
-      status: true,
-      result: {
-        answer,
-        data: {
-          fields: theFields,
-          files: theFiles,
-        },
-        query: req.query,
-      },
-    };
-  } catch (err) {
-    console.log(err);
-    result = { status: false, errors: [err] };
-  }
+  result = makeResponse(answer);
+} catch (err) {
+  result = makeResponse(err.message, "error");
+}
   res.status(200).json(result);
 }

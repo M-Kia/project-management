@@ -1,3 +1,5 @@
+import { ResponseData } from "../types/ActionRecordTypes";
+
 function capitalize(text: string): string {
   return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
 }
@@ -109,8 +111,24 @@ function checkInputs(
   };
 }
 
-function makePath(path: string){
-  return `http://localhost:3000/public/${path}`;
+function makePath(path: string) {
+  return `http://localhost:3000/${path}`;
 }
 
-export { capitalize, conditionConverter, checkInputs, makePath };
+function makeResponse(
+  data = undefined,
+  status: "error" | "success" = "success"
+): ResponseData {
+  if (status === "success") {
+    return {
+      status: true,
+      result: data,
+    };
+  }
+  return {
+    status: false,
+    errors: data,
+  };
+}
+
+export { capitalize, conditionConverter, checkInputs, makePath, makeResponse };

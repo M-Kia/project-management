@@ -40,17 +40,10 @@ export default async function handler(
       profile_img_id,
     });
 
-    result = {
-      status: true,
-      result: {
-        data,
-      },
-    };
+    result = makeResponse();
   } catch (err) {
-    result = {
-      status: false,
-      errors: [err.message],
-    };
+    result = makeResponse(err.message, "error");
   }
+  
   res.status(200).json(result);
 }

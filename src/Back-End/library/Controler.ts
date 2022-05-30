@@ -1,6 +1,6 @@
 import { capitalize } from "../helpers/functions";
-import type ActionRecord from "./ActionRecord";
-import { query } from "../helpers/config";
+import ActionRecord from "./ActionRecord";
+import { config, query } from "../helpers/config";
 
 import Images from "../models/Images";
 import Chat_user_links from "../models/Chat_user_links";
@@ -16,15 +16,11 @@ export const CLASSES = {
   Users: () => new Users(),
 };
 
-export function pathMaker(path) {
-  return `http://localhost:300/${path}`;
-}
-
 // TODO: set and check primary and foreign keys
 
 export async function tablesChecker() {
   let tables = await query(
-    `SELECT TABLE_NAME as tablename, COLUMN_NAME as column_name, COLUMN_TYPE as column_type FROM information_schema.columns WHERE TABLE_SCHEMA = 'test';`
+    `SELECT TABLE_NAME as tablename, COLUMN_NAME as column_name, COLUMN_TYPE as column_type FROM information_schema.columns WHERE TABLE_SCHEMA = '${config.db.database}';`
   );
   tables = tables.reduce(
     (
@@ -44,32 +40,60 @@ export async function tablesChecker() {
   );
   // NOT NULL AUTO_INCREMENT PRIMARY KEY
   Object.keys(CLASSES).forEach((theClass) => {
-    let c = CLASSES[theClass]();
+    let c: ActionRecord = CLASSES[theClass]();
     if (Object.keys(tables).includes(theClass)) {
-      c.fields.forEach((classField: { name: string; type: string }) => {
-        let f = tables[theClass].find((v) => v.name === classField.name);
-        if (!f) {
-          query(
-            `ALTER TABLE ${theClass.toLowerCase()} ADD ${classField.name} ${
-              classField.type
-            };`
-          );
-        } else if (!classField.type.includes(f.type)) {
-          query(
-            `ALTER TABLE ${theClass.toLowerCase()} MODIFY COLUMN ${
-              classField.name
-            } ${classField.type};`
-          );
-        }
-      });
+      // c.fields.forEach((classField) => {
+      //   let f = tables[theClass].find((v) => v.name === classField.name);
+      //   if (!f) {
+      //     let q = `ALTER TABLE ${c.tableName} ADD ${
+      //       classField.name
+      //     } ${classField.config.type}`;
+      //     if (typeof classField.size !== "undefined")
+      //       q += `(${classField.config.size})`;
+      //     if (classField.config.notNull)
+      //       q += " NOT NULL"`ALTER TABLE ${c.tableName} ADD ${
+      //         classField.name
+      //       } ${classField.type}`;
+      //     q += ";";
+      //     query(q);
+      //     if (typeof classField.dependency !== "undefined"){
+      //       if (classField.dependency.type === "ispk") query(`ALTER TABLE`)
+      //     }
+      //   } else if (!classField.type.includes(f.type)) {
+      //     query(
+      //       `ALTER TABLE ${c.tableName} MODIFY COLUMN ${
+      //         classField.name
+      //       } ${classField.type};`
+      //     );
+      //   }
+      // });
     } else {
-      query(
-        `CREATE TABLE ${theClass.toLowerCase()} (${c.fields
-          .map((val) => {
-            return `${val.name} ${val.type}`;
-          })
-          .join(", ")});`
-      );
+      let keys = [];
+      let q = `CREATE TABLE ${theClass.toLowerCase()} (${c.fields
+        .map((val) => {
+          let str = `${val.name} ${val.config.type}`;
+          if (typeof val.config.size !== "undefined") {
+            str += `(${val.config.size})`;
+          }
+          if (val.config.notNull) {
+            str += " NOT NULL";
+          }
+          if (typeof val.dependency !== "undefined") {
+            if (val.dependency.type === "ispk") {
+              str += " AUTO_INCREMENT"
+              keys.push(`PRIMARY KEY (${val.name})`);
+            } else if (val.dependency.type === "isfk") {
+              keys.push(
+                `FOREIGN KEY (${val.name}) REFERENCES ${val.dependency.table}(${val.dependency.field})`
+              );
+            }
+          }
+          return str;
+        })
+        .join(", ")}`;
+      if (keys.length !== 0) q += " " + keys.join(", ");
+      q += ");";
+      query(q);
     }
   });
 }

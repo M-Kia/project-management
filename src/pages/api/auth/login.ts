@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { checkInputs } from "../../../Back-End/helpers/functions";
+import { checkInputs, makeResponse } from "../../../Back-End/helpers/functions";
 import Users from "../../../Back-End/models/Users";
 
 type Data = {
@@ -23,14 +23,10 @@ export default async function handler(
     let res = await u.find(`username/=/${username}&&password/=/${password}`);
     if (res.length == 0) throw new Error("Wrong username or password");
 
-    result = {
-      status: true,
-      result: {
-        data: req.body,
-      },
-    };
+    result = makeResponse(res[0]);
   } catch (err) {
-    result = { status: false, errors: [err.message] };
+    result = makeResponse(err.message, "error");
   }
+  
   res.status(200).json(result);
 }

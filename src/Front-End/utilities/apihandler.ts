@@ -6,7 +6,10 @@ const objToFormData = (object) => {
   return formData;
 };
 
-export async function formApiHandler(functionName, data) {
+export async function formApiHandler(
+  functionName: string,
+  data: FormData | object | undefined
+) {
   let formData;
   if (data instanceof FormData) {
     formData = data;
@@ -19,6 +22,15 @@ export async function formApiHandler(functionName, data) {
   return axios.post(`http://localhost:3000/api/${functionName}`, formData);
 }
 
-export async function apiHandler(functionName, data) {
-  return axios.post(`http://localhost:3000/api/${functionName}`, data);
+export async function apiHandler(
+  functionName: string,
+  data,
+  method: "post" | "get" | "put" | "delete" = "post"
+) {
+  if (method === "get") {
+    return axios.get(`http://localhost:3000/api/${functionName}`, {
+      params: data,
+    });
+  }
+  return axios[method](`http://localhost:3000/api/${functionName}`, data);
 }

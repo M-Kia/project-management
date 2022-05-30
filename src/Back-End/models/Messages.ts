@@ -1,13 +1,18 @@
 import ActionRecord from "../library/ActionRecord";
+import { Fields } from "../types/ActionRecordTypes";
 
 export default class Messages extends ActionRecord {
   tableName = "messages";
 
-  fields = [
-    { name: "id", type: "int", config: "NOT NULL AUTO_INCREMENT PRIMARY KEY" },
+  fields: Fields[] = [
+    {
+      name: "id",
+      config: { type: "int", notNull: true },
+      dependency: { type: "ispk" },
+    },
     {
       name: "chat_id",
-      type: "int",
+      config: { type: "int", notNull: true },
       dependency: {
         type: "isfk",
         table: "chats",
@@ -16,31 +21,29 @@ export default class Messages extends ActionRecord {
     },
     {
       name: "sender_id",
-      type: "int",
+      config: { type: "int", notNull: true },
       dependency: {
         type: "isfk",
         table: "users",
         field: "id",
       },
     },
-    { name: "text", type: "varchar", size: 255 },
+    { name: "text", config: { type: "varchar", size: 255 } },
     {
       name: "image_ids",
-      type: "varchar",
-      size: 255,
+      config: { type: "varchar", size: 255 },
       dependency: {
         type: "multifk",
         table: "images",
         field: "id",
       },
     },
-    { name: "type", type: "int" }, // 0 => normal, 1 => todo
-    { name: "todo_status", type: "varchar", size: 255 }, // 0 => undone, 1 => done
-    { name: "main_status", type: "varchar", size: 255 }, // 0 => normal, 1 => deleted
+    { name: "type", config: { type: "int" } }, // 0 => normal, 1 => todo
+    { name: "todo_status", config: { type: "varchar", size: 255 } }, // 0 => undone, 1 => done
+    { name: "main_status", config: { type: "varchar", size: 255 } }, // 0 => normal, 1 => deleted
     {
       name: "todo_user_link",
-      type: "varchar",
-      size: 255,
+      config: { type: "varchar", size: 255 },
       dependency: {
         type: "multifk",
         table: "messages",
@@ -49,13 +52,13 @@ export default class Messages extends ActionRecord {
     },
     {
       name: "reply_id",
-      type: "int",
+      config: { type: "int", notNull: true },
       dependency: {
         type: "isfk",
         table: "messages",
         field: "id",
       },
     },
-    { name: "mtm", type: "varchar", size: 255 },
+    { name: "mtm", config: { type: "varchar", size: 255 } },
   ];
 }
