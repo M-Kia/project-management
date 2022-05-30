@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import SideBar from "../../Front-End/components/SideBar";
 import ShowPage from "../../Front-End/components/ShowPage";
-import { apiHandler } from "../../Front-End/utilities/apihandler";
+import { apiHandler } from "../../Front-End/utilities/apihandler.ts";
 import MessangerContext from "../../Front-End/context/MessangerContext";
 const Panel = () => {
   const { updater } = useContext(MessangerContext);
@@ -12,11 +12,11 @@ const Panel = () => {
       setChats(res.data.result.answer)
     );
   }, [updater]);
-  console.log(chats);
+  // console.log(chats);
   return (
     <div className="row main">
       <SideBar chats={chats} />
-      <ShowPage />
+      <ShowPage chats={chats} />
     </div>
   );
 };

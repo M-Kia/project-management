@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import ImageInput from "./ImageInput";
-import { apiHandler, formApiHandler } from "../utilities/apihandler";
+import { apiHandler, formApiHandler } from "../utilities/apihandler.ts";
 import "react-toastify/dist/ReactToastify.css";
 import closeEye from "../assets/images/icons8-closed-eye-24.png";
 import openEye from "../assets/images/icons8-eye-24.png";

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { apiHandler, formApiHandler } from "../utilities/apihandler";
+import { apiHandler, formApiHandler } from "../utilities/apihandler.ts";
 import ImageInput from "./ImageInput";
 import defaultImage from "../assets/images/173-1731325_person-icon-png-transparent-png.png";
 import useToastify from "../hooks/useToastify";
@@ -24,7 +24,7 @@ const AddChatModal = () => {
       true
     ).then((res) => {
       if (res.data.status) {
-        setFileId(res.data.result.answer[0].id);
+        setFileId(res.data.result[0].id);
       }
     });
   }
