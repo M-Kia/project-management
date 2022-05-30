@@ -16,7 +16,7 @@ const Panel = () => {
   return (
     <div className="row main">
       <SideBar chats={chats} />
-      <ShowPage chats={chats} />
+      <ShowPage />
     </div>
   );
 };
