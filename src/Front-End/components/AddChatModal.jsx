@@ -8,7 +8,7 @@ const AddChatModal = () => {
   const { updater, setUpdater } = useContext(MessangerContext);
   const [type, setType] = useState("");
   const [users, setUsers] = useState([]);
-  const [fileId, setFileId] = useState("");
+  const [fileId, setFileId] = useState(0);
   const [groupName, setGroupName] = useState("");
   let ids = users.reduce((total, value) => {
     if (!value.status) return total;
@@ -29,7 +29,7 @@ const AddChatModal = () => {
     });
   }
   const onClickHandlerSubmit = () => {
-    if (groupName == "") {
+    if (type == "group" && groupName == "") {
       toastify("اسم گروه را وارد کنید", "error");
       return;
     }
@@ -83,7 +83,7 @@ const AddChatModal = () => {
           <div className="modal-body">
             <div>
               <div>
-                <div className="form-check">
+                <div className="form-check col-3">
                   <input
                     className="form-check-input"
                     type="radio"
@@ -97,7 +97,7 @@ const AddChatModal = () => {
                     چت شخصی
                   </label>
                 </div>
-                <div className="form-check">
+                <div className="form-check col-3">
                   <input
                     className="form-check-input"
                     type="radio"
@@ -114,33 +114,43 @@ const AddChatModal = () => {
               </div>
               <hr />
               {type == "private" ? (
-                <div className="users">
-                  {users.map((value) =>
-                    value.id != 1 ? (
-                      <div
-                        key={value.id}
-                        className={`user col-12 ${
-                          value.status ? "selected" : ""
-                        }`}
-                        onClick={(e) =>
-                          setUsers((user) =>
-                            user.map((val) =>
-                              val.id == value.id
-                                ? { ...val, status: !val.status }
-                                : val
+                <div>
+                  <div className="users">
+                    {users.map((value) =>
+                      value.id != 1 ? (
+                        <div
+                          key={value.id}
+                          className={`user col-12 ${
+                            value.status ? "selected" : ""
+                          }`}
+                          onClick={(e) =>
+                            setUsers((user) =>
+                              user.map((val) =>
+                                val.id == value.id
+                                  ? { ...val, status: !val.status }
+                                  : val
+                              )
                             )
-                          )
-                        }
-                      >
-                        <div className="name">{value.username}</div>
-                        <div className="profile_pic">
-                          <img src={value.path} alt="profile_pic" />
+                          }
+                        >
+                          <div className="name">{value.username}</div>
+                          <div className="profile_pic">
+                            <img src={value.path} alt="profile_pic" />
+                          </div>
                         </div>
-                      </div>
-                    ) : (
-                      ""
-                    )
-                  )}
+                      ) : (
+                        ""
+                      )
+                    )}
+                  </div>
+                  <div className="create">
+                    <div
+                      className="btn btn-primary"
+                      onClick={onClickHandlerSubmit}
+                    >
+                      ایجاد چت
+                    </div>
+                  </div>
                 </div>
               ) : type == "group" ? (
                 <div>
