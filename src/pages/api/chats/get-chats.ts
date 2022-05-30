@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { checkInputs } from "../../../Back-End/helpers/functions";
-import { pathMaker } from "../../../Back-End/library/Controler";
+import { checkInputs, makePath } from "../../../Back-End/helpers/functions";
 import Chats from "../../../Back-End/models/Chats";
 import Chat_user_links from "../../../Back-End/models/Chat_user_links";
 import Images from "../../../Back-End/models/Images";
@@ -71,7 +70,7 @@ export default async function handler(
         ans = { ...ans, title: r[0].title, type: r[0].type };
 
         let r1 = await img.find(`id/=/${r[0].profile_id}`);
-        ans.logo = r1.length > 0 ? pathMaker(r1[0].path) : "";
+        ans.logo = r1.length > 0 ? makePath(r1[0].path) : "";
 
         r = await cul.find(
           `chat_id/=/${rrr[i].chat_id}`,
@@ -83,7 +82,7 @@ export default async function handler(
           let rr = img.find(`id/=/${r[j].profile_img_id}`);
           a.push({
             username: r[j].username,
-            profile: rr.length > 0 ? pathMaker(rr[0].path) : "",
+            profile: rr.length > 0 ? makePath(rr[0].path) : "",
             type: r[i].user_type,
           });
         }
@@ -108,7 +107,7 @@ export default async function handler(
             tm: r[j].mtm,
             sender: {
               username: rr1[0].username,
-              profile: rr.length > 0 ? pathMaker(rr[0].path) : "",
+              profile: rr.length > 0 ? makePath(rr[0].path) : "",
               type: r[i].user_type,
             },
             todo_status: r[j].todo_status,

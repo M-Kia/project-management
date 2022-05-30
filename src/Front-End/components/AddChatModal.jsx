@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { apiHandler, formApiHandler } from "../utilities/apihandler";
 import ImageInput from "./ImageInput";
 import defaultImage from "../assets/images/173-1731325_person-icon-png-transparent-png.png";
-
-const AddChatModal = ({ updater, setUpdater }) => {
+import useToastify from "../hooks/useToastify";
+import MessangerContext from "../context/MessangerContext";
+const AddChatModal = () => {
+  const { updater, setUpdater } = useContext(MessangerContext);
   const [type, setType] = useState("");
   const [users, setUsers] = useState([]);
   const [fileId, setFileId] = useState("");
   const [groupName, setGroupName] = useState("");
   let ids = users.reduce((total, value) => {
-    if (value.status) return total;
+    if (!value.status) return total;
     if (total == "") return total + value.id;
     return total + "," + value.id;
   }, "");
@@ -27,7 +29,15 @@ const AddChatModal = ({ updater, setUpdater }) => {
     });
   }
   const onClickHandlerSubmit = () => {
-    console.log("ids in api", ids);
+    if (groupName == "") {
+      useToastify("اسم گروه را وارد کنید", "error");
+      return;
+    }
+    if (ids == "") {
+      useToastify("کاربران را انتخاب کنید", "error");
+      return;
+    }
+    // console.log("ids in api", ids);
     apiHandler("chats/add-chat", {
       userIds: ids,
       ownerId: 1,
@@ -46,8 +56,8 @@ const AddChatModal = ({ updater, setUpdater }) => {
       )
     );
   }, []);
-  console.log(users);
-  console.log("ids", ids);
+  // console.log(users);
+  // console.log("ids", ids);
   return (
     <div
       className="modal fade addChat"
