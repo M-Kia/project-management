@@ -58,6 +58,7 @@ const SideBar = ({ chats }) => {
   //     numUnread: 2,
   //   },
   // ];
+
   return (
     <div className="col-3 col-xxl-2 sidebar">
       {chats.map((value, index) => {
@@ -97,7 +98,6 @@ const SideBar = ({ chats }) => {
         <AddChatModal />
       </WithPortal>
     </div>
-    // <div className="col-3 col-xxl-2 sidebar">Sidebar</div>
   );
 };
 
