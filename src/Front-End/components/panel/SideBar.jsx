@@ -60,7 +60,9 @@ const SideBar = ({ chats }) => {
   // ];
 
   return (
-    <div className="col-3 col-xxl-2 sidebar">
+    <div
+      className={`col-3 col-xxl-2 sidebar ${chats.length > 9 ? "scroll" : ""}`}
+    >
       {chats.map((value, index) => {
         return (
           <div className="card" key={index} onClick={() => setChat(value)}>

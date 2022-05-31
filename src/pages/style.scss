@@ -36,7 +36,10 @@
   margin-left: 15px;
   border: 1px solid #363062;
   border-radius: 20px;
-  overflow-y: scroll;
+  overflow-y: hidden;
+  &.scroll {
+    overflow-y: scroll !important;
+  }
   & .card {
     display: flex;
     flex-direction: row;
@@ -100,6 +103,26 @@
       border: 1px solid #4d4c7d;
     }
   }
+}
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 50px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #4d4c7d;
+  border-radius: 50px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #363062;
 }
 
 .addChat {
@@ -202,20 +225,23 @@
     }
   }
   & .send {
-    padding: 15px 10px;
+    padding: 15px 20px;
     border: 1px solid #707070;
     border-radius: 25px;
     resize: none;
-    overflow: hidden;
-    min-height: 45px;
-    max-height: 60px;
+    overflow-y: hidden !important;
+    height: 54px;
+    max-height: 90px;
+    &.scroll {
+      overflow-y: scroll !important;
+    }
   }
   & .bottom {
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
-    top: 680px;
+    margin-top: 660px;
   }
   & .text {
     text-align: center;
@@ -236,7 +262,32 @@
       border-radius: 50%;
     }
   }
+  & .showMessageParent {
+    position: absolute;
+    overflow-y: scroll;
+    height: 656px;
+  }
 
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 50px;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #4d4c7d;
+    border-radius: 50px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #363062;
+  }
   .form-check-input {
     cursor: pointer;
     &:checked {
@@ -250,12 +301,12 @@
     }
   }
 }
-
 .showMessage {
   display: flex;
   flex-direction: column;
   & .card {
     width: fit-content;
+    min-width: 100px;
     max-width: 460px;
     padding: 2px 0px;
     margin: 2px 0px;
@@ -271,10 +322,18 @@
       }
       & .textMessage {
         padding: 5px 10px 5px 25px;
+        font-size: 17px;
       }
       & .time {
         margin-right: 20px;
         color: #707070;
+      }
+      & .reply {
+        margin-right: -30px;
+        cursor: pointer;
+        & img {
+          transform: rotateY(180deg);
+        }
       }
     }
     &.me {
@@ -288,12 +347,21 @@
       }
       & .textMessage {
         padding: 5px 25px 5px 10px;
+        font-size: 17px;
       }
       & .time {
         margin-right: auto;
         margin-left: 20px;
         color: #707070;
       }
+      & .reply {
+        margin-right: auto;
+        margin-left: -30px;
+        cursor: pointer;
+      }
+    }
+    &:hover {
+      background-color: whitesmoke;
     }
   }
 }

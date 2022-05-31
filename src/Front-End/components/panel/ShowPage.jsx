@@ -7,8 +7,8 @@ import ShowMessage from "./ShowMessage";
 const ShowPage = () => {
   const [newMessage, setNewMessage] = useState("");
   const [typeMessage, setTypeMessage] = useState(0);
-  const { chat } = useContext(MessangerContext);
-  useEffect(() => {}, [chat]);
+  const [scrollHeight, setScrollHeight] = useState(false);
+  const { chat, replyId, updater, setUpdater } = useContext(MessangerContext);
   const onClickHandlerSend = () => {
     apiHandler(
       "messages",
@@ -17,14 +17,21 @@ const ShowPage = () => {
         chat_id: chat.id,
         text: newMessage,
         type: typeMessage,
-        reply_id: "",
+        reply_id: replyId,
       },
       "post"
-    );
+    ).then((res) => {
+      if (res.status) {
+        setUpdater(!updater);
+        setNewMessage("");
+      }
+    });
   };
   function auto_grow(element) {
     element.style.height = "5px";
     element.style.height = element.scrollHeight + "px";
+    if (element.scrollHeight > 120) setScrollHeight(true);
+    else setScrollHeight(false);
   }
   if (chat != "")
     return (
@@ -39,18 +46,19 @@ const ShowPage = () => {
           <div className="title">
             {chat.title == null ? chat.members[1].username : chat.title}
           </div>
-          <div style={{ position: "absolute" }} className="col-12">
-            <ShowMessage />
+          <div className="col-12 showMessageParent">
+            <ShowMessage messages={chat.messages} />
           </div>
           <div className="bottom">
             <div className="col-1 sendIcon" onClick={onClickHandlerSend}>
               <img src={send.src} alt="send" />
             </div>
             <textarea
-              className="col-9 send"
+              className={`col-9 send ${scrollHeight ? "scroll" : ""}`}
               placeholder="نوشتن پیام..."
+              value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
-              onInput={(e) => auto_grow(this)}
+              onInput={(e) => auto_grow(e.target)}
             ></textarea>
             <div className="col-1 typeMessage">
               <div className="form-check form-check-inline">
