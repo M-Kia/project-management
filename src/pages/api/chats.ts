@@ -161,7 +161,7 @@ async function get(query) {
           [{ type: "RIGHT", fieldName: "user_id" }]
         );
         if (chatUserLinkI2.length == 0) continue;
-        imageI = await img.find(`id/=/${chatUserLinkI2[0].profile_img_id}`);
+        let imageI = await img.find(`id/=/${chatUserLinkI2[0].profile_img_id}`);
         a.push({
           id: messageI[j].id,
           parent_id: messageI[j].reply_id,
