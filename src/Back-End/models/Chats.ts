@@ -15,7 +15,7 @@ export default class Chats extends ActionRecord {
     { name: "type", config: { type: "varchar", size: 255 } }, // pv => 0, group => 1
     {
       name: "profile_id",
-      config: { type: "int", notNull: true },
+      config: { type: "int" },
       dependency: {
         type: "isfk",
         table: "images",

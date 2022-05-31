@@ -54,7 +54,7 @@ export default class Messages extends ActionRecord {
     },
     {
       name: "reply_id",
-      config: { type: "int", notNull: true },
+      config: { type: "int" },
       dependency: {
         type: "isfk",
         table: "messages",

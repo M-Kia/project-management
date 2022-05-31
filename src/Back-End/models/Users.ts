@@ -17,7 +17,7 @@ export default class Users extends ActionRecord {
     { name: "email", config: { type: "varchar", size: 255 } },
     {
       name: "profile_img_id",
-      config: { type: "int", notNull: true },
+      config: { type: "int" },
       dependency: {
         type: "isfk",
         table: "images",
