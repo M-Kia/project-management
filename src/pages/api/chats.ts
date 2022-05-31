@@ -12,6 +12,7 @@ import Users from "../../Back-End/models/Users";
 import { ResponseData } from "../../Back-End/types/ActionRecordTypes";
 
 type User = {
+  id: number;
   username: string;
   profile: string;
   type: number;
@@ -72,12 +73,12 @@ async function get(query) {
 
   let cul = new ChatUserLinks(),
     c = new Chats(),
-    u = new Users(),
     m = new Messages(),
     img = new Images();
 
   let answer: Answer[] = [];
 
+  // get links
   let chatUserLinkI1 = await cul.find(`user_id/=/${userId}`);
 
   for (let i = 0; i < chatUserLinkI1.length; i++) {
@@ -90,21 +91,19 @@ async function get(query) {
       messages: [],
       numberOfUnread: 0,
     };
+    // get chat data
     let chatI = await c.find(`id/=/${chatUserLinkI1[i].chat_id}`);
     if (chatI.length > 0) {
       ans = {
         ...ans,
         id: chatI[0].id,
-        title: chatI[0].title,
         type: chatI[0].type,
       };
-
-      let imageI = await img.find(`id/=/${chatI[0].profile_id}`);
-      ans.logo = imageI.length > 0 ? makePath(imageI[0].path) : "";
-
+      // get chat's users data
       let chatUserLinkI2 = await cul.find(
         `chat_id/=/${chatUserLinkI1[i].chat_id}`,
         [
+          "`users`.`id`",
           "`users`.`profile_img_id`",
           "`users`.`username`",
           "`chat_user_links`.`user_type`",
@@ -112,16 +111,48 @@ async function get(query) {
         [{ type: "RIGHT", fieldName: "user_id" }]
       );
       let a: User[] | Message[] = [];
-      for (let j = 0; j < chatUserLinkI2.length; j++) {
-        imageI = img.find(`id/=/${chatUserLinkI2[j].profile_img_id}`);
-        a.push({
-          username: chatUserLinkI2[j].username,
-          profile: imageI.length > 0 ? makePath(imageI[0].path) : "",
-          type: chatUserLinkI2[j].user_type,
-        });
+      if (chatI[0].type == 0) {
+        // private chat
+        // if it is a private chat, some data depend on other user
+        // fill chat and members data
+        for (let j = 0; j < chatUserLinkI2.length; j++) {
+          imageI = img.find(`id/=/${chatUserLinkI2[j].profile_img_id}`);
+          if (chatUserLinkI2[j].id != userId) {
+            ans = {
+              ...ans,
+              title: chatUserLinkI2[j].username,
+              logo: imageI.length > 0 ? makePath(imageI[0].path) : "",
+            };
+          }
+          a.push({
+            id: chatUserLinkI2[j].id,
+            username: chatUserLinkI2[j].username,
+            profile: imageI.length > 0 ? makePath(imageI[0].path) : "",
+            type: chatUserLinkI2[j].user_type,
+          });
+        }
+        ans.members = [...a];
+      } else if (chatI[0].type == 1) {
+        // group chat
+        ans = { ...ans, title: chatI[0].title };
+        // fill chat and members data
+        let imageI = await img.find(`id/=/${chatI[0].profile_id}`);
+        ans.logo = imageI.length > 0 ? makePath(imageI[0].path) : "";
+        for (let j = 0; j < chatUserLinkI2.length; j++) {
+          imageI = img.find(`id/=/${chatUserLinkI2[j].profile_img_id}`);
+          a.push({
+            id: chatUserLinkI2[j].id,
+            username: chatUserLinkI2[j].username,
+            profile: imageI.length > 0 ? makePath(imageI[0].path) : "",
+            type: chatUserLinkI2[j].user_type,
+          });
+        }
+        ans.members = [...a];
+      } else {
+        continue;
       }
-      ans.members = [...a];
 
+      // get messages
       let messageI = await m.find(`id/=/${chatUserLinkI1[i].last_message_saw}`);
       let messageCount = 0,
         lastMessageTm = "";

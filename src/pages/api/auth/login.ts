@@ -1,5 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { checkInputs, makeResponse } from "../../../Back-End/helpers/functions";
+import {
+  checkInputs,
+  makePath,
+  makeResponse,
+} from "../../../Back-End/helpers/functions";
+import Encryption from "../../../Back-End/library/Encryption";
 import Users from "../../../Back-End/models/Users";
 
 type Data = {
@@ -20,13 +25,24 @@ export default async function handler(
 
     let u = new Users();
 
-    let res = await u.find(`username/=/${username}&&password/=/${password}`);
+    let res = await u.find(
+      `username/=/${username}&&password/=/${Encryption.encode(password)}`,
+      [
+        "`users`.`id`",
+        "`users`.`firstname`",
+        "`users`.`lastname`",
+        "`users`.`username`",
+        "`users`.`email`",
+        "`images`.`path`",
+      ],
+      [{ fieldName: "profile_img_id", type: "LEFT" }]
+    );
     if (res.length == 0) throw new Error("Wrong username or password");
-
+    res[0].path = makePath(res[0].path);
     result = makeResponse(res[0]);
   } catch (err) {
     result = makeResponse(err.message, "error");
   }
-  
+
   res.status(200).json(result);
 }
