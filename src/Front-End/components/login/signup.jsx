@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import ImageInput from "./ImageInput";
-import { apiHandler, formApiHandler } from "../utilities/apihandler.ts";
+import ImageInput from "../common/ImageInput";
+import { apiHandler, formApiHandler } from "../../utilities/apihandler.ts";
 import "react-toastify/dist/ReactToastify.css";
-import closeEye from "../assets/images/icons8-closed-eye-24.png";
-import openEye from "../assets/images/icons8-eye-24.png";
-import defaultImage from "../assets/images/173-1731325_person-icon-png-transparent-png.png";
-import toastify from "../utilities/toustify.ts";
+import closeEye from "../../assets/images/icons8-closed-eye-24.png";
+import openEye from "../../assets/images/icons8-eye-24.png";
+import defaultImage from "../../assets/images/173-1731325_person-icon-png-transparent-png.png";
+import toastify from "../../utilities/toustify.ts";
 
 const Signup = ({ setShowFirst }) => {
   const [eye, setEye] = useState(true);
