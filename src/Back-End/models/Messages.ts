@@ -31,27 +31,9 @@ export default class Messages extends ActionRecord {
       },
     },
     { name: "text", property: { type: "varchar", size: 255 } },
-    {
-      name: "image_ids",
-      property: { type: "varchar", size: 255 },
-      dependency: {
-        type: "multifk",
-        table: "images",
-        field: "id",
-      },
-    },
     { name: "type", property: { type: "int" } }, // 0 => normal, 1 => todo
     { name: "todo_status", property: { type: "varchar", size: 255 } }, // 0 => undone, 1 => done
     { name: "main_status", property: { type: "varchar", size: 255 } }, // 0 => normal, 1 => deleted
-    {
-      name: "todo_user_link",
-      property: { type: "varchar", size: 255 },
-      dependency: {
-        type: "multifk",
-        table: "users",
-        field: "id",
-      },
-    },
     {
       name: "reply_id",
       property: { type: "int" },
