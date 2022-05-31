@@ -19,6 +19,7 @@ type User = {
 };
 
 type Message = {
+  id: number;
   type: number;
   text: string;
   tm: number;
@@ -111,47 +112,35 @@ async function get(query) {
         [{ type: "RIGHT", fieldName: "user_id" }]
       );
       let a: User[] | Message[] = [];
-      if (chatI[0].type == 0) {
-        // private chat
-        // if it is a private chat, some data depend on other user
-        // fill chat and members data
-        for (let j = 0; j < chatUserLinkI2.length; j++) {
-          let imageI = img.find(`id/=/${chatUserLinkI2[j].profile_img_id}`);
-          if (chatUserLinkI2[j].id != userId) {
-            ans = {
-              ...ans,
-              title: chatUserLinkI2[j].username,
-              logo: imageI.length > 0 ? makePath(imageI[0].path) : "",
-            };
-          }
-          a.push({
-            id: chatUserLinkI2[j].id,
-            username: chatUserLinkI2[j].username,
-            profile: imageI.length > 0 ? makePath(imageI[0].path) : "",
-            type: chatUserLinkI2[j].user_type,
-          });
-        }
-        ans.members = [...a];
-      } else if (chatI[0].type == 1) {
+      if (chatI[0].type == 1) {
         // group chat
         ans = { ...ans, title: chatI[0].title };
         // fill chat and members data
         let imageI = await img.find(`id/=/${chatI[0].profile_id}`);
         ans.logo = imageI.length > 0 ? makePath(imageI[0].path) : "";
-        for (let j = 0; j < chatUserLinkI2.length; j++) {
-          imageI = img.find(`id/=/${chatUserLinkI2[j].profile_img_id}`);
-          a.push({
-            id: chatUserLinkI2[j].id,
-            username: chatUserLinkI2[j].username,
-            profile: imageI.length > 0 ? makePath(imageI[0].path) : "",
-            type: chatUserLinkI2[j].user_type,
-          });
-        }
-        ans.members = [...a];
-      } else {
+      } else if (chatI[0].type != 0) {
         continue;
       }
 
+      for (let j = 0; j < chatUserLinkI2.length; j++) {
+        let imageI = await img.find(`id/=/${chatUserLinkI2[j].profile_img_id}`);
+        if (chatI[0].type == 0 && chatUserLinkI2[j].id != userId) {
+          // private chat
+          // if it is a private chat, some data depend on other user
+          ans = {
+            ...ans,
+            title: chatUserLinkI2[j].username,
+            logo: imageI.length > 0 ? makePath(imageI[0].path) : "",
+          };
+        }
+        a.push({
+          id: chatUserLinkI2[j].id,
+          username: chatUserLinkI2[j].username,
+          profile: imageI.length > 0 ? makePath(imageI[0].path) : "",
+          type: chatUserLinkI2[j].user_type,
+        });
+      }
+      ans.members = [...a];
       // get messages
       let messageI = await m.find(`id/=/${chatUserLinkI1[i].last_message_saw}`);
       let messageCount = 0,
@@ -174,6 +163,7 @@ async function get(query) {
         if (chatUserLinkI2.length == 0) continue;
         imageI = await img.find(`id/=/${chatUserLinkI2[0].profile_img_id}`);
         a.push({
+          id: messageI[j].id,
           parent_id: messageI[j].reply_id,
           type: messageI[j].type,
           text: messageI[j].text,
