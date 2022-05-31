@@ -7,9 +7,9 @@ export default class Images extends ActionRecord {
   fields: Fields[] = [
     {
       name: "id",
-      config: { type: "int", notNull: true },
+      property: { type: "int", notNull: true },
       dependency: { type: "ispk" },
     },
-    { name: "path", config: { type: "varchar", size: 255 } },
+    { name: "path", property: { type: "varchar", size: 255 } },
   ];
 }

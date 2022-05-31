@@ -7,17 +7,17 @@ export default class TodoUserLinks extends ActionRecord {
   fields: Fields[] = [
     {
       name: "id",
-      config: { type: "int", notNull: true },
+      property: { type: "int", notNull: true },
       dependency: { type: "ispk" },
     },
     {
       name: "message_id",
-      config: { type: "int" },
+      property: { type: "int" },
       dependency: { type: "isfk", table: "messages", field: "id", force: true },
     },
     {
       name: "user_id",
-      config: { type: "int" },
+      property: { type: "int" },
       dependency: { type: "isfk", table: "users", field: "id", force: true },
     },
   ];

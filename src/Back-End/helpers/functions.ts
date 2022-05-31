@@ -1,4 +1,6 @@
+import ActionRecord from "../library/ActionRecord";
 import { ResponseData } from "../types/ActionRecordTypes";
+import { CLASSES } from "../types/ActionRecordTypes";
 
 function capitalize(text: string): string {
   return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
@@ -131,4 +133,15 @@ function makeResponse(
   };
 }
 
-export { capitalize, conditionConverter, checkInputs, makePath, makeResponse };
+function getData(data, cls){
+  let m:ActionRecord = CLASSES[cls]();
+  let d = {}, keys = Object.keys(data);
+  m.fields.forEach(value => {
+    if (keys.includes(value.name)){
+      d[value.name] = data[value.name];
+    }
+  })
+  return d;
+}
+
+export { capitalize, conditionConverter, checkInputs, makePath, makeResponse, getData };

@@ -7,14 +7,14 @@ export default class ChatUserLinks extends ActionRecord {
   fields: Fields[] = [
     {
       name: "id",
-      config: { type: "int", notNull: true },
+      property: { type: "int", notNull: true },
       dependency: {
         type: "ispk",
       },
     },
     {
       name: "chat_id",
-      config: { type: "int", notNull: true },
+      property: { type: "int", notNull: true },
       dependency: {
         type: "isfk",
         table: "chats",
@@ -24,7 +24,7 @@ export default class ChatUserLinks extends ActionRecord {
     },
     {
       name: "user_id",
-      config: { type: "int", notNull: true },
+      property: { type: "int", notNull: true },
       dependency: {
         type: "isfk",
         table: "users",
@@ -32,11 +32,11 @@ export default class ChatUserLinks extends ActionRecord {
         force: true
       },
     },
-    { name: "type", config: {type: "int"} }, // 0 => joined, 1 => pending
-    { name: "user_type", config: {type: "int"} }, // 0 => member, 1 => admin, 2 => owner
+    { name: "type", property: {type: "int"} }, // 0 => joined, 1 => pending
+    { name: "user_type", property: {type: "int"} }, // 0 => member, 1 => admin, 2 => owner
     {
       name: "last_message_saw",
-      config: { type: "int" },
+      property: { type: "int" },
       dependency: {
         type: "isfk",
         table: "messages",

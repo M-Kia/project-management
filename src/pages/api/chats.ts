@@ -82,6 +82,7 @@ async function get(query) {
 
   for (let i = 0; i < chatUserLinkI1.length; i++) {
     let ans: Answer = {
+      id: 0,
       title: "",
       type: 0,
       logo: "",
@@ -91,7 +92,12 @@ async function get(query) {
     };
     let chatI = await c.find(`id/=/${chatUserLinkI1[i].chat_id}`);
     if (chatI.length > 0) {
-      ans = { ...ans, title: chatI[0].title, type: chatI[0].type };
+      ans = {
+        ...ans,
+        id: chatI[0].id,
+        title: chatI[0].title,
+        type: chatI[0].type,
+      };
 
       let imageI = await img.find(`id/=/${chatI[0].profile_id}`);
       ans.logo = imageI.length > 0 ? makePath(imageI[0].path) : "";

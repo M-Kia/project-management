@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { checkInputs, makeResponse } from "../../../Back-End/helpers/functions";
 import Users from "../../../Back-End/models/Users";
+import Encryption from "../../../Back-End/library/Encryption";
 
 type Data = {
   status: boolean;
@@ -14,6 +15,7 @@ export default async function handler(
 ) {
   let result: Data;
   try {
+    // check entries
     let checker = checkInputs(
       [
         "firstname",
@@ -26,12 +28,16 @@ export default async function handler(
       req.body
     );
     if (!checker.status) throw new Error(checker.missings);
+    // get values
     let { firstname, lastname, username, password, email, profile_img_id } =
       checker.data;
 
-    let u = new Users();
+    // encrypt password
+    password = Encryption.encode(password);
 
-    let data = await u.insert({
+    let u = new Users();
+    // insert user
+    await u.insert({
       firstname,
       lastname,
       username,
@@ -41,6 +47,7 @@ export default async function handler(
     });
 
     result = makeResponse();
+    res.status(200).json(result);
   } catch (err) {
     result = makeResponse(err.message, "error");
   }

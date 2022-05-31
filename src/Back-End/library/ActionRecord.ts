@@ -1,5 +1,5 @@
 import { query } from "../helpers/config";
-import { conditionConverter } from "../helpers/functions";
+import { conditionConverter, getData } from "../helpers/functions";
 import { Fields } from "../types/ActionRecordTypes";
 
 // TODO: export class types for insert and update inputs and find exports
@@ -7,7 +7,7 @@ import { Fields } from "../types/ActionRecordTypes";
 // config multifk => illegal in mysql
 // TODO: write comments
 // TODO: make config and secure passwords
-
+// TODO: make default value for fields
 
 export default class ActionRecord {
   tableName = "";
@@ -37,25 +37,22 @@ export default class ActionRecord {
         let theField: Fields | undefined = this.fields.find(
           (value) => value.name == table.fieldName
         );
-        if (
-          typeof theField === "undefined"
-        )
-          return total;
-          if (theField.dependency.type === "isfk")
+        if (typeof theField === "undefined") return total;
+        if (theField.dependency.type === "isfk")
           return (
             total +
             `${table.type} JOIN ${
               theField.dependency.table
             } ON ${`\`${this.tableName}\`.\`${theField.name}\` = \`${theField.dependency.table}\`.\`${theField.dependency.field}\` `}`
           );
-          // if (theField.dependency.type === "multifk")
-          // return (
-          //   total +
-          //   `${table.type} JOIN ${
-          //     theField.dependency.table
-          //   } ON ${`\`${theField.dependency.table}\`.\`${theField.dependency.field}\` IN (\`${this.tableName}\`.\`${theField.name}\`) `}`
-          // );
-            return total;
+        // if (theField.dependency.type === "multifk")
+        // return (
+        //   total +
+        //   `${table.type} JOIN ${
+        //     theField.dependency.table
+        //   } ON ${`\`${theField.dependency.table}\`.\`${theField.dependency.field}\` IN (\`${this.tableName}\`.\`${theField.name}\`) `}`
+        // );
+        return total;
       }, "");
     }
     if (conditions.length > 0) {
@@ -82,10 +79,11 @@ export default class ActionRecord {
     try {
       delete data["id"];
     } catch (e) {}
-    let sql = `INSERT INTO ${this.tableName}(${Object.keys(data)
+    let filteredData = getData(data, this.constructor.name);
+    let sql = `INSERT INTO ${this.tableName}(${Object.keys(filteredData)
       .map((value: string) => `\`${value}\``)
-      .join(", ")}) VALUES (${Object.keys(data)
-      .map((value: string) => `"${data[value].toString()}"`)
+      .join(", ")}) VALUES (${Object.keys(filteredData)
+      .map((value: string) => `"${filteredData[value].toString()}"`)
       .join(", ")})`;
     let r = await query(sql);
     r = { id: r.insertId };

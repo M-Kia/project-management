@@ -7,17 +7,21 @@ export default class Users extends ActionRecord {
   fields: Fields[] = [
     {
       name: "id",
-      config: { type: "int", notNull: true },
+      property: { type: "int", notNull: true },
       dependency: { type: "ispk" },
     },
-    { name: "firstname", config: { type: "varchar", size: 255 } },
-    { name: "lastname", config: { type: "varchar", size: 255 } },
-    { name: "username", config: { type: "varchar", size: 255 } },
-    { name: "password", config: { type: "varchar", size: 255 } },
-    { name: "email", config: { type: "varchar", size: 255 } },
+    { name: "firstname", property: { type: "varchar", size: 255 } },
+    { name: "lastname", property: { type: "varchar", size: 255 } },
+    { name: "username", property: { type: "varchar", size: 255 } },
+    {
+      name: "password",
+      property: { type: "varchar", size: 255 },
+      config: { encryption: true },
+    },
+    { name: "email", property: { type: "varchar", size: 255 } },
     {
       name: "profile_img_id",
-      config: { type: "int" },
+      property: { type: "int" },
       dependency: {
         type: "isfk",
         table: "images",

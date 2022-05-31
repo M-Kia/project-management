@@ -1,24 +1,8 @@
 import { capitalize } from "../helpers/functions";
 import ActionRecord from "./ActionRecord";
 import { config, query } from "../helpers/config";
+import { CLASSES } from "../types/ActionRecordTypes";
 
-import Images from "../models/Images";
-import ChatUserLinks from "../models/ChatUserLinks";
-import Chats from "../models/Chats";
-import Messages from "../models/Messages";
-import Users from "../models/Users";
-import MessageImagesLinks from "../models/MessageImagesLinks";
-import TodoUserLinks from "../models/TodoUserLinks";
-
-export const CLASSES = {
-  Images: () => new Images(),
-  Users: () => new Users(),
-  Chats: () => new Chats(),
-  Messages: () => new Messages(),
-  ChatUserLinks: () => new ChatUserLinks(),
-  MessageImagesLinks: () => new MessageImagesLinks(),
-  TodoUserLinks: () => new TodoUserLinks(),
-};
 
 // TODO: set and check primary and foreign keys
 
@@ -52,10 +36,10 @@ export async function tablesChecker() {
       //   if (!f) {
       //     let q = `ALTER TABLE ${c.tableName} ADD ${
       //       classField.name
-      //     } ${classField.config.type}`;
+      //     } ${classField.property.type}`;
       //     if (typeof classField.size !== "undefined")
-      //       q += `(${classField.config.size})`;
-      //     if (classField.config.notNull)
+      //       q += `(${classField.property.size})`;
+      //     if (classField.property.notNull)
       //       q += " NOT NULL"`ALTER TABLE ${c.tableName} ADD ${
       //         classField.name
       //       } ${classField.type}`;
@@ -76,11 +60,11 @@ export async function tablesChecker() {
       let keys = [];
       let q = `CREATE TABLE \`${c.tableName}\` (${c.fields
         .map((val) => {
-          let str = `\`${val.name}\` ${val.config.type}`;
-          if (typeof val.config.size !== "undefined") {
-            str += `(${val.config.size})`;
+          let str = `\`${val.name}\` ${val.property.type}`;
+          if (typeof val.property.size !== "undefined") {
+            str += `(${val.property.size})`;
           }
-          if (val.config.notNull) {
+          if (val.property.notNull) {
             str += " NOT NULL";
           }
           if (typeof val.dependency !== "undefined") {
