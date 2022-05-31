@@ -9,7 +9,7 @@ const Login = () => {
       <div className="col-4 col-md-6">
         <img
           src={pic.src}
-          alt="picture login"
+          alt="login"
           style={{ marginTop: "150px" }}
           className="col-7"
         />

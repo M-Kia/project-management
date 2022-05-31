@@ -39,4 +39,6 @@ const CLASSES = {
   MessageImagesLinks: () => new MessageImagesLinks(),
   TodoUserLinks: () => new TodoUserLinks(),
 };
-export { Fields, ResponseData, CLASSES };
+export type { Fields, ResponseData };
+
+export {CLASSES}

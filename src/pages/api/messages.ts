@@ -1,27 +1,17 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { checkInputs, makeResponse } from "../../Back-End/helpers/functions";
-import ChatUserLinks from "../../Back-End/models/ChatUserLinks";
 import Messages from "../../Back-End/models/Messages";
 import { ResponseData } from "../../Back-End/types/ActionRecordTypes";
 
 export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse<ResponseData>
-) {
+): Promise<void> {
   let result: ResponseData;
   try {
     switch (request.method.toUpperCase()) {
-      case "GET":
-        result = get(request.query);
-        break;
       case "POST":
-        result = add(request.body);
-        break;
-      case "PUT":
-        result = update(request.body);
-        break;
-      case "DELETE":
-        result = remove(request.body);
+        result = await add(request.body);
         break;
       default:
         throw new Error("Wrong Method!!");
@@ -34,9 +24,7 @@ export default async function handler(
   response.status(200).json(result);
 }
 
-async function get(query) {}
-
-async function add(data): ResponseData {
+async function add(data): Promise<ResponseData> {
   let checker = checkInputs(
     ["userId", "chat_id", "text", "type", "reply_id"],
     data
@@ -53,8 +41,5 @@ async function add(data): ResponseData {
     type,
     reply_id,
   });
+  return makeResponse();
 }
-
-async function update(data) {}
-
-async function remove(data) {}

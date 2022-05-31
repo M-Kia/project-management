@@ -4,12 +4,7 @@ import formidable from "formidable";
 
 import FileController from "../../Back-End/library/FileControler";
 import { makeResponse } from "../../Back-End/helpers/functions";
-
-type Data = {
-  status: boolean;
-  errors?: string[];
-  result?: any;
-};
+import { ResponseData } from "../../Back-End/types/ActionRecordTypes";
 
 export const config = {
   api: {
@@ -19,16 +14,16 @@ export const config = {
 
 export default async function hander(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
-) {
-  let result: Data;
+  res: NextApiResponse<ResponseData>
+): Promise<void> {
+  let result: ResponseData;
   try {
     let controller = new FileController();
     let answer = [],
       theFields = [],
       theFiles = [];
 
-    const data = await new Promise((resolve, reject) => {
+    await new Promise((resolve, reject) => {
       const form = formidable({ multiples: true, maxFileSize: 1000000000000 });
 
       form.parse(req, async (err, fields: formidable.Fields, files: any) => {

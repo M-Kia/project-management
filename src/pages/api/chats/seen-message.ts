@@ -1,21 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { checkInputs } from "../../../Back-End/helpers/functions";
-import Chats from "../../../Back-End/models/Chats";
+import { checkInputs, makeResponse } from "../../../Back-End/helpers/functions";
 import ChatUserLinks from "../../../Back-End/models/ChatUserLinks";
-import Messages from "../../../Back-End/models/Messages";
-import Users from "../../../Back-End/models/Users";
-
-type Data = {
-  status: boolean;
-  errors?: string[];
-  result?: any;
-};
+import { ResponseData } from "../../../Back-End/types/ActionRecordTypes";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
-) {
-  let result: Data;
+  res: NextApiResponse<ResponseData>
+): Promise<void> {
+  let result: ResponseData;
   try {
     let checker = checkInputs(["userId", "chat_id", "message_id"], req.body);
     if (!checker.status) throw new Error(checker.missings);
@@ -30,14 +22,9 @@ export default async function handler(
       `user_id/=/${userId}&&chat_id/=/${chat_id}`
     );
 
-    result = {
-      status: true,
-      result: {
-        data: req.body,
-      },
-    };
+    result = makeResponse()
   } catch (err) {
-    result = { status: false, errors: [err.message] };
+    result = makeResponse(err.message, "error")
   }
   res.status(200).json(result);
 }

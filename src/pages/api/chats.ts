@@ -8,7 +8,6 @@ import Chats from "../../Back-End/models/Chats";
 import ChatUserLinks from "../../Back-End/models/ChatUserLinks";
 import Images from "../../Back-End/models/Images";
 import Messages from "../../Back-End/models/Messages";
-import Users from "../../Back-End/models/Users";
 import { ResponseData } from "../../Back-End/types/ActionRecordTypes";
 
 type User = {
@@ -29,6 +28,7 @@ type Message = {
 };
 
 type Answer = {
+  id: number;
   title: string;
   type: number;
   logo: string;
@@ -40,7 +40,7 @@ type Answer = {
 export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse<ResponseData>
-) {
+): Promise<void> {
   let result: ResponseData;
   try {
     switch (request.method.toUpperCase()) {
@@ -50,16 +50,9 @@ export default async function handler(
       case "POST":
         result = await add(request.body);
         break;
-      // case "PUT":
-      //   result = update(request.body);
-      //   break;
-      // case "DELETE":
-      //   result = remove(request.body);
-      //   break;
       default:
         throw new Error("Wrong Method!!");
     }
-    result = makeResponse(result);
   } catch (err) {
     result = makeResponse(err.message, "error");
   }
@@ -67,7 +60,7 @@ export default async function handler(
   response.status(200).json(result);
 }
 
-async function get(query) {
+async function get(query): Promise<ResponseData> {
   let checker = checkInputs(["userId"], query);
   if (!checker.status) throw new Error(checker.missings);
   let { userId } = checker.data;
@@ -78,6 +71,8 @@ async function get(query) {
     img = new Images();
 
   let answer: Answer[] = [];
+
+  let imageI: any;
 
   // get links
   let chatUserLinkI1 = await cul.find(`user_id/=/${userId}`);
@@ -111,20 +106,20 @@ async function get(query) {
         ],
         [{ type: "RIGHT", fieldName: "user_id" }]
       );
-      let a: User[] | Message[] = [];
-      if (chatI[0].type == 1) {
+      if (chatI[0].type.toString() === "1") {
         // group chat
         ans = { ...ans, title: chatI[0].title };
         // fill chat and members data
-        let imageI = await img.find(`id/=/${chatI[0].profile_id}`);
+        imageI = await img.find(`id/=/${chatI[0].profile_id}`);
         ans.logo = imageI.length > 0 ? makePath(imageI[0].path) : "";
-      } else if (chatI[0].type != 0) {
+      } else if (chatI[0].type.toString() !== "0") {
         continue;
       }
 
+      let userArr: User[] = [];
       for (let j = 0; j < chatUserLinkI2.length; j++) {
-        let imageI = await img.find(`id/=/${chatUserLinkI2[j].profile_img_id}`);
-        if (chatI[0].type == 0 && chatUserLinkI2[j].id != userId) {
+        imageI = await img.find(`id/=/${chatUserLinkI2[j].profile_img_id}`);
+        if (chatI[0].type.toString() === "0" && chatUserLinkI2[j].id.toString() !== userId.toString()) {
           // private chat
           // if it is a private chat, some data depend on other user
           ans = {
@@ -133,14 +128,14 @@ async function get(query) {
             logo: imageI.length > 0 ? makePath(imageI[0].path) : "",
           };
         }
-        a.push({
+        userArr.push({
           id: chatUserLinkI2[j].id,
           username: chatUserLinkI2[j].username,
           profile: imageI.length > 0 ? makePath(imageI[0].path) : "",
           type: chatUserLinkI2[j].user_type,
         });
       }
-      ans.members = [...a];
+      ans.members = [...userArr];
       // get messages
       let messageI = await m.find(`id/=/${chatUserLinkI1[i].last_message_saw}`);
       let messageCount = 0,
@@ -149,26 +144,28 @@ async function get(query) {
 
       messageI = await m.find(`chat_id/=/${chatUserLinkI1[i].chat_id}`);
 
-      a = [];
+      let messageArr: Message[] = [];
       for (let j = 0; j < messageI.length; j++) {
         chatUserLinkI2 = await cul.find(
           `user_id/=/${messageI[j].sender_id}`,
           [
+            "`users`.`id`",
             "`users`.`profile_img_id`",
             "`users`.`username`",
             "`chat_user_links`.`user_type`",
           ],
           [{ type: "RIGHT", fieldName: "user_id" }]
         );
-        if (chatUserLinkI2.length == 0) continue;
+        if (chatUserLinkI2.length === 0) continue;
         imageI = await img.find(`id/=/${chatUserLinkI2[0].profile_img_id}`);
-        a.push({
+        messageArr.push({
           id: messageI[j].id,
           parent_id: messageI[j].reply_id,
           type: messageI[j].type,
           text: messageI[j].text,
           tm: messageI[j].mtm,
           sender: {
+            id: chatUserLinkI2[0].id,
             username: chatUserLinkI2[0].username,
             profile: imageI.length > 0 ? makePath(imageI[0].path) : "",
             type: chatUserLinkI2[0].user_type,
@@ -177,48 +174,59 @@ async function get(query) {
         });
 
         if (
-          lastMessageTm != "" &&
+          lastMessageTm !== "" &&
           parseInt(lastMessageTm) < parseInt(messageI[j].mtm)
         )
           messageCount++;
       }
 
-      ans.messages = [...a];
+      ans.messages = [...messageArr];
       ans.numberOfUnread = messageCount;
 
       answer.push(ans);
     }
   }
-  return answer;
+  return makeResponse(answer);
 }
 
-async function add(data): ResponseData {
+async function add(data): Promise<ResponseData> {
   let checker = checkInputs(["type"], data);
   if (!checker.status) throw new Error(checker.missings);
   let { type } = checker.data;
   let c = new Chats(),
     cul = new ChatUserLinks(),
-    u = new Users(),
     res;
   // check the type of chat
-  if (type == 0) {
+  if (type.toString() === "0") {
     // pivate chat
     // if the chat is pv, only userIds needed
     checker = checkInputs(["userIds"], data);
     if (!checker.status) throw new Error(checker.missings);
     let { userIds } = checker.data;
+    let uIds = userIds.split(",");
+    if (uIds.length !== 2)
+      throw new Error("Private chat should have 2 members.");
+
+    // check if any pv between these members exist or not
+    res = await cul.find(
+      `\`chats\`.\`type\`/=/0&&\`chat_user_links\`.\`user_id\`/in/${userIds}`,
+      ["`chat_user_links`.`chat_id`"],
+      [{ fieldName: "chat_id", type: "LEFT" }]
+    );
+    if (res.length > 0)
+      throw new Error(`There is a private chat with id of ${res[0].chat_id}.`);
     // insert chat
     res = await c.insert({ type });
     // link chat to users
     await Promise.all(
-      userIds.split(",").map(async (value) => {
+      uIds.map(async (value) => {
         await cul.insert({
           chat_id: res.id,
           user_id: value,
         });
       })
     );
-  } else if (type == 1) {
+  } else if (type.toString() === "1") {
     // group chat
     checker = checkInputs(["userIds", "ownerId", "profile_id", "title"], data);
     if (!checker.status) throw new Error(checker.missings);
@@ -235,7 +243,7 @@ async function add(data): ResponseData {
         await cul.insert({
           chat_id: res.id,
           user_id: value,
-          user_type: value == ownerId ? 2 : 0,
+          user_type: value.toString() === ownerId.toString() ? 2 : 0,
         });
       })
     );
@@ -244,7 +252,3 @@ async function add(data): ResponseData {
   }
   return makeResponse();
 }
-
-async function update(data) {}
-
-async function remove(data) {}

@@ -37,7 +37,7 @@ export default async function handler(
       ],
       [{ fieldName: "profile_img_id", type: "LEFT" }]
     );
-    if (res.length == 0) throw new Error("Wrong username or password");
+    if (res.length === 0) throw new Error("Wrong username or password");
     res[0].path = makePath(res[0].path);
     result = makeResponse(res[0]);
   } catch (err) {

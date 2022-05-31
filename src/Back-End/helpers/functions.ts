@@ -58,6 +58,8 @@ function conditionMaker(text: string): string {
   } else if (temp[1].toLowerCase() === "between") {
     let t = temp[2].split(",");
     result += ` ${t[0]} AND ${t[1]} `;
+  } else if (temp[1].toLowerCase() === "in") {
+    result += ` (${temp[2]}) `;
   } else {
     result += ` '${temp[2]}' `;
   }

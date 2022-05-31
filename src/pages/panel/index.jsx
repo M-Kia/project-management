@@ -4,7 +4,7 @@ import ShowPage from "../../Front-End/components/panel/ShowPage";
 import { apiHandler } from "../../Front-End/utilities/apihandler.ts";
 import MessangerContext from "../../Front-End/context/MessangerContext";
 // import useInterval from "../../Front-End/components/common/TimeInterval";
-const Panel = () => {
+export default function Panel() {
   const { updater } = useContext(MessangerContext);
   const [chats, setChats] = useState([]);
   // const [time, setTime] = useState(null);
@@ -22,6 +22,4 @@ const Panel = () => {
       <ShowPage />
     </div>
   );
-};
-
-export default Panel;
+}
