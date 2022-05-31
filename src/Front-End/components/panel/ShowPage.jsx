@@ -14,7 +14,7 @@ const ShowPage = () => {
       "messages",
       {
         userId: 1,
-        chat_id: "",
+        chat_id: chat.id,
         text: newMessage,
         type: typeMessage,
         reply_id: "",
