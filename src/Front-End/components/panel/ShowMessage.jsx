@@ -1,65 +1,17 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import reply from "../../assets/images/icons8-left-2-24.png";
 import MessangerContext from "../../context/MessangerContext";
 import menu from "../../assets/images/icons8-menu-24.png";
+import { apiHandler } from "../../utilities/apihandler.ts";
 const ShowMessage = ({ messages }) => {
-  const { replyId, setReplyId, chat } = useContext(MessangerContext);
-  const data = [
-    {
-      text: "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و ",
-      time: "12:48",
-      sender: "hediem",
-      id: 1,
-    },
-    {
-      text: "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت ",
-      time: "12:48",
-      sender: "m_kia",
-      id: 2,
-    },
-    {
-      text: "لورم ایپسوم متن ساختگی با  ",
-      time: "12:48",
-      sender: "hediem",
-      id: 3,
-    },
-    {
-      text: "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله ",
-      time: "12:48",
-      sender: "hediem",
-      id: 4,
-    },
-    {
-      text: "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با ",
-      time: "12:48",
-      sender: "m_kia",
-      id: 5,
-    },
-    {
-      text: "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و ",
-      time: "12:48",
-      sender: "hediem",
-      id: 6,
-    },
-    {
-      text: "لورم ایپسوم متن ساختگی با  ",
-      time: "12:48",
-      sender: "m_kia",
-      id: 7,
-    },
-    {
-      text: "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله ",
-      time: "12:48",
-      sender: "hediem",
-      id: 8,
-    },
-    {
-      text: "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با ",
-      time: "12:48",
-      sender: "m_kia",
-      id: 9,
-    },
-  ];
+  const { setReplyId, chat } = useContext(MessangerContext);
+  const [todoStatus, setTodoStatus] = useState(false);
+  const onClickHandler = (id, status) => {
+    apiHandler("chats/change-todo", {
+      message_id: id,
+      todo_status: status == 0 ? 1 : 0,
+    });
+  };
   if (messages.length != 0)
     return (
       <div className="showMessage">
@@ -76,12 +28,10 @@ const ShowMessage = ({ messages }) => {
                     <img src={value.sender.profile} alt="profilePic" />
                   </div>
                 ) : (
-                  <div
-                    className={`round empty ${index % 2 != 0 ? "odd" : "even"}`}
-                  ></div>
+                  ""
                 )}
                 <div key={index} className="card">
-                  {value.sender.username != "hediem" ? (
+                  {chat.type != 0 && value.sender.username != "hediem" ? (
                     <div className="sender">{value.sender.username} </div>
                   ) : (
                     ""
@@ -110,12 +60,15 @@ const ShowMessage = ({ messages }) => {
                     <img src={value.sender.profile} alt="profilePic" />
                   </div>
                 ) : (
-                  <div
-                    className={`round empty ${index % 2 != 0 ? "odd" : "even"}`}
-                  ></div>
+                  ""
                 )}
 
                 <div key={index} className="card todo">
+                  {chat.type != 0 && value.sender.username != "hediem" ? (
+                    <div className="sender">{value.sender.username} </div>
+                  ) : (
+                    ""
+                  )}
                   <span
                     className="reply"
                     onClick={(e) => setReplyId(value.id)}
@@ -136,6 +89,10 @@ const ShowMessage = ({ messages }) => {
                           id="checkboxNoLabel"
                           value=""
                           aria-label="..."
+                          checked={value.todo_status == 0 ? false : true}
+                          onClick={(e) =>
+                            onClickHandler(value.id, value.todo_status)
+                          }
                         />
                       </div>
                     </div>
