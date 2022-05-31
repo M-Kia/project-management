@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import { apiHandler, formApiHandler } from "../utilities/apihandler.ts";
-import ImageInput from "./ImageInput";
-import defaultImage from "../assets/images/173-1731325_person-icon-png-transparent-png.png";
-import toastify from "../utilities/toustify.ts";
-import MessangerContext from "../context/MessangerContext";
+import { apiHandler, formApiHandler } from "../../utilities/apihandler.ts";
+import ImageInput from "../common/ImageInput";
+import defaultImage from "../../assets/images/173-1731325_person-icon-png-transparent-png.png";
+import toastify from "../../utilities/toustify.ts";
+import MessangerContext from "../../context/MessangerContext";
 const AddChatModal = () => {
   const { updater, setUpdater } = useContext(MessangerContext);
   const [type, setType] = useState("");

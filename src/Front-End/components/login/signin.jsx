@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
-import { apiHandler } from "../utilities/apihandler.ts";
+import { apiHandler } from "../../utilities/apihandler.ts";
 
-import closeEye from "../assets/images/icons8-closed-eye-24.png";
-import openEye from "../assets/images/icons8-eye-24.png";
-import toastify from "../utilities/toustify.ts";
+import closeEye from "../../assets/images/icons8-closed-eye-24.png";
+import openEye from "../../assets/images/icons8-eye-24.png";
+import toastify from "../../utilities/toustify.ts";
 const Singin = ({ setShowFirst }) => {
   const router = useRouter();
   const [eye, setEye] = useState(true);

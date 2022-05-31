@@ -1,11 +1,11 @@
 import React, { useState, useContext } from "react";
-import plus from "../assets/images/icons8-plus-32.png";
-import WithPortal from "../hoc/WithPortal";
+import plus from "../../assets/images/icons8-plus-32.png";
+import WithPortal from "../../hoc/WithPortal";
 import AddChatModal from "./AddChatModal";
-import moshtaghi from "../assets/images/photo_2022-05-22_09-37-49.jpg";
-import kia from "../assets/images/photo_2022-05-22_09-38-07.jpg";
-import niko from "../assets/images/photo_2022-05-22_09-37-57.jpg";
-import MessangerContext from "../context/MessangerContext";
+import moshtaghi from "../../assets/images/photo_2022-05-22_09-37-49.jpg";
+import kia from "../../assets/images/photo_2022-05-22_09-38-07.jpg";
+import niko from "../../assets/images/photo_2022-05-22_09-37-57.jpg";
+import MessangerContext from "../../context/MessangerContext";
 const SideBar = ({ chats }) => {
   const { setChat } = useContext(MessangerContext);
   // const data = [
@@ -70,13 +70,19 @@ const SideBar = ({ chats }) => {
                   <div
                     className={`round empty ${index % 2 != 0 ? "odd" : "even"}`}
                   ></div>
+                ) : value.logo == "" && value.members.length == 2 ? (
+                  <div className="round">
+                    <img src={value.members[1].profile} alt="profilePic" />
+                  </div>
                 ) : (
                   <div className="round">
                     <img src={value.logo} alt="profilePic" />
                   </div>
                 )}
               </div>
-              <div>{value.title}</div>
+              <div>
+                {value.title == null ? value.members[1].username : value.title}
+              </div>
             </div>
             {value.numberOfUnread == 0 ? (
               ""
