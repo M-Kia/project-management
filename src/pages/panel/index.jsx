@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import SideBar from "../../Front-End/components/SideBar";
-import ShowPage from "../../Front-End/components/ShowPage";
+import SideBar from "../../Front-End/components/panel/SideBar";
+import ShowPage from "../../Front-End/components/panel/ShowPage";
 import { apiHandler } from "../../Front-End/utilities/apihandler.ts";
 import MessangerContext from "../../Front-End/context/MessangerContext";
 const Panel = () => {
@@ -8,7 +8,7 @@ const Panel = () => {
   const [chats, setChats] = useState([]);
 
   useEffect(() => {
-    apiHandler("chats", { userId: 1 },"get").then((res) =>
+    apiHandler("chats", { userId: 1 }, "get").then((res) =>
       setChats(res.data.result)
     );
   }, [updater]);
