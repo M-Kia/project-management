@@ -209,12 +209,30 @@
   }
   & .title {
     background-color: #4d4c7d;
-    height: 45px;
+    height: 85px;
     border-radius: 17px 17px 0px 0px;
     color: white;
     padding: 6px 25px;
     font-size: 20px;
     z-index: 5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    & .round {
+      width: 75px;
+      height: 75px;
+      margin-left: 10px;
+      &.empty {
+        border-radius: 50%;
+        background-color: #827397;
+      }
+      & img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+      }
+    }
   }
   & .typeMessage {
     display: flex;
@@ -304,14 +322,32 @@
 .showMessage {
   display: flex;
   flex-direction: column;
-  & .card {
-    width: fit-content;
-    min-width: 100px;
-    max-width: 460px;
-    padding: 2px 0px;
-    margin: 2px 0px;
-    &.person {
-      align-self: flex-end;
+
+  & .person {
+    align-self: flex-end;
+    display: flex;
+    flex-direction: row-reverse;
+    & .round {
+      width: 75px;
+      height: 75px;
+      margin-right: 10px;
+      &.empty {
+        border-radius: 50%;
+        background-color: #827397;
+      }
+      & img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+      }
+    }
+    & .card {
+      width: fit-content;
+      min-width: 150px;
+      max-width: 460px;
+      padding: 2px 0px;
+      margin: 5px 0px;
       border-radius: 45px 10px 10px 0px;
       & .sender {
         margin-right: auto;
@@ -330,13 +366,68 @@
       }
       & .reply {
         margin-right: -30px;
+        margin-bottom: -20px;
         cursor: pointer;
         & img {
           transform: rotateY(180deg);
         }
       }
+      &.todo {
+        min-width: 250px;
+        border-radius: 10px 10px 10px 0px;
+        & .description {
+          display: flex;
+          flex-direction: row-reverse;
+          align-items: center;
+          justify-content: space-around;
+          & .check {
+            display: flex;
+            flex-direction: row-reverse;
+            align-items: flex-end;
+            & .todoStatus {
+              & .form-check-input {
+                width: 20px !important;
+                height: 20px !important;
+                margin-top: 2px;
+                margin-left: 5px;
+                border-radius: 50px;
+              }
+            }
+          }
+        }
+      }
+      &:hover {
+        background-color: whitesmoke;
+        border-color: whitesmoke;
+      }
     }
-    &.me {
+  }
+  & .me {
+    display: flex;
+    flex-direction: row;
+    & .round {
+      width: 75px;
+      height: 75px;
+      margin-left: 10px;
+      &.empty {
+        border-radius: 50%;
+        background-color: #827397;
+      }
+      & img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+      }
+    }
+    & .card {
+      width: fit-content;
+      min-width: 150px;
+      max-width: 460px;
+      padding: 2px 0px;
+      margin: 5px 0px;
+      background-color: #e9d5da;
+      border-color: #e9d5da;
       border-radius: 10px 45px 0px 10px;
       & .sender {
         margin-right: auto;
@@ -357,11 +448,36 @@
       & .reply {
         margin-right: auto;
         margin-left: -30px;
+        margin-bottom: -20px;
         cursor: pointer;
       }
-    }
-    &:hover {
-      background-color: whitesmoke;
+      &.todo {
+        min-width: 250px;
+        border-radius: 10px 10px 0px 10px;
+
+        & .description {
+          display: flex;
+          align-items: center;
+          justify-content: space-around;
+          & .check {
+            display: flex;
+            align-items: flex-end;
+            & .todoStatus {
+              & .form-check-input {
+                width: 20px !important;
+                height: 20px !important;
+                margin-top: 2px;
+                margin-right: 5px;
+                border-radius: 50px;
+              }
+            }
+          }
+        }
+      }
+      &:hover {
+        background-color: #d6bdc3;
+        border-color: #d6bdc3;
+      }
     }
   }
 }
