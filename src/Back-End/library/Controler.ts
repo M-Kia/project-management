@@ -135,9 +135,8 @@ export default class Controler {
           orderType = posts.orderType;
         }
         result = await x.find(
-          [],
           conditions,
-          fields,
+          fields,[],
           page,
           count,
           orderBy,
@@ -145,9 +144,7 @@ export default class Controler {
         );
         break;
       case "Insert":
-        let keys = Object.keys(posts),
-          values = keys.map((value) => posts[value]);
-        result = await x.insert(keys, values);
+        result = await x.insert(posts);
         break;
       case "Update":
         result = await x.update(posts.keyvalues, posts.conditions);
