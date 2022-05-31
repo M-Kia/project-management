@@ -116,7 +116,7 @@ async function get(query) {
         // if it is a private chat, some data depend on other user
         // fill chat and members data
         for (let j = 0; j < chatUserLinkI2.length; j++) {
-          imageI = img.find(`id/=/${chatUserLinkI2[j].profile_img_id}`);
+          let imageI = img.find(`id/=/${chatUserLinkI2[j].profile_img_id}`);
           if (chatUserLinkI2[j].id != userId) {
             ans = {
               ...ans,
