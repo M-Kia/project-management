@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { apiHandler, formApiHandler } from "../../utilities/apihandler.ts";
+import { apiHandler, imageUploader } from "../../utilities/apihandler.ts";
 import ImageInput from "../common/ImageInput";
 import defaultImage from "../../assets/images/173-1731325_person-icon-png-transparent-png.png";
 import toastify from "../../utilities/toustify.ts";
@@ -16,12 +16,11 @@ const AddChatModal = () => {
     return total + "," + value.id;
   }, "");
   function fileChangeHandler(event) {
-    formApiHandler(
-      "upload",
+    imageUploader(
+      // "upload",
       {
         files: event.target.files[0],
-      },
-      true
+      }
     ).then((res) => {
       if (res.data.status) {
         setFileId(res.data.result[0].id);
@@ -49,7 +48,7 @@ const AddChatModal = () => {
   useEffect(() => {
     apiHandler("chats/get-users").then((res) =>
       setUsers(
-        res.data.result.data.map((value) => {
+        res.data.result.map((value) => {
           if (value.id == 1) return { ...value, status: true };
           return { ...value, status: false };
         })
