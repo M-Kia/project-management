@@ -61,7 +61,7 @@ const SideBar = ({ chats }) => {
 
   return (
     <div
-      className={`col-3 col-xxl-2 sidebar ${chats.length > 9 ? "scroll" : ""}`}
+      className={`col-3 col-xxl-2 sidebar ${chats.length >= 9 ? "scroll" : ""}`}
     >
       {chats.map((value, index) => {
         return (
