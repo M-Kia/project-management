@@ -21,11 +21,11 @@ export async function imageUploader(
   // }
   let formData = new FormData();
   formData.append("files", data.files)
-  return fetch(`/api/upload`, {
-    method: "POST",
-    body: formData,
-  });
-  // return axios.post(`http://localhost:3000/api/upload`, formData);
+  // return fetch(`/api/upload`, {
+  //   method: "POST",
+  //   body: formData,
+  // });
+  return axios.post(`http://localhost:3000/api/upload`, formData);
   // return axios.post(`http://localhost:3000/api/${functionName}`, formData);
 }
 
@@ -34,17 +34,21 @@ export async function apiHandler(
   data,
   method: "post" | "get" | "put" | "delete" = "post"
   ) {
-    // if (method.toLowerCase() === "get") {
-    //   return axios.get(`/api/${functionName}`, {
-    //     params: data,
-    //   });
-    // }
-    return fetch(`/api/${functionName}`, {
-      method: method.toUpperCase(),
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data),
-    }).then(res => res.json());
-  // return axios[method](`/api/${functionName}`, data);
+    if (method.toLowerCase() === "get") {
+      return axios.get(`http://localhost:3000/api/${functionName}`, {
+        params: data,
+      });
+      // let param = Object.keys(data).map(val => `${val}=${data[val]}`)
+      // return fetch(`/api/${functionName}?${param}`, {
+      //   method: "GET"
+      // });
+    }
+    // return fetch(`/api/${functionName}`, {
+    //   method: method.toUpperCase(),
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify(data),
+    // }).then(res => res.json());
+  return axios[method](`http://localhost:3000/api/${functionName}`, data);
 }

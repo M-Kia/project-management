@@ -18,7 +18,7 @@ export default async function handler(
     for (let i = 0; i < res.length; i++) {
       res[i].path = makePath(res[i].path);
     }
-    result = makeResponse()
+    result = makeResponse(res)
   } catch (err) {
     result = makeResponse(err.message, "error");
   }
