@@ -6,8 +6,8 @@ import moshtaghi from "../../assets/images/photo_2022-05-22_09-37-49.jpg";
 import kia from "../../assets/images/photo_2022-05-22_09-38-07.jpg";
 import niko from "../../assets/images/photo_2022-05-22_09-37-57.jpg";
 import MessangerContext from "../../context/MessangerContext";
-const SideBar = ({ chats }) => {
-  const { setChat } = useContext(MessangerContext);
+const SideBar = () => {
+  const { chats, setChat } = useContext(MessangerContext);
   // const data = [
   //   {
   //     type: 1,
