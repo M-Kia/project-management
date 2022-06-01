@@ -19,13 +19,18 @@ export const MessangerContextProvider = ({ children }) => {
   const [chat, setChat] = useState("");
   const [chats, setChats] = useState([]);
   const [replyId, setReplyId] = useState(0);
-  
-  
+
   useEffect(() => {
     apiHandler("chats", { userId: 1 }, "get").then((res) =>
       setChats(res.data.result)
     );
   }, [updater]);
+  useEffect(() => {
+    if (chat.id) {
+      let cf = chats.find((value) => value.id == chat.id);
+      setChat(cf);
+    }
+  }, [chats]);
   return (
     <MessangerContext.Provider
       value={{

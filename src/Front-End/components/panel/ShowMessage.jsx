@@ -1,17 +1,21 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import reply from "../../assets/images/icons8-left-2-24.png";
 import MessangerContext from "../../context/MessangerContext";
 import menu from "../../assets/images/icons8-menu-24.png";
 import { apiHandler } from "../../utilities/apihandler.ts";
-const ShowMessage = ({ messages }) => {
-  const { setReplyId, chat } = useContext(MessangerContext);
+const ShowMessage = () => {
+  const { setReplyId, chat, chats, updater } = useContext(MessangerContext);
   const [todoStatus, setTodoStatus] = useState(false);
+  const [messages, setMessages] = useState([]);
   const onClickHandler = (id, status) => {
     apiHandler("chats/change-todo", {
       message_id: id,
       todo_status: status == 0 ? 1 : 0,
     });
   };
+  useEffect(() => {
+setMessages(chat.messages)
+  }, [chat])
   if (messages.length != 0)
     return (
       <div className="showMessage">

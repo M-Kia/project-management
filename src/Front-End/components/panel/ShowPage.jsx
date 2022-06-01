@@ -65,7 +65,7 @@ const ShowPage = () => {
             </div>
           </div>
           <div className="col-12 showMessageParent">
-            <ShowMessage messages={chat.messages} />
+            <ShowMessage />
           </div>
           <div className="bottom">
             <div className="col-1 sendIcon" onClick={onClickHandlerSend}>

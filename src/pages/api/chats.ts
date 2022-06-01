@@ -143,11 +143,10 @@ async function get(query): Promise<ResponseData> {
       if (messageI.length > 0) lastMessageTm = messageI[0].mtm;
 
       messageI = await m.find(`chat_id/=/${chatUserLinkI1[i].chat_id}`);
-
       let messageArr: Message[] = [];
       for (let j = 0; j < messageI.length; j++) {
         chatUserLinkI2 = await cul.find(
-          `user_id/=/${messageI[j].sender_id}`,
+          `users\`.\`id/=/${messageI[j].sender_id}`,
           [
             "`users`.`id`",
             "`users`.`profile_img_id`",
@@ -156,6 +155,8 @@ async function get(query): Promise<ResponseData> {
           ],
           [{ type: "RIGHT", fieldName: "user_id" }]
         );
+        console.log(messageI[j].sender_id);
+        console.log(chatUserLinkI2);
         if (chatUserLinkI2.length === 0) continue;
         imageI = await img.find(`id/=/${chatUserLinkI2[0].profile_img_id}`);
         messageArr.push({
@@ -179,7 +180,7 @@ async function get(query): Promise<ResponseData> {
         )
           messageCount++;
       }
-
+console.log(messageArr);
       ans.messages = [...messageArr];
       ans.numberOfUnread = messageCount;
 
