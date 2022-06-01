@@ -155,8 +155,6 @@ async function get(query): Promise<ResponseData> {
           ],
           [{ type: "RIGHT", fieldName: "user_id" }]
         );
-        console.log(messageI[j].sender_id);
-        console.log(chatUserLinkI2);
         if (chatUserLinkI2.length === 0) continue;
         imageI = await img.find(`id/=/${chatUserLinkI2[0].profile_img_id}`);
         messageArr.push({
@@ -180,7 +178,6 @@ async function get(query): Promise<ResponseData> {
         )
           messageCount++;
       }
-console.log(messageArr);
       ans.messages = [...messageArr];
       ans.numberOfUnread = messageCount;
 
