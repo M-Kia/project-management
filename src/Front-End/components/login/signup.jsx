@@ -70,24 +70,22 @@ const Signup = ({ setShowFirst }) => {
   };
 
   function fileChangeHandler(event) {
-    imageUploader(
-      // "upload",
-      {
-        files: event.target.files[0],
-      },
-      true
-    )
     // imageUploader(
     //   // "upload",
     //   {
     //     files: event.target.files[0],
-    //   },
-    //   true
-    // ).then((res) => {
-    //   if (res.data.status) {
-    //     setFileId(res.data.result[0].id);
     //   }
-    // });
+    // )
+    imageUploader(
+      // "upload",
+      {
+        files: event.target.files[0],
+      }
+    ).then((res) => {
+      if (res.data.status) {
+        setFileId(res.data.result[0].id);
+      }
+    });
   }
   return (
     <div className="col-12 col-md-4 col-lg-3 signup">

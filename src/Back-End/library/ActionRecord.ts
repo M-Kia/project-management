@@ -79,7 +79,7 @@ export default class ActionRecord {
     try {
       delete data["id"];
     } catch (e) {}
-    console.log(this.constructor.name);
+    // console.log(this.constructor.name);
     let filteredData = getData(data, this.constructor.name);
     // let filteredData = data;
     let sql = `INSERT INTO ${this.tableName}(${Object.keys(filteredData)

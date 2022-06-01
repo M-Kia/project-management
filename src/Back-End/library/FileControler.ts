@@ -25,16 +25,19 @@ export default class FileController {
     // let filepath = "files/" + filename;
     let filepath = filename;
     fs.renameSync(file.filepath, path.join(folderpath, filepath));
-    let image = new Images();
-    let result = await image.insert({ path: filepath });
-    return result;
+    // let image = new Images();
+    // let result = await image.insert({ path: filepath });
+    // let result = {id: 1};
+    return filepath;
   }
 
   async groupUpload(files: any[]): Promise<number[]> {
     let result: number[] = [];
     for (const value of files) {
-      let id = await this.upload(value);
-      result.push(id);
+      // let id = await this.upload(value);
+      // result.push(id);
+      let filepath = await this.upload(value);
+      result.push(filepath);
     }
     return result;
   }
