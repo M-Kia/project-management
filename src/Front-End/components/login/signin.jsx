@@ -43,7 +43,7 @@ const Singin = ({ setShowFirst }) => {
     <div className="col-12 col-md-4 col-lg-3 signin">
       <form>
         <div className="mb-3">
-          <label for="username" className="form-label">
+          <label htmlFor="username" className="form-label">
             نام کاربری
           </label>
           <input
@@ -55,7 +55,7 @@ const Singin = ({ setShowFirst }) => {
         </div>
         <div className="mb-3">
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <label for="password" className="form-label">
+            <label htmlFor="password" className="form-label">
               رمز عبور
             </label>
             {eye ? (

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import ImageInput from "../common/ImageInput";
-import { apiHandler, formApiHandler } from "../../utilities/apihandler.ts";
+import { apiHandler, imageUploader } from "../../utilities/apihandler.ts";
 import "react-toastify/dist/ReactToastify.css";
 import closeEye from "../../assets/images/icons8-closed-eye-24.png";
 import openEye from "../../assets/images/icons8-eye-24.png";
@@ -70,17 +70,24 @@ const Signup = ({ setShowFirst }) => {
   };
 
   function fileChangeHandler(event) {
-    formApiHandler(
-      "upload",
+    imageUploader(
+      // "upload",
       {
         files: event.target.files[0],
       },
       true
-    ).then((res) => {
-      if (res.data.status) {
-        setFileId(res.data.result[0].id);
-      }
-    });
+    )
+    // imageUploader(
+    //   // "upload",
+    //   {
+    //     files: event.target.files[0],
+    //   },
+    //   true
+    // ).then((res) => {
+    //   if (res.data.status) {
+    //     setFileId(res.data.result[0].id);
+    //   }
+    // });
   }
   return (
     <div className="col-12 col-md-4 col-lg-3 signup">
