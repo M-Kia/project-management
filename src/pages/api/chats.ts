@@ -209,7 +209,7 @@ async function add(data): Promise<ResponseData> {
 
     // check if any pv between these members exist or not
     res = await cul.find(
-      `\`chats\`.\`type\`/=/0&&\`chat_user_links\`.\`user_id\`/in/${userIds}`,
+      `chats\`.\`type/=/0&&chat_user_links\`.\`user_id/in/${userIds}`,
       ["`chat_user_links`.`chat_id`"],
       [{ fieldName: "chat_id", type: "LEFT" }]
     );
