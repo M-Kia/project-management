@@ -26,19 +26,27 @@ export default async function handler(
     let u = new Users();
 
     let res = await u.find(
-      `username/=/${username}&&password/=/${Encryption.encode(password)}`,
+      `username/=/${username}`,
       [
         "`users`.`id`",
         "`users`.`firstname`",
         "`users`.`lastname`",
         "`users`.`username`",
         "`users`.`email`",
+        "`users`.`password`",
         "`images`.`path`",
       ],
       [{ fieldName: "profile_img_id", type: "LEFT" }]
     );
-    if (res.length === 0) throw new Error("Wrong username or password");
+    let user;
+    for (let i = 0; i < res.length; i++){
+      if (Encryption.decode(res[i].password) == password){
+        user = res[i]
+      }
+    }
+    if (typeof user === "undefined") throw new Error("Wrong username or password");
     res[0].path = makePath(res[0].path);
+    delete res[0].password
     result = makeResponse(res[0]);
   } catch (err) {
     result = makeResponse(err.message, "error");
