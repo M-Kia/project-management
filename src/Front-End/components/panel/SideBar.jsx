@@ -66,31 +66,42 @@ const SideBar = () => {
       {chats.map((value, index) => {
         return (
           <div className="card" key={index} onClick={() => setChat(value)}>
-            <div className="right">
-              <div>
-                {value.logo == "" ? (
-                  <div
-                    className={`round empty ${index % 2 != 0 ? "odd" : "even"}`}
-                  ></div>
-                ) : value.logo == "" && value.members.length == 2 ? (
-                  <div className="round">
-                    <img src={value.members[1].profile} alt="profilePic" />
+            <div className="col-12 description">
+              <div className="right">
+                <div>
+                  {value.logo == "" ? (
+                    <div
+                      className={`round empty ${
+                        index % 2 != 0 ? "odd" : "even"
+                      }`}
+                    ></div>
+                  ) : value.logo == "" && value.members.length == 2 ? (
+                    <div className="round">
+                      <img src={value.members[1].profile} alt="profilePic" />
+                    </div>
+                  ) : (
+                    <div className="round">
+                      <img src={value.logo} alt="profilePic" />
+                    </div>
+                  )}
+                </div>
+                <div>
+                  {value.title == null
+                    ? value.members[1].username
+                    : value.title}
+                  <div className="text">
+                    {value.messages.slice(-1).length != 0
+                      ? value.messages.slice(-1)[0].text
+                      : ""}
                   </div>
-                ) : (
-                  <div className="round">
-                    <img src={value.logo} alt="profilePic" />
-                  </div>
-                )}
+                </div>
               </div>
-              <div>
-                {value.title == null ? value.members[1].username : value.title}
-              </div>
+              {value.numberOfUnread == 0 ? (
+                <div className="number">0</div>
+              ) : (
+                <div className="number">{value.numberOfUnread}</div>
+              )}
             </div>
-            {value.numberOfUnread == 0 ? (
-              ""
-            ) : (
-              <div className="number">{value.numberOfUnread}</div>
-            )}
           </div>
         );
       })}
