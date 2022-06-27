@@ -15,7 +15,7 @@ const ShowPage = () => {
     apiHandler(
       "messages",
       {
-        userId: 2,
+        userId: 1,
         chat_id: chat.id,
         text: newMessage,
         type: typeMessage,
@@ -35,6 +35,7 @@ const ShowPage = () => {
     if (element.scrollHeight > 120) setScrollHeight(true);
     else setScrollHeight(false);
   }
+  console.log(replyId);
   if (chat != "")
     return (
       <div className="col-8 showpage mainCover row">
@@ -67,44 +68,60 @@ const ShowPage = () => {
           <div className="col-12 showMessageParent">
             <ShowMessage />
           </div>
-          <div className="bottom">
-            <div className="col-1 sendIcon" onClick={onClickHandlerSend}>
-              <img src={send.src} alt="send" />
-            </div>
-            <textarea
-              className={`col-9 send ${scrollHeight ? "scroll" : ""}`}
-              placeholder="نوشتن پیام..."
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              onInput={(e) => auto_grow(e.target)}
-            ></textarea>
-            <div className="col-1 typeMessage">
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="inlineRadioOptions"
-                  id="inlineRadio1"
-                  value="option1"
-                  defaultChecked
-                  onClick={(e) => setTypeMessage(0)}
-                />
-                <label className="form-check-label" htmlFor="inlineRadio1">
-                  N
-                </label>
+          <div className={`bottom ${replyId != 0 ? "change" : ""}`}>
+            <div className="sendMessage">
+              <div className="col-1 sendIcon" onClick={onClickHandlerSend}>
+                <img src={send.src} alt="send" />
               </div>
-              <div className="form-check form-check-inline">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="inlineRadioOptions"
-                  id="inlineRadio2"
-                  value="option2"
-                  onClick={(e) => setTypeMessage(1)}
-                />
-                <label className="form-check-label" htmlFor="inlineRadio2">
-                  T
-                </label>
+              <div className="col-9">
+                {replyId != 0
+                  ? chat.messages.map((value, id) => {
+                      if (value.id == replyId) {
+                        return (
+                          <div className="replyMessage col-12">
+                            <div>{value.sender.username}</div>
+                            <div className="replytext">{value.text}</div>
+                          </div>
+                        );
+                      }
+                    })
+                  : ""}
+                <textarea
+                  className={`col-12 send ${scrollHeight ? "scroll" : ""}`}
+                  placeholder="نوشتن پیام..."
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  onInput={(e) => auto_grow(e.target)}
+                ></textarea>
+              </div>
+              <div className="col-1 typeMessage">
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="inlineRadioOptions"
+                    id="inlineRadio1"
+                    value="option1"
+                    defaultChecked
+                    onClick={(e) => setTypeMessage(0)}
+                  />
+                  <label className="form-check-label" htmlFor="inlineRadio1">
+                    N
+                  </label>
+                </div>
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="inlineRadioOptions"
+                    id="inlineRadio2"
+                    value="option2"
+                    onClick={(e) => setTypeMessage(1)}
+                  />
+                  <label className="form-check-label" htmlFor="inlineRadio2">
+                    T
+                  </label>
+                </div>
               </div>
             </div>
           </div>

@@ -14,8 +14,8 @@ const ShowMessage = () => {
     });
   };
   useEffect(() => {
-setMessages(chat.messages)
-  }, [chat])
+    setMessages(chat.messages);
+  }, [chat]);
   if (messages.length != 0)
     return (
       <div className="showMessage">
@@ -35,6 +35,24 @@ setMessages(chat.messages)
                   ""
                 )}
                 <div key={index} className="card">
+                  {value.parent_id != 0 ? (
+                    <div className="replyMessage">
+                      {messages.map((val, ind) => {
+                        return val.id == value.parent_id ? (
+                          <>
+                            <div className="sender">{val.sender.username}</div>
+                            <div key={ind} className="textMessage">
+                              {val.text}
+                            </div>
+                          </>
+                        ) : (
+                          ""
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    ""
+                  )}
                   {chat.type != 0 && value.sender.username != "hediem" ? (
                     <div className="sender">{value.sender.username} </div>
                   ) : (
@@ -68,6 +86,24 @@ setMessages(chat.messages)
                 )}
 
                 <div key={index} className="card todo">
+                  {value.parent_id != 0 ? (
+                    <div className="replyMessage">
+                      {messages.map((val, ind) => {
+                        return val.id == value.parent_id ? (
+                          <>
+                            <div className="sender">{val.sender.username}</div>
+                            <div key={ind} className="textMessage">
+                              {val.text}
+                            </div>
+                          </>
+                        ) : (
+                          ""
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    ""
+                  )}
                   {chat.type != 0 && value.sender.username != "hediem" ? (
                     <div className="sender">{value.sender.username} </div>
                   ) : (
@@ -93,7 +129,11 @@ setMessages(chat.messages)
                           id="checkboxNoLabel"
                           value=""
                           aria-label="..."
-                          checked={value.todo_status == 0 ? false : true}
+                          checked={
+                            value.todo_status == 0 || value.todo_status == null
+                              ? false
+                              : true
+                          }
                           onClick={(e) =>
                             onClickHandler(value.id, value.todo_status)
                           }

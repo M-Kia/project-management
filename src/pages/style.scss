@@ -42,9 +42,9 @@
   }
   & .card {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     padding: 5px 10px;
     cursor: pointer;
     border: none;
@@ -54,6 +54,7 @@
     }
     & .right {
       display: flex;
+      // flex-direction: column;
       align-items: center;
       & .round {
         width: 75px;
@@ -83,6 +84,20 @@
       border-radius: 50%;
       text-align: center;
       color: white;
+    }
+    & .description {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+    & .text {
+      padding-right: 5px;
+      color: #707070;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 140px;
     }
   }
   & .plus {
@@ -245,7 +260,7 @@
   & .send {
     padding: 15px 20px;
     border: 1px solid #707070;
-    border-radius: 25px;
+    // border-radius: 0px 0px 15px 15px;
     resize: none;
     overflow-y: hidden !important;
     height: 54px;
@@ -255,11 +270,35 @@
     }
   }
   & .bottom {
-    display: flex;
+    // display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
     margin-top: 660px;
+    &.change {
+      margin-top: 595px;
+    }
+    & .sendMessage {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    & .replyMessage {
+      background-color: white;
+      height: 65px;
+      border-radius: 10px 10px 0px 0px;
+      // margin-right: 85px;
+      border: 1px solid #707070;
+      border-bottom: none;
+      padding: 5px 15px;
+      & .replytext {
+        border-right: 3px solid #7f819a;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding-right: 10px;
+      }
+    }
   }
   & .text {
     text-align: center;
@@ -400,11 +439,22 @@
         background-color: whitesmoke;
         border-color: whitesmoke;
       }
+      & .replyMessage {
+        border-radius: 10px 0px 0px 0px;
+        margin-top: 3px;
+        border-right: 3px solid #7f819a;
+        margin-right: 40px;
+        padding-right: 5px;
+        color: rgb(53, 53, 53);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
     }
   }
   & .me {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     & .round {
       width: 75px;
       height: 75px;
@@ -426,8 +476,8 @@
       max-width: 460px;
       padding: 2px 0px;
       margin: 5px 0px;
-      background-color: #e9d5da;
-      border-color: #e9d5da;
+      background-color: #e1d3e1;
+      border-color: #e1d3e1;
       border-radius: 10px 45px 0px 10px;
       & .sender {
         margin-right: auto;
@@ -478,6 +528,17 @@
         background-color: #d6bdc3;
         border-color: #d6bdc3;
       }
+    }
+    & .replyMessage {
+      border-radius: 10px 0px 0px 0px;
+      margin-top: 3px;
+      border-right: 3px solid #7f819a;
+      margin-right: 40px;
+      padding-right: 5px;
+      color: rgb(53, 53, 53);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 }
