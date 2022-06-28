@@ -5,6 +5,8 @@ import background from "../../assets/images/brandi-redd-aJTiW00qqtI-unsplash.png
 import send from "../../assets/images/icons8-send-letter-50.png";
 import ShowMessage from "./ShowMessage";
 import back from "../../assets/images/icons8-back-50.png";
+import WithPortal from "../../hoc/WithPortal";
+import ChatInfo from "./ChatInfo";
 const ShowPage = () => {
   const [newMessage, setNewMessage] = useState("");
   const [typeMessage, setTypeMessage] = useState(0);
@@ -49,17 +51,29 @@ const ShowPage = () => {
           <div className="title">
             <div className="d-flex align-items-center">
               {chat.logo == "" ? (
-                <div className="round empty"></div>
+                <div
+                  className="round empty"
+                  data-bs-toggle="modal"
+                  data-bs-target="#infoModal"
+                ></div>
               ) : chat.logo == "" && chat.members.length == 2 ? (
-                <div className="round">
+                <div
+                  className="round"
+                  data-bs-toggle="modal"
+                  data-bs-target="#infoModal"
+                >
                   <img src={chat.members[1].profile} alt="profilePic" />
                 </div>
               ) : (
-                <div className="round">
+                <div
+                  className="round"
+                  data-bs-toggle="modal"
+                  data-bs-target="#infoModal"
+                >
                   <img src={chat.logo} alt="profilePic" />
                 </div>
               )}
-              {chat.title == null ? chat.members[1].username : chat.title}
+              {chat.title}
             </div>
             <div style={{ cursor: "pointer" }}>
               <img src={back.src} alt="back" onClick={(e) => setChat("")} />
@@ -126,6 +140,9 @@ const ShowPage = () => {
             </div>
           </div>
         </div>
+        <WithPortal>
+          <ChatInfo />
+        </WithPortal>
       </div>
     );
   return (

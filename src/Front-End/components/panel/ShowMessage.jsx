@@ -4,7 +4,8 @@ import MessangerContext from "../../context/MessangerContext";
 import menu from "../../assets/images/icons8-menu-24.png";
 import { apiHandler } from "../../utilities/apihandler.ts";
 const ShowMessage = () => {
-  const { setReplyId, chat, chats, updater } = useContext(MessangerContext);
+  const { setReplyId, chat, chats, updater, setUpdater } =
+    useContext(MessangerContext);
   const [todoStatus, setTodoStatus] = useState(false);
   const [messages, setMessages] = useState([]);
   const onClickHandler = (id, status) => {
@@ -12,10 +13,11 @@ const ShowMessage = () => {
       message_id: id,
       todo_status: status == 0 ? 1 : 0,
     });
+    setUpdater(!updater);
   };
   useEffect(() => {
     setMessages(chat.messages);
-  }, [chat]);
+  }, [chat, updater]);
   if (messages.length != 0)
     return (
       <div className="showMessage">
