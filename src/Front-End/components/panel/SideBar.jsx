@@ -6,6 +6,8 @@ import moshtaghi from "../../assets/images/photo_2022-05-22_09-37-49.jpg";
 import kia from "../../assets/images/photo_2022-05-22_09-38-07.jpg";
 import niko from "../../assets/images/photo_2022-05-22_09-37-57.jpg";
 import MessangerContext from "../../context/MessangerContext";
+import setting from "../../assets/images/icons8-settings-48.png";
+import SettingModal from "./SettingModal";
 const SideBar = () => {
   const { chats, setChat } = useContext(MessangerContext);
   // const data = [
@@ -63,6 +65,9 @@ const SideBar = () => {
     <div
       className={`col-3 col-xxl-2 sidebar ${chats.length >= 9 ? "scroll" : ""}`}
     >
+      <div data-bs-toggle="modal" data-bs-target="#settingModal">
+        <img src={setting.src} alt="setting" />
+      </div>
       {chats.map((value, index) => {
         return (
           <div className="card" key={index} onClick={() => setChat(value)}>
@@ -97,7 +102,7 @@ const SideBar = () => {
                 </div>
               </div>
               {value.numberOfUnread == 0 ? (
-                <div className="number">0</div>
+                ""
               ) : (
                 <div className="number">{value.numberOfUnread}</div>
               )}
@@ -115,6 +120,7 @@ const SideBar = () => {
       </button>
       <WithPortal>
         <AddChatModal />
+        <SettingModal />
       </WithPortal>
     </div>
   );

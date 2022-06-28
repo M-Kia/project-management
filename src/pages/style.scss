@@ -542,3 +542,22 @@
     }
   }
 }
+.chatinfo {
+  & .profile_pic {
+    width: 100px;
+    height: 100px;
+    &.member {
+      width: 75px;
+      height: 75px;
+    }
+    & img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+  }
+  & .members {
+    margin-bottom: 10px;
+  }
+}
