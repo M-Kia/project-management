@@ -14,7 +14,7 @@ type UserInfo = {
 const AuthenticationContext = createContext<{
   isLogin: boolean;
   userInfo: UserInfo;
-  login: (userInformation) => void;
+  login: (userInformation: UserInfo) => void;
   logout: () => void;
 }>({
   isLogin: true,
@@ -28,7 +28,7 @@ const AuthenticationContext = createContext<{
     email: "",
     profile: "",
   },
-  login: (userInformation) => {},
+  login: (userInformation: UserInfo) => {},
   logout: () => {},
 });
 
@@ -46,7 +46,7 @@ export function AuthenticationProvider({ children }) {
     profile: "",
   });
 
-  function login(userInformation) {
+  function login(userInformation: UserInfo) {
     setUserInfo(userInformation);
   }
 
@@ -64,6 +64,8 @@ export function AuthenticationProvider({ children }) {
   }
 
   return (
-    <AuthenticationContext.Provider>{children}</AuthenticationContext.Provider>
+    <AuthenticationContext.Provider value={{ userInfo, login, logout }}>
+      {children}
+    </AuthenticationContext.Provider>
   );
 }
