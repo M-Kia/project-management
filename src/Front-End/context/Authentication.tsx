@@ -44,8 +44,6 @@ export function AuthenticationProvider({ children }) {
   });
 
   function login(userInformation: UserInfo) {
-    console.log("login function");
-    console.log(userInformation);
     setUserInfo(userInformation);
   }
 
@@ -61,6 +59,8 @@ export function AuthenticationProvider({ children }) {
     });
   }
 
+  // console.log("userInfo :>> " , userInfo);
+  
   return (
     <AuthenticationContext.Provider value={{ userInfo, login, logout }}>
       {children}

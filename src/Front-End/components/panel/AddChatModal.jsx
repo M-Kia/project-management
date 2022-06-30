@@ -1,11 +1,18 @@
 import React, { useContext, useEffect, useState } from "react";
+
+import AuthenticationContext from "../../context/Authentication.tsx";
+import MessangerContext from "../../context/MessangerContext";
+
 import { apiHandler, imageUploader } from "../../utilities/apihandler.ts";
 import ImageInput from "../common/ImageInput";
-import defaultImage from "../../assets/images/173-1731325_person-icon-png-transparent-png.png";
 import toastify from "../../utilities/toustify.ts";
-import MessangerContext from "../../context/MessangerContext";
+
+import defaultImage from "../../assets/images/173-1731325_person-icon-png-transparent-png.png";
+
 const AddChatModal = () => {
   const { updater, setUpdater } = useContext(MessangerContext);
+  const { userInfo } = useContext(AuthenticationContext);
+
   const [type, setType] = useState("");
   const [users, setUsers] = useState([]);
   const [fileId, setFileId] = useState(0);
@@ -32,14 +39,17 @@ const AddChatModal = () => {
       toastify("اسم گروه را وارد کنید", "error");
       return;
     }
-    if (ids == "") {
+    if (type == "group" && ids.length < 3) {
+      toastify("کاربران را انتخاب کنید", "error");
+      return;
+    } else if (type == "private" && ids.length < 2) {
       toastify("کاربران را انتخاب کنید", "error");
       return;
     }
     // console.log("ids in api", ids);
     apiHandler("chats", {
       userIds: ids,
-      ownerId: 1,
+      ownerId: userInfo.id,
       profile_id: fileId,
       title: groupName,
       type: type == "private" ? 0 : 1,
@@ -49,7 +59,7 @@ const AddChatModal = () => {
     apiHandler("chats/get-users").then((res) =>
       setUsers(
         res.data.result.map((value) => {
-          if (value.id == 1) return { ...value, status: true };
+          if (value.id == userInfo.id) return { ...value, status: true };
           return { ...value, status: false };
         })
       )
@@ -116,7 +126,7 @@ const AddChatModal = () => {
                 <div>
                   <div className="users">
                     {users.map((value) =>
-                      value.id != 1 ? (
+                      value.id != userInfo.id ? (
                         <div
                           key={value.id}
                           className={`user col-12 ${
@@ -155,7 +165,7 @@ const AddChatModal = () => {
                 <div>
                   <div className="users">
                     {users.map((value) =>
-                      value.id != 1 ? (
+                      value.id != userInfo.id ? (
                         <div
                           key={value.id}
                           className={`user col-12 ${

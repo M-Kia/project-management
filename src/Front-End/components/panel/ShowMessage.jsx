@@ -1,11 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
-import reply from "../../assets/images/icons8-left-2-24.png";
+
+import AuthenticationContext from "../../context/Authentication.tsx";
 import MessangerContext from "../../context/MessangerContext";
-import menu from "../../assets/images/icons8-menu-24.png";
 import { apiHandler } from "../../utilities/apihandler.ts";
+
+import menu from "../../assets/images/icons8-menu-24.png";
+import reply from "../../assets/images/icons8-left-2-24.png";
 const ShowMessage = () => {
   const { setReplyId, chat, chats, updater, setUpdater } =
     useContext(MessangerContext);
+  const { userInfo } = useContext(AuthenticationContext);
+
   const [todoStatus, setTodoStatus] = useState(false);
   const [messages, setMessages] = useState([]);
   const onClickHandler = (id, status) => {
@@ -18,6 +23,8 @@ const ShowMessage = () => {
   useEffect(() => {
     setMessages(chat.messages);
   }, [chat, updater]);
+  // console.log(userInfo);
+  console.log(chat);
   if (messages.length != 0)
     return (
       <div className="showMessage">
@@ -26,7 +33,7 @@ const ShowMessage = () => {
             return (
               <div
                 className={`${
-                  value.sender.username == "hediem" ? "me" : "person"
+                  value.sender.username == userInfo.username ? "me" : "person"
                 }`}
                 key={index}
               >
@@ -56,7 +63,8 @@ const ShowMessage = () => {
                   ) : (
                     ""
                   )}
-                  {chat.type != 0 && value.sender.username != "hediem" ? (
+                  {chat.type != 0 &&
+                  value.sender.username != userInfo.username ? (
                     <div className="sender">{value.sender.username} </div>
                   ) : (
                     ""
@@ -77,7 +85,7 @@ const ShowMessage = () => {
             return (
               <div
                 className={`${
-                  value.sender.username == "hediem" ? "me" : "person"
+                  value.sender.username == userInfo.username ? "me" : "person"
                 }`}
                 key={index}
               >
@@ -108,7 +116,8 @@ const ShowMessage = () => {
                   ) : (
                     ""
                   )}
-                  {chat.type != 0 && value.sender.username != "hediem" ? (
+                  {chat.type != 0 &&
+                  value.sender.username != userInfo.username ? (
                     <div className="sender">{value.sender.username} </div>
                   ) : (
                     ""
