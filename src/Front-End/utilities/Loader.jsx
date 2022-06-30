@@ -11,11 +11,11 @@ export default function Loader() {
           top: "0",
           bottom: "0",
           overflow: "hidden",
-          backgroundColor: "rgba(247,234,219, 0.52)",
+          backgroundColor: "rgba(219,234,247, 0.52)",
           zIndex: 5,
         }}
       >
-        <CommonLoading color={"#ff938a"} />
+        <CommonLoading color={"#8a93ff"} />
       </div>
     </>
   );

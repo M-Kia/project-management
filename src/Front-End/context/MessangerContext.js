@@ -20,12 +20,14 @@ export const MessangerContextProvider = ({ children }) => {
   const [chat, setChat] = useState("");
   const [chats, setChats] = useState([]);
   const [replyId, setReplyId] = useState(0);
-  const { userInfo } = useContext(AuthenticationContext);
+  const { userInfo, isLogin } = useContext(AuthenticationContext);
 
   useEffect(() => {
-    apiHandler("chats", { userId: userInfo.id }, "get").then((res) =>
-      setChats(res.data.result)
-    );
+    if (isLogin) {
+      apiHandler("chats", { userId: userInfo.id }, "get").then((res) =>
+        setChats(res.data.result)
+      );
+    }
   }, [updater, userInfo]);
   useEffect(() => {
     if (chat.id) {

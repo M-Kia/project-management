@@ -1,4 +1,5 @@
-import axios from "axios";
+import Cookies from "js-cookie";
+import axios, { AxiosRequestHeaders } from "axios";
 
 const objToFormData = (object) => {
   const formData = new FormData();
@@ -20,35 +21,54 @@ export async function imageUploader(
   //   formData = new FormData();
   // }
   let formData = new FormData();
-  formData.append("files", data.files)
+  formData.append("files", data.files);
   // return fetch(`/api/upload`, {
   //   method: "POST",
   //   body: formData,
   // });
-  return axios.post(`http://localhost:3000/api/upload`, formData);
-  // return axios.post(`http://localhost:3000/api/${functionName}`, formData);
+
+  let headers: AxiosRequestHeaders = {};
+  let token = Cookies.get("token");
+  if (typeof token !== "undefined") {
+    headers = { Authorization: `hkn ${token}` };
+  }
+
+  return axios.post(`/api/upload`, formData, {
+    headers,
+  });
+  // return axios.post(`/api/${functionName}`, formData);
 }
 
 export async function apiHandler(
   functionName: string,
   data,
   method: "post" | "get" | "put" | "delete" = "post"
-  ) {
-    if (method.toLowerCase() === "get") {
-      return axios.get(`http://localhost:3000/api/${functionName}`, {
-        params: data,
-      });
-      // let param = Object.keys(data).map(val => `${val}=${data[val]}`)
-      // return fetch(`/api/${functionName}?${param}`, {
-      //   method: "GET"
-      // });
-    }
-    // return fetch(`/api/${functionName}`, {
-    //   method: method.toUpperCase(),
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify(data),
-    // }).then(res => res.json());
-  return axios[method](`http://localhost:3000/api/${functionName}`, data);
+) {
+  let headers: AxiosRequestHeaders = {};
+  let token = Cookies.get("token");
+  if (typeof token !== "undefined") {
+    headers = { Authorization: `hkn ${token}` };
+  }
+
+  if (method.toLowerCase() === "get") {
+    return axios.get(`/api/${functionName}`, {
+      params: data,
+      headers,
+    });
+    // let param = Object.keys(data).map(val => `${val}=${data[val]}`)
+    // return fetch(`/api/${functionName}?${param}`, {
+    //   method: "GET"
+    // });
+  }
+  // return fetch(`/api/${functionName}`, {
+  //   method: method.toUpperCase(),
+  //   headers: {
+  //     'Content-Type': 'application/json'
+  //   },
+  //   body: JSON.stringify(data),
+  // }).then(res => res.json());
+
+  return axios[method](`/api/${functionName}`, data, {
+    headers,
+  });
 }

@@ -18,6 +18,7 @@ const AuthenticationContext = createContext<{
   isLogin: boolean;
   isLoading: boolean;
   userInfo: UserInfo;
+  changeLoading: (loading: boolean) => void;
   login: (userInformation: UserInfo) => void;
   logout: () => void;
 }>({
@@ -33,6 +34,7 @@ const AuthenticationContext = createContext<{
     profile: "",
   },
   login: (userInformation: UserInfo) => {},
+  changeLoading: (loading: boolean) => {},
   logout: () => {},
 });
 
@@ -48,7 +50,8 @@ export function AuthenticationProvider({ children }) {
     email: "",
     profile: "",
   });
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   function changeLoading(loading: boolean): void {
     setIsLoading(loading);
@@ -56,6 +59,7 @@ export function AuthenticationProvider({ children }) {
 
   function login(userInformation: UserInfo) {
     setUserInfo(userInformation);
+    setIsLogin(true);
     Cookie.set("token", userInformation.token);
   }
 
@@ -69,19 +73,24 @@ export function AuthenticationProvider({ children }) {
       email: "",
       profile: "",
     });
+    setIsLogin(false);
     Cookie.set("token", null);
   }
 
   async function checkLoginInfo() {
     let token = Cookie.get("token");
+    changeLoading(true);
+    token = "U2FsdGVkX18WOcJOYDZPN4LNRO0L85YqihcKkci8P5EhXzZ7jAjfWlGIoul9JQs1";
+
     if (token) {
-      let res = await apiHandler("check-login", { token }, "post");
+      let res = await apiHandler("auth/check-login", { token }, "post");
       if (res.data.status) {
-        login(res.data.data);
+        login(res.data.result);
       } else {
         Cookie.set("token", null);
       }
     }
+    changeLoading(false);
   }
 
   useEffect(() => {
@@ -91,7 +100,7 @@ export function AuthenticationProvider({ children }) {
 
   return (
     <AuthenticationContext.Provider
-      value={{ userInfo, isLoading, login, logout, changeLoading }}
+      value={{ userInfo, isLogin, isLoading, login, logout, changeLoading }}
     >
       {isLoading ? <Loader /> : null}
       {children}
