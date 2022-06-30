@@ -2,12 +2,19 @@ import React, { useContext, useState } from "react";
 import MessangerContext from "../../context/MessangerContext";
 import AuthenticationContext from "../../context/Authentication.tsx";
 
+import ImageInput from "../common/ImageInput";
+
 import editIcon from "../../assets/images/icons8-edit-64.png";
+import submitIcon from "../../assets/images/icons8-submit-58.png";
+import removeIcon from "../../assets/images/icons8-close-24.png";
+import defaultImage from "../../assets/images/173-1731325_person-icon-png-transparent-png.png";
+
 const ChatInfo = () => {
+  let admin;
   const { chat } = useContext(MessangerContext);
   const { userInfo } = useContext(AuthenticationContext);
-  let admin;
   const [edit, setEdit] = useState(false);
+
   chat.members.map((value) => {
     if (value.type == 2) {
       if (value.id == userInfo.id) {
@@ -17,8 +24,19 @@ const ChatInfo = () => {
       }
     }
   });
-  console.log(admin);
-  console.log(chat);
+  function fileChangeHandler(event) {
+    imageUploader({
+      files: event.target.files[0],
+    }).then((res) => {
+      if (res.data.status) {
+        setFileId(res.data.result[0].id);
+      }
+    });
+  }
+  const onClickHandlerRemove = () => {};
+  const onClickHandlerEdit = () => {};
+  // console.log(admin);
+  // console.log(chat);
   return (
     <div
       className="modal fade chatinfo"
@@ -43,13 +61,34 @@ const ChatInfo = () => {
           <div className="modal-body">
             <div className="d-flex align-items-center justify-content-between">
               <div className="d-flex align-items-center">
-                <div
-                  className="profile_pic"
-                  data-bs-toggle="modal"
-                  data-bs-target="#infoModal"
-                >
-                  <img src={chat.logo} alt="profilePic" />
-                </div>
+                {edit ? (
+                  <div
+                    className="mb-3"
+                    style={{
+                      width: 120,
+                      height: 120,
+                      fontSize: "20px",
+                      margin: "0px auto",
+                    }}
+                  >
+                    <ImageInput
+                      src={defaultImage.src}
+                      radiusPercentage={50}
+                      width={300}
+                      height={300}
+                      onChangeHandler={fileChangeHandler}
+                    />
+                  </div>
+                ) : (
+                  <div
+                    className="profile_pic"
+                    data-bs-toggle="modal"
+                    data-bs-target="#infoModal"
+                  >
+                    <img src={chat.logo} alt="profilePic" />
+                  </div>
+                )}
+
                 <div
                   style={{
                     fontSize: "20px",
@@ -58,20 +97,36 @@ const ChatInfo = () => {
                   }}
                 >
                   {admin && edit == true ? (
-                    <input
-                      type="text"
-                      class="form-control"
-                      placeholder="Username"
-                      aria-label="Username"
-                      aria-describedby="basic-addon1"
-                    ></input>
+                    <div className="d-flex">
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder={chat.title}
+                        aria-label="Username"
+                        aria-describedby="basic-addon1"
+                      ></input>
+                      <div
+                        onClick={onClickHandlerEdit}
+                        style={{ cursor: "pointer" }}
+                      >
+                        <img
+                          src={submitIcon.src}
+                          alt="submit"
+                          width={35}
+                          height={35}
+                        />
+                      </div>
+                    </div>
                   ) : (
                     <div>{chat.title}</div>
                   )}
                 </div>
               </div>
               {admin ? (
-                <div>
+                <div
+                  onClick={(e) => setEdit(!edit)}
+                  style={{ cursor: "pointer" }}
+                >
                   <img src={editIcon.src} alt="edit" width={30} height={30} />
                 </div>
               ) : (
@@ -92,30 +147,42 @@ const ChatInfo = () => {
                 </div>
                 {chat.members.map((value) => {
                   return (
-                    <div className="d-flex align-items-center members">
-                      <div
-                        className="profile_pic member"
-                        data-bs-toggle="modal"
-                        data-bs-target="#infoModal"
-                      >
-                        <img src={value.profile} alt="profilePic" />
+                    <div className="d-flex align-items-center justify-content-between">
+                      <div className="d-flex align-items-center members">
+                        <div
+                          className="profile_pic member"
+                          data-bs-toggle="modal"
+                          data-bs-target="#infoModal"
+                        >
+                          <img src={value.profile} alt="profilePic" />
+                        </div>
+                        <div
+                          style={{
+                            fontSize: "20px",
+                            marginRight: "15px",
+                            fontWeight: "500",
+                          }}
+                        >
+                          {value.username}
+                        </div>
+                        <span style={{ color: "#363062" }}>
+                          {value.type == 2
+                            ? " (owner) "
+                            : value.type == 1
+                            ? " (admin) "
+                            : ""}
+                        </span>
                       </div>
-                      <div
-                        style={{
-                          fontSize: "20px",
-                          marginRight: "15px",
-                          fontWeight: "500",
-                        }}
-                      >
-                        {value.username}
-                      </div>
-                      <span style={{ color: "#363062" }}>
-                        {value.type == 2
-                          ? " (owner) "
-                          : value.type == 1
-                          ? " (admin) "
-                          : ""}
-                      </span>
+                      {admin && value.id != userInfo.id ? (
+                        <div
+                          style={{ cursor: "pointer" }}
+                          onClick={onClickHandlerRemove}
+                        >
+                          <img src={removeIcon.src} alt="removeIcon" />
+                        </div>
+                      ) : (
+                        ""
+                      )}
                     </div>
                   );
                 })}
