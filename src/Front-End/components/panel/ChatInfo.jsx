@@ -1,9 +1,24 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import MessangerContext from "../../context/MessangerContext";
+import AuthenticationContext from "../../context/Authentication.tsx";
 
+import editIcon from "../../assets/images/icons8-edit-64.png";
 const ChatInfo = () => {
   const { chat } = useContext(MessangerContext);
-  // console.log(chat);
+  const { userInfo } = useContext(AuthenticationContext);
+  let admin;
+  const [edit, setEdit] = useState(false);
+  chat.members.map((value) => {
+    if (value.type == 2) {
+      if (value.id == userInfo.id) {
+        return (admin = true);
+      } else {
+        return (admin = false);
+      }
+    }
+  });
+  console.log(admin);
+  console.log(chat);
   return (
     <div
       className="modal fade chatinfo"
@@ -26,23 +41,42 @@ const ChatInfo = () => {
             ></button>
           </div> */}
           <div className="modal-body">
-            <div className="d-flex align-items-center">
-              <div
-                className="profile_pic"
-                data-bs-toggle="modal"
-                data-bs-target="#infoModal"
-              >
-                <img src={chat.logo} alt="profilePic" />
+            <div className="d-flex align-items-center justify-content-between">
+              <div className="d-flex align-items-center">
+                <div
+                  className="profile_pic"
+                  data-bs-toggle="modal"
+                  data-bs-target="#infoModal"
+                >
+                  <img src={chat.logo} alt="profilePic" />
+                </div>
+                <div
+                  style={{
+                    fontSize: "20px",
+                    marginRight: "15px",
+                    fontWeight: "500",
+                  }}
+                >
+                  {admin && edit == true ? (
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Username"
+                      aria-label="Username"
+                      aria-describedby="basic-addon1"
+                    ></input>
+                  ) : (
+                    <div>{chat.title}</div>
+                  )}
+                </div>
               </div>
-              <div
-                style={{
-                  fontSize: "20px",
-                  marginRight: "15px",
-                  fontWeight: "500",
-                }}
-              >
-                {chat.title}
-              </div>
+              {admin ? (
+                <div>
+                  <img src={editIcon.src} alt="edit" width={30} height={30} />
+                </div>
+              ) : (
+                ""
+              )}
             </div>
             {chat.type == 1 ? (
               <div>
