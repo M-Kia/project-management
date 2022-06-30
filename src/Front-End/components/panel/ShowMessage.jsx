@@ -28,6 +28,7 @@ const ShowMessage = () => {
                 className={`${
                   value.sender.username == "hediem" ? "me" : "person"
                 }`}
+                key={index}
               >
                 {value.sender.profile != "" && chat.type != 0 ? (
                   <div className="round">
@@ -78,6 +79,7 @@ const ShowMessage = () => {
                 className={`${
                   value.sender.username == "hediem" ? "me" : "person"
                 }`}
+                key={index}
               >
                 {value.sender.profile != "" && chat.type != 0 ? (
                   <div className="round">

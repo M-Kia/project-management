@@ -6,7 +6,6 @@ type UserInfo = {
   firstname: string;
   lastname: string;
   username: string;
-  mobile: string;
   email: string;
   profile: string;
 };
@@ -14,7 +13,7 @@ type UserInfo = {
 const AuthenticationContext = createContext<{
   isLogin: boolean;
   userInfo: UserInfo;
-  login: (userInformation) => void;
+  login: (userInformation: UserInfo) => void;
   logout: () => void;
 }>({
   isLogin: true,
@@ -24,11 +23,10 @@ const AuthenticationContext = createContext<{
     firstname: "",
     lastname: "",
     username: "",
-    mobile: "",
     email: "",
     profile: "",
   },
-  login: (userInformation) => {},
+  login: (userInformation: UserInfo) => {},
   logout: () => {},
 });
 
@@ -41,12 +39,13 @@ export function AuthenticationProvider({ children }) {
     firstname: "",
     lastname: "",
     username: "",
-    mobile: "",
     email: "",
     profile: "",
   });
 
-  function login(userInformation) {
+  function login(userInformation: UserInfo) {
+    console.log("login function");
+    console.log(userInformation);
     setUserInfo(userInformation);
   }
 
@@ -57,13 +56,14 @@ export function AuthenticationProvider({ children }) {
       firstname: "",
       lastname: "",
       username: "",
-      mobile: "",
       email: "",
       profile: "",
     });
   }
 
   return (
-    <AuthenticationContext.Provider>{children}</AuthenticationContext.Provider>
+    <AuthenticationContext.Provider value={{ userInfo, login, logout }}>
+      {children}
+    </AuthenticationContext.Provider>
   );
 }

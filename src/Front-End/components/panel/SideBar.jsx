@@ -1,13 +1,16 @@
 import React, { useState, useContext } from "react";
-import plus from "../../assets/images/icons8-plus-32.png";
+import MessangerContext from "../../context/MessangerContext";
+
 import WithPortal from "../../hoc/WithPortal";
 import AddChatModal from "./AddChatModal";
+import SettingModal from "./SettingModal";
+
+import plus from "../../assets/images/icons8-plus-32.png";
 import moshtaghi from "../../assets/images/photo_2022-05-22_09-37-49.jpg";
 import kia from "../../assets/images/photo_2022-05-22_09-38-07.jpg";
 import niko from "../../assets/images/photo_2022-05-22_09-37-57.jpg";
-import MessangerContext from "../../context/MessangerContext";
 import setting from "../../assets/images/icons8-settings-48.png";
-import SettingModal from "./SettingModal";
+import menu from "../../assets/images/icons8-menu-24.png";
 const SideBar = () => {
   const { chats, setChat } = useContext(MessangerContext);
   // const data = [
@@ -65,9 +68,83 @@ const SideBar = () => {
     <div
       className={`col-3 col-xxl-2 sidebar ${chats.length >= 9 ? "scroll" : ""}`}
     >
-      <div data-bs-toggle="modal" data-bs-target="#settingModal">
-        <img src={setting.src} alt="setting" />
+      <div className="accordion accordion-flush" id="accordionFlushExample">
+        <div className="accordion-item">
+          <h2 className="accordion-header" id="flush-headingOne">
+            <button
+              className="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#flush-collapseOne"
+              aria-expanded="false"
+              aria-controls="flush-collapseOne"
+            >
+              <img src={menu.src} alt="menu" />
+            </button>
+          </h2>
+          <div
+            id="flush-collapseOne"
+            className="accordion-collapse collapse"
+            aria-labelledby="flush-headingOne"
+            data-bs-parent="#accordionFlushExample"
+          >
+            <div className="accordion-body">
+              <div className="d-flex flex-column">
+                <div
+                  className="profile_pic"
+                  data-bs-toggle="modal"
+                  data-bs-target="#infoModal"
+                >
+                  {/* <img src={chat.logo} alt="profilePic" /> */}
+                  <img src={moshtaghi.src} alt="profilePic" />
+                </div>
+                <div
+                  style={{
+                    fontSize: "20px",
+                    marginTop: "5px",
+                    marginRight: "5px",
+                    fontWeight: "500",
+                  }}
+                >
+                  {/* {chat.title} */}
+                  hediem
+                </div>
+                <hr />
+              </div>
+              <div
+                data-bs-toggle="modal"
+                data-bs-target="#addChatModal"
+                style={{ cursor: "pointer" }}
+              >
+                <button className="plus" type="button">
+                  <img src={plus.src} alt="add" />
+                </button>
+                <span
+                  style={{
+                    fontWeight: "500",
+                    fontSize: "18px",
+                    marginRight: "5px",
+                  }}
+                >
+                  چت جدید
+                </span>
+              </div>
+              <hr />
+              <div
+                data-bs-toggle="modal"
+                data-bs-target="#settingModal"
+                style={{ cursor: "pointer" }}
+              >
+                <img src={setting.src} alt="setting" />
+                <span style={{ fontWeight: "500", fontSize: "18px" }}>
+                  تنظیمات
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+
       {chats.map((value, index) => {
         return (
           <div className="card" key={index} onClick={() => setChat(value)}>
@@ -110,14 +187,14 @@ const SideBar = () => {
           </div>
         );
       })}
-      <button
+      {/* <button
         className="plus"
         type="button"
         data-bs-toggle="modal"
         data-bs-target="#addChatModal"
       >
         <img src={plus.src} alt="add" />
-      </button>
+      </button> */}
       <WithPortal>
         <AddChatModal />
         <SettingModal />

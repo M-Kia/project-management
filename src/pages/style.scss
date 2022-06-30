@@ -104,18 +104,45 @@
     background-color: #9e98ce;
     border: 1px solid #9e98ce;
     border-radius: 50%;
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    height: 40px;
     // position: fixed;
     // bottom: 90px;
     cursor: pointer;
     & img {
-      width: 35px;
-      height: 35px;
+      width: 20px;
+      height: 20px;
+      margin-bottom: 3px;
     }
     &:hover {
       background-color: #4d4c7d;
       border: 1px solid #4d4c7d;
+    }
+  }
+  & .accordion {
+    & .profile_pic {
+      width: 110px;
+      height: 110px;
+      & img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+      }
+    }
+    & .accordion-item:last-of-type .accordion-collapse {
+      height: 100vh;
+    }
+    & .accordion-button::after {
+      width: 0px;
+      height: 0px;
+    }
+    & .accordion-button:focus {
+      border-color: #7f819a;
+      box-shadow: 0 0 0 0.25rem #7f819a3b;
+    }
+    & .accordion-button:not(.collapsed) {
+      background-color: #7f819a77;
     }
   }
 }

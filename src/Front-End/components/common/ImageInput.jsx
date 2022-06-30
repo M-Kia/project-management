@@ -75,7 +75,7 @@ export default function ImageInput({
               fill="currentColor"
               strokeWidth="0"
               viewBox="0 0 16 16"
-              class="icon"
+              className="icon"
               height="0.5em"
               width="0.5em"
               xmlns="http://www.w3.org/2000/svg"
