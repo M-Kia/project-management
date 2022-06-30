@@ -12,11 +12,9 @@ export default function Panel() {
   // useInterval(() => {});
   // console.log(chats);
   return (
-    <MessangerContextProvider>
-      <div className="row main">
-        <SideBar />
-        <ShowPage />
-      </div>
-    </MessangerContextProvider>
+    <div className="row main">
+      <SideBar />
+      <ShowPage />
+    </div>
   );
 }
