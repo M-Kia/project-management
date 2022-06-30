@@ -44,6 +44,8 @@ export function AuthenticationProvider({ children }) {
   });
 
   function login(userInformation: UserInfo) {
+    console.log("login function");
+    console.log(userInformation);
     setUserInfo(userInformation);
   }
 

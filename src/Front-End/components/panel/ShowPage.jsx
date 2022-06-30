@@ -7,12 +7,15 @@ import ShowMessage from "./ShowMessage";
 import back from "../../assets/images/icons8-back-50.png";
 import WithPortal from "../../hoc/WithPortal";
 import ChatInfo from "./ChatInfo";
+import AuthenticationContext from "../../context/Authentication.tsx";
+
 const ShowPage = () => {
   const [newMessage, setNewMessage] = useState("");
   const [typeMessage, setTypeMessage] = useState(0);
   const [scrollHeight, setScrollHeight] = useState(false);
   const { chat, replyId, updater, setUpdater, setChat } =
     useContext(MessangerContext);
+  const { userInfo } = useContext(AuthenticationContext);
   const onClickHandlerSend = () => {
     apiHandler(
       "messages",
@@ -37,7 +40,7 @@ const ShowPage = () => {
     if (element.scrollHeight > 120) setScrollHeight(true);
     else setScrollHeight(false);
   }
-  console.log(replyId);
+  console.log(userInfo);
   if (chat != "")
     return (
       <div className="col-8 showpage mainCover row">

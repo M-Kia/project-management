@@ -3,7 +3,7 @@ import MessangerContext from "../../context/MessangerContext";
 
 const ChatInfo = () => {
   const { chat } = useContext(MessangerContext);
-  console.log(chat);
+  // console.log(chat);
   return (
     <div
       className="modal fade chatinfo"
