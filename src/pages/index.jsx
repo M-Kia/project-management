@@ -1,11 +1,12 @@
-import Login from "./login";
+import React from "react";
+import SideBar from "../Front-End/components/panel/SideBar";
+import ShowPage from "../Front-End/components/panel/ShowPage";
 
-export default function index() {
+export default function Panel() {
   return (
-    <>
-      <div className="row" style={{ margin: "0px", justifyContent: "center" }}>
-        <Login />
-      </div>
-    </>
+    <div className="row main">
+      <SideBar />
+      <ShowPage />
+    </div>
   );
 }
