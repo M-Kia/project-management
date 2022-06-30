@@ -39,15 +39,18 @@ export default async function handler(
       [{ fieldName: "profile_img_id", type: "LEFT" }]
     );
     let user;
-    for (let i = 0; i < res.length; i++){
-      if (Encryption.decode(res[i].password) == password){
-        user = res[i]
+    for (let i = 0; i < res.length; i++) {
+      if (Encryption.decode(res[i].password) == password) {
+        user = res[i];
       }
     }
-    if (typeof user === "undefined") throw new Error("Wrong username or password");
-    res[0].path = makePath(res[0].path);
-    delete res[0].password
-    result = makeResponse(res[0]);
+    if (typeof user === "undefined")
+      throw new Error("Wrong username or password");
+    user.profile = makePath(user.path);
+    delete user.path;
+    delete user.password;
+    user.token = Encryption.encode(`${Date.now()}##${user.id}`);
+    result = makeResponse(user);
   } catch (err) {
     result = makeResponse(err.message, "error");
   }

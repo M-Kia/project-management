@@ -6,7 +6,6 @@ type UserInfo = {
   firstname: string;
   lastname: string;
   username: string;
-  mobile: string;
   email: string;
   profile: string;
 };
@@ -24,7 +23,6 @@ const AuthenticationContext = createContext<{
     firstname: "",
     lastname: "",
     username: "",
-    mobile: "",
     email: "",
     profile: "",
   },
@@ -41,7 +39,6 @@ export function AuthenticationProvider({ children }) {
     firstname: "",
     lastname: "",
     username: "",
-    mobile: "",
     email: "",
     profile: "",
   });
@@ -57,7 +54,6 @@ export function AuthenticationProvider({ children }) {
       firstname: "",
       lastname: "",
       username: "",
-      mobile: "",
       email: "",
       profile: "",
     });
