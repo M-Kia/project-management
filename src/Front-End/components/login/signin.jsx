@@ -34,7 +34,6 @@ const Singin = ({ setShowFirst }) => {
       password: password,
     }).then((res) => {
       if (res.data.status) {
-        console.log(res);
         login(res.data.result);
         toastify("ورود با موفقیت انجام شد", "success");
         router.push("/panel");

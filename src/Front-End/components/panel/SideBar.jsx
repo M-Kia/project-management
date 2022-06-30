@@ -1,5 +1,8 @@
 import React, { useState, useContext } from "react";
+import { useRouter } from "next/router";
+
 import MessangerContext from "../../context/MessangerContext";
+import AuthenticationContext from "../../context/Authentication.tsx";
 
 import WithPortal from "../../hoc/WithPortal";
 import AddChatModal from "./AddChatModal";
@@ -11,59 +14,17 @@ import kia from "../../assets/images/photo_2022-05-22_09-38-07.jpg";
 import niko from "../../assets/images/photo_2022-05-22_09-37-57.jpg";
 import setting from "../../assets/images/icons8-settings-48.png";
 import menu from "../../assets/images/icons8-menu-24.png";
+import logoutIcon from "../../assets/images/icons8-logout-50.png";
 const SideBar = () => {
   const { chats, setChat } = useContext(MessangerContext);
-  // const data = [
-  //   {
-  //     type: 1,
-  //     name: "لیست وظایف",
-  //     profileImg: "",
-  //     numUnread: 1,
-  //   },
-  //   {
-  //     type: 0,
-  //     name: "نیکوفکر",
-  //     profileImg: niko.src,
-  //     numUnread: 1,
-  //   },
-  //   {
-  //     type: 0,
-  //     name: "کیاالحسینی",
-  //     profileImg: kia.src,
-  //     numUnread: 2,
-  //   },
-  //   {
-  //     type: 0,
-  //     name: "مشتاقی",
-  //     profileImg: moshtaghi.src,
-  //     numUnread: 3,
-  //   },
-  //   {
-  //     type: 0,
-  //     name: "فرانت اند",
-  //     profileImg: "",
-  //     numUnread: 2,
-  //   },
-  //   {
-  //     type: 0,
-  //     name: "بک اند",
-  //     profileImg: "",
-  //     numUnread: 3,
-  //   },
-  //   {
-  //     type: 0,
-  //     name: "UI and UX",
-  //     profileImg: "",
-  //     numUnread: 1,
-  //   },
-  //   {
-  //     type: 0,
-  //     name: "مدیریت",
-  //     profileImg: "",
-  //     numUnread: 2,
-  //   },
-  // ];
+  const { userInfo, logout } = useContext(AuthenticationContext);
+  const router = useRouter();
 
+  const onClickHandlerLogout = () => {
+    router.push("/");
+    logout();
+  };
+  // console.log(userInfo);
   return (
     <div
       className={`col-3 col-xxl-2 sidebar ${chats.length >= 9 ? "scroll" : ""}`}
@@ -95,8 +56,7 @@ const SideBar = () => {
                   data-bs-toggle="modal"
                   data-bs-target="#infoModal"
                 >
-                  {/* <img src={chat.logo} alt="profilePic" /> */}
-                  <img src={moshtaghi.src} alt="profilePic" />
+                  <img src={userInfo.profile} alt="profilePic" />
                 </div>
                 <div
                   style={{
@@ -106,8 +66,7 @@ const SideBar = () => {
                     fontWeight: "500",
                   }}
                 >
-                  {/* {chat.title} */}
-                  hediem
+                  {userInfo.username}
                 </div>
                 <hr />
               </div>
@@ -138,6 +97,23 @@ const SideBar = () => {
                 <img src={setting.src} alt="setting" />
                 <span style={{ fontWeight: "500", fontSize: "18px" }}>
                   تنظیمات
+                </span>
+              </div>
+              <hr />
+              <div onClick={onClickHandlerLogout} style={{ cursor: "pointer" }}>
+                <img
+                  src={logoutIcon.src}
+                  alt="logout"
+                  style={{ width: "40px", height: "40px" }}
+                />
+                <span
+                  style={{
+                    fontWeight: "500",
+                    fontSize: "18px",
+                    marginRight: "15px",
+                  }}
+                >
+                  خروج از حساب کاربری
                 </span>
               </div>
             </div>

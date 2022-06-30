@@ -466,22 +466,22 @@
         background-color: whitesmoke;
         border-color: whitesmoke;
       }
-      & .replyMessage {
-        border-radius: 10px 0px 0px 0px;
-        margin-top: 3px;
-        border-right: 3px solid #7f819a;
-        margin-right: 40px;
-        padding-right: 5px;
-        color: rgb(53, 53, 53);
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
+    }
+    & .replyMessage {
+      border-radius: 10px 0px 0px 0px;
+      margin-top: 3px;
+      border-right: 3px solid #7f819a;
+      margin-right: 40px;
+      padding-right: 5px;
+      color: rgb(53, 53, 53);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
   & .me {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     & .round {
       width: 75px;
       height: 75px;

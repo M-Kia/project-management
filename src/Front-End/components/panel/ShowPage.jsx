@@ -20,7 +20,7 @@ const ShowPage = () => {
     apiHandler(
       "messages",
       {
-        userId: 1,
+        userId: userInfo.id,
         chat_id: chat.id,
         text: newMessage,
         type: typeMessage,
@@ -40,7 +40,6 @@ const ShowPage = () => {
     if (element.scrollHeight > 120) setScrollHeight(true);
     else setScrollHeight(false);
   }
-  console.log(userInfo);
   if (chat != "")
     return (
       <div className="col-8 showpage mainCover row">

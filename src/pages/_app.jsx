@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "./style.scss";
 
 import { AuthenticationProvider } from "../Front-End/context/Authentication.tsx";
-import MessangerContextProvider from "../Front-End/context/MessangerContext";
+import { MessangerContextProvider } from "../Front-End/context/MessangerContext";
 
 export default function MyApp({ Component, pageProps }) {
   useEffect(() => {
