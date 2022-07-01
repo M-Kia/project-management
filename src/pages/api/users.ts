@@ -20,7 +20,7 @@ export default async function handler(
         result = await get();
         break;
       case "PATCH":
-        result = await update(request.query, request.headers);
+        result = await update(request.body, request.headers);
         break;
       default:
         throw new Error("Wrong Method!!");
@@ -54,25 +54,31 @@ async function get(): Promise<ResponseData> {
 }
 
 async function update(data, headers) {
-  let checker = checkInputs(["userId"], data);
+  let checker = checkInputs(["user_id"], data);
   if (!checker.status) throw new Error(checker.missings);
-  let { userId } = checker.data;
+  let { user_id } = checker.data;
 
   //todo
   // let token = headers.authorization;
   // token = Encryption.decode(token);
   // token = token.split("##");
-  // let userId = token[1];
+  // let user_id = token[1];
 
   let ul = new Users();
 
   let d = getData(data, "Users");
 
+  let x = await ul.find(`username/=/${d.username}&&id/!=/${user_id}`);
+
+  if (x.length > 0) {
+    throw new Error("There is a user with this username");
+  }
+
   try {
     delete d.id;
   } catch (err) {}
 
-  await ul.update(d, `id/=/${userId}`);
+  await ul.update(d, `id/=/${user_id}`);
 
   return makeResponse();
 }

@@ -95,6 +95,7 @@ export default class ActionRecord {
       return `\`${value}\` = '${keyvalues[value]}'`;
     });
     let sql = `UPDATE ${this.tableName} SET ${kv.join(", ")}${con}`;
+    // console.log("sql", sql);
     await query(sql);
     return true;
   }

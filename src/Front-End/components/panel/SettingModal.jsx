@@ -47,7 +47,7 @@ const SettingModal = () => {
       user_id: userInfo.id,
     };
     if (update.username !== "") {
-      obj.usename = update.username;
+      obj.username = update.username;
     }
     if (update.firstname !== "") {
       obj.firstname = update.firstname;
