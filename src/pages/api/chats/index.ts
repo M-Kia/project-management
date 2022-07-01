@@ -79,7 +79,7 @@ async function get(query): Promise<ResponseData> {
   let imageI: any;
 
   // get links
-  let chatUserLinkI1 = await cul.find(`user_id/=/${userId}`);
+  let chatUserLinkI1 = await cul.find(`user_id/=/${userId}&&type/!=/2`);
 
   for (let i = 0; i < chatUserLinkI1.length; i++) {
     let ans: Answer = {
@@ -101,7 +101,7 @@ async function get(query): Promise<ResponseData> {
       };
       // get chat's users data
       let chatUserLinkI2 = await cul.find(
-        `chat_id/=/${chatUserLinkI1[i].chat_id}`,
+        `chat_id/=/${chatUserLinkI1[i].chat_id}&&type/!=/2`,
         [
           "`users`.`id`",
           "`users`.`profile_img_id`",

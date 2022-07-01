@@ -5,6 +5,7 @@ import {
   getData,
   makePath,
 } from "../../Back-End/helpers/functions";
+import Encryption from "../../Back-End/library/Encryption";
 import Users from "../../Back-End/models/Users";
 import { ResponseData } from "../../Back-End/types/ActionRecordTypes";
 
@@ -16,10 +17,10 @@ export default async function handler(
   try {
     switch (request.method.toUpperCase()) {
       case "GET":
-        result = await get(request.query);
+        result = await get();
         break;
       case "PATCH":
-        result = await update(request.query);
+        result = await update(request.query, request.headers);
         break;
       default:
         throw new Error("Wrong Method!!");
@@ -31,7 +32,7 @@ export default async function handler(
   response.status(200).json(result);
 }
 
-async function get(data): Promise<ResponseData> {
+async function get(): Promise<ResponseData> {
   let u = new Users();
   let res = await u.find(
     "",
@@ -45,15 +46,23 @@ async function get(data): Promise<ResponseData> {
     [{ type: "LEFT", fieldName: "profile_img_id" }]
   );
   for (let i = 0; i < res.length; i++) {
+    // todo
+    // res[i].id = Encryption(`${Date.now()}##${res[i].id}`);
     res[i].path = makePath(res[i].path);
   }
   return makeResponse(res);
 }
 
-async function update(data) {
+async function update(data, headers) {
   let checker = checkInputs(["userId"], data);
   if (!checker.status) throw new Error(checker.missings);
   let { userId } = checker.data;
+
+  //todo
+  // let token = headers.authorization;
+  // token = Encryption.decode(token);
+  // token = token.split("##");
+  // let userId = token[1];
 
   let ul = new Users();
 

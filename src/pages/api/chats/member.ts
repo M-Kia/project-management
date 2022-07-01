@@ -35,7 +35,7 @@ async function add(data): Promise<ResponseData> {
 
   await cul.insert({
     chat_id,
-    user_id: user_id,
+    user_id,
     type: 1,
   });
 
@@ -43,7 +43,7 @@ async function add(data): Promise<ResponseData> {
 }
 
 async function remove(data): Promise<ResponseData> {
-  let checker = checkInputs(["user_id", "chat_id"], req.body);
+  let checker = checkInputs(["user_id", "chat_id"], data);
   if (!checker.status) throw new Error(checker.missings);
   let { user_id, chat_id } = checker.data;
 
