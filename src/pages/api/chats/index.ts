@@ -79,7 +79,7 @@ async function get(query): Promise<ResponseData> {
   let imageI: any;
 
   // get links
-  let chatUserLinkI1 = await cul.find(`user_id/=/${userId}&&type/!=/2`);
+  let chatUserLinkI1 = await cul.find(`user_id/=/${userId}&&type/=/0`);
 
   for (let i = 0; i < chatUserLinkI1.length; i++) {
     let ans: Answer = {
@@ -101,7 +101,7 @@ async function get(query): Promise<ResponseData> {
       };
       // get chat's users data
       let chatUserLinkI2 = await cul.find(
-        `chat_id/=/${chatUserLinkI1[i].chat_id}&&type/!=/2`,
+        `chat_id/=/${chatUserLinkI1[i].chat_id}&&type/=/0`,
         [
           "`users`.`id`",
           "`users`.`profile_img_id`",
@@ -209,17 +209,25 @@ async function add(data): Promise<ResponseData> {
     if (!checker.status) throw new Error(checker.missings);
     let { userIds } = checker.data;
     let uIds = userIds.split(",");
-    if (uIds.length !== 2)
+    if (uIds.length > 2) {
       throw new Error("Private chat should have 2 members.");
+    }
 
     // check if any pv between these members exist or not
     res = await cul.find(
-      `chats\`.\`type/=/0&&chat_user_links\`.\`user_id/in/${userIds}`,
+      `chats\`.\`type/=/0&&chat_user_links\`.\`user_id/in/${userIds}&&chat_user_links\`.\`type/=/0`,
       ["`chat_user_links`.`chat_id`"],
       [{ fieldName: "chat_id", type: "LEFT" }]
     );
-    if (res.length > 0)
-      throw new Error(`There is a private chat with id of ${res[0].chat_id}.`);
+    let theChats = [];
+    for (let i = 0; i < res.length; i++) {
+      if (theChats.includes(res[i].chat_id)) {
+        throw new Error(`There is a private chat with this user.`);
+      } else {
+        theChats.push(res[i].chat_id);
+      }
+    }
+
     // insert chat
     res = await c.insert({ type });
     // link chat to users
@@ -228,6 +236,7 @@ async function add(data): Promise<ResponseData> {
         await cul.insert({
           chat_id: res.id,
           user_id: value,
+          type: 0,
         });
       })
     );
@@ -249,6 +258,7 @@ async function add(data): Promise<ResponseData> {
           chat_id: res.id,
           user_id: value,
           user_type: value.toString() === ownerId.toString() ? 2 : 0,
+          type: 0,
         });
       })
     );
