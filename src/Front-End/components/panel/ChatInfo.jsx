@@ -14,6 +14,9 @@ const ChatInfo = () => {
   const { chat, updater, setUpdater } = useContext(MessangerContext);
   const { userInfo } = useContext(AuthenticationContext);
   const [edit, setEdit] = useState(false);
+  const [add, setAdd] = useState(false);
+  const [users, setUsers] = useState([]);
+
   // const [newName, setNewName] = useState(chat.title);
   // const [fileId, setFileId] = useState("");
   const [temp, setTemp] = useState({
@@ -45,7 +48,22 @@ const ChatInfo = () => {
       }
     });
   }
-  const onClickHandlerRemove = () => {};
+  const onClickHandlerRemove = (id) => {
+    console.log(id);
+    console.log(chat.id);
+    apiHandler(
+      "chats/member",
+      {
+        user_id: id,
+        chat_id: chat.id,
+      },
+      "delete"
+    ).then((res) => {
+      if (res.status) {
+        setUpdater(!updater);
+      }
+    });
+  };
   const onClickHandlerEdit = () => {
     let obj = {
       chat_id: chat.id,
@@ -62,11 +80,23 @@ const ChatInfo = () => {
       }
     });
   };
-  console.log(temp);
-  console.log(update);
+  const AddHandler = () => {
+    apiHandler("users", {}, "get").then((res) => {
+      setUsers(
+        res.data.result.map((value) => {
+          if (value.id == userInfo.id) return { ...value, status: true };
+          return { ...value, status: false };
+        })
+      );
+    });
+    setAdd(true);
+  };
+  // console.log(temp);
+  // console.log(update);
   // console.log(admin);
   // console.log(chat);
   // console.log(newName);
+  console.log(users);
   return (
     <div
       className="modal fade chatinfo"
@@ -178,7 +208,7 @@ const ChatInfo = () => {
                     marginBottom: "10px",
                   }}
                 >
-                  اعضای گروه:
+                  اعضای گروه
                 </div>
                 {chat.members.map((value) => {
                   return (
@@ -211,7 +241,7 @@ const ChatInfo = () => {
                       {admin && value.id != userInfo.id ? (
                         <div
                           style={{ cursor: "pointer" }}
-                          onClick={onClickHandlerRemove}
+                          onClick={(e) => onClickHandlerRemove(value.id)}
                         >
                           <img src={removeIcon.src} alt="removeIcon" />
                         </div>
@@ -221,6 +251,57 @@ const ChatInfo = () => {
                     </div>
                   );
                 })}
+                <div
+                  className="btn"
+                  style={{
+                    fontWeight: "500",
+                    background: "rgb(225 211 225 / 43%)",
+                  }}
+                  onClick={AddHandler}
+                >
+                  اضافه کردن کاربر
+                </div>
+                {add ? (
+                  <div className="d-flex flex-column">
+                    {users.map((value) =>
+                      value.id != userInfo.id ? (
+                        <div
+                          key={value.id}
+                          className={`d-flex align-items-center col-12 ${
+                            value.status ? "selected" : ""
+                          }`}
+                          onClick={(e) =>
+                            setUsers((user) =>
+                              user.map((val) =>
+                                val.id == value.id
+                                  ? { ...val, status: !val.status }
+                                  : val
+                              )
+                            )
+                          }
+                        >
+                          <div className="profile_pic member">
+                            <img src={value.path} alt="profile_pic" />
+                          </div>
+                          <div
+                            className="name"
+                            style={{
+                              fontSize: "20px",
+                              marginRight: "15px",
+                              fontWeight: "500",
+                            }}
+                          >
+                            {value.username}
+                          </div>
+                        </div>
+                      ) : (
+                        ""
+                      )
+                    )}
+                  </div>
+                ) : (
+                  ""
+                )}
               </div>
             ) : (
               ""

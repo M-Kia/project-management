@@ -39,14 +39,12 @@ export async function apiHandler(
       headers,
     });
   }
-
   if (method.toLowerCase() === "delete") {
     return axios.delete(`/api/${functionName}`, {
       headers,
       data,
     });
   }
-
   return axios[method](`/api/${functionName}`, data, {
     headers,
   });
