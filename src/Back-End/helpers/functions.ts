@@ -135,15 +135,24 @@ function makeResponse(
   };
 }
 
-function getData(data, cls){
-  let m:ActionRecord = CLASSES[cls]();
-  let d = {}, keys = Object.keys(data);
-  m.fields.forEach(value => {
-    if (keys.includes(value.name)){
+//* اطلاعاتی را که key آنها در model مربوطه موجود میباشد از متغییر data استخراج میکند.
+function getData(data, cls) {
+  let m: ActionRecord = CLASSES[cls]();
+  let d = {},
+    keys = Object.keys(data);
+  m.fields.forEach((value) => {
+    if (keys.includes(value.name)) {
       d[value.name] = data[value.name];
     }
-  })
+  });
   return d;
 }
 
-export { capitalize, conditionConverter, checkInputs, makePath, makeResponse, getData };
+export {
+  capitalize,
+  conditionConverter,
+  checkInputs,
+  makePath,
+  makeResponse,
+  getData,
+};

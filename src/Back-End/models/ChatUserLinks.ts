@@ -19,7 +19,7 @@ export default class ChatUserLinks extends ActionRecord {
         type: "isfk",
         table: "chats",
         field: "id",
-        force: true
+        force: true,
       },
     },
     {
@@ -29,11 +29,11 @@ export default class ChatUserLinks extends ActionRecord {
         type: "isfk",
         table: "users",
         field: "id",
-        force: true
+        force: true,
       },
     },
-    { name: "type", property: {type: "int"} }, // 0 => joined, 1 => pending
-    { name: "user_type", property: {type: "int"} }, // 0 => member, 1 => admin, 2 => owner
+    { name: "type", property: { type: "int" } }, // 0 => joined, 1 => pending, 2 => deleted
+    { name: "user_type", property: { type: "int" } }, // 0 => member, 1 => admin, 2 => owner
     {
       name: "last_message_saw",
       property: { type: "int" },

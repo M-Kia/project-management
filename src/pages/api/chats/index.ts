@@ -1,14 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import {
   checkInputs,
+  getData,
   makePath,
   makeResponse,
-} from "../../Back-End/helpers/functions";
-import Chats from "../../Back-End/models/Chats";
-import ChatUserLinks from "../../Back-End/models/ChatUserLinks";
-import Images from "../../Back-End/models/Images";
-import Messages from "../../Back-End/models/Messages";
-import { ResponseData } from "../../Back-End/types/ActionRecordTypes";
+} from "../../../Back-End/helpers/functions";
+import Chats from "../../../Back-End/models/Chats";
+import ChatUserLinks from "../../../Back-End/models/ChatUserLinks";
+import Images from "../../../Back-End/models/Images";
+import Messages from "../../../Back-End/models/Messages";
+import { ResponseData } from "../../../Back-End/types/ActionRecordTypes";
 
 type User = {
   id: number;
@@ -49,6 +50,9 @@ export default async function handler(
         break;
       case "POST":
         result = await add(request.body);
+        break;
+      case "PATCH":
+        result = await update(request.body);
         break;
       default:
         throw new Error("Wrong Method!!");
@@ -119,7 +123,10 @@ async function get(query): Promise<ResponseData> {
       let userArr: User[] = [];
       for (let j = 0; j < chatUserLinkI2.length; j++) {
         imageI = await img.find(`id/=/${chatUserLinkI2[j].profile_img_id}`);
-        if (chatI[0].type.toString() === "0" && chatUserLinkI2[j].id.toString() !== userId.toString()) {
+        if (
+          chatI[0].type.toString() === "0" &&
+          chatUserLinkI2[j].id.toString() !== userId.toString()
+        ) {
           // private chat
           // if it is a private chat, some data depend on other user
           ans = {
@@ -248,5 +255,18 @@ async function add(data): Promise<ResponseData> {
   } else {
     throw new Error("Wrong Group Type");
   }
+  return makeResponse();
+}
+
+async function update(data): Promise<ResponseData> {
+  let checker = checkInputs(["chat_id"], data);
+  if (!checker.status) throw new Error(checker.missings);
+  let { chat_id } = checker.data;
+  let c = new Chats();
+
+  let d = getData(data, "Chats");
+
+  await c.update(d, `id/=/${chat_id}`);
+
   return makeResponse();
 }
