@@ -47,15 +47,16 @@ const ChatInfo = () => {
   }
   const onClickHandlerRemove = () => {};
   const onClickHandlerEdit = () => {
-    apiHandler(
-      "chats",
-      {
-        chat_id: chat.id,
-        title: update.title,
-        profile_id: update.profile,
-      },
-      "patch"
-    ).then((res) => {
+    let obj = {
+      chat_id: chat.id,
+    };
+    if (update.title !== "") {
+      obj.title = update.title;
+    }
+    if (update.profile !== "") {
+      obj.profile_id = update.profile;
+    }
+    apiHandler("chats", obj, "patch").then((res) => {
       if (res.status) {
         setUpdater(!updater);
       }
