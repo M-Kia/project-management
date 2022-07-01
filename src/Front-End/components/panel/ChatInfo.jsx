@@ -3,7 +3,7 @@ import MessangerContext from "../../context/MessangerContext";
 import AuthenticationContext from "../../context/Authentication.tsx";
 
 import ImageInput from "../common/ImageInput";
-
+import { apiHandler, imageUploader } from "../../utilities/apihandler.ts";
 import editIcon from "../../assets/images/icons8-edit-64.png";
 import submitIcon from "../../assets/images/icons8-submit-58.png";
 import removeIcon from "../../assets/images/icons8-close-24.png";
@@ -11,10 +11,19 @@ import defaultImage from "../../assets/images/173-1731325_person-icon-png-transp
 
 const ChatInfo = () => {
   let admin;
-  const { chat } = useContext(MessangerContext);
+  const { chat, updater, setUpdater } = useContext(MessangerContext);
   const { userInfo } = useContext(AuthenticationContext);
   const [edit, setEdit] = useState(false);
-
+  // const [newName, setNewName] = useState(chat.title);
+  // const [fileId, setFileId] = useState("");
+  const [temp, setTemp] = useState({
+    title: chat.title,
+    profile: chat.profile,
+  });
+  const [update, setUpdate] = useState({
+    title: "",
+    profile: "",
+  });
   chat.members.map((value) => {
     if (value.type == 2) {
       if (value.id == userInfo.id) {
@@ -29,14 +38,34 @@ const ChatInfo = () => {
       files: event.target.files[0],
     }).then((res) => {
       if (res.data.status) {
-        setFileId(res.data.result[0].id);
+        console.log(res);
+        // setFileId(res.data.result[0].id);
+        setTemp({ ...temp, profile: res.data.result[0].path });
+        setUpdate({ ...update, profile: res.data.result[0].id.id });
       }
     });
   }
   const onClickHandlerRemove = () => {};
-  const onClickHandlerEdit = () => {};
+  const onClickHandlerEdit = () => {
+    apiHandler(
+      "chats",
+      {
+        chat_id: chat.id,
+        title: update.title,
+        profile_id: update.profile,
+      },
+      "patch"
+    ).then((res) => {
+      if (res.status) {
+        setUpdater(!updater);
+      }
+    });
+  };
+  console.log(temp);
+  console.log(update);
   // console.log(admin);
   // console.log(chat);
+  // console.log(newName);
   return (
     <div
       className="modal fade chatinfo"
@@ -104,6 +133,11 @@ const ChatInfo = () => {
                         placeholder={chat.title}
                         aria-label="Username"
                         aria-describedby="basic-addon1"
+                        value={temp.title}
+                        onChange={(e) => {
+                          setTemp({ ...temp, title: e.target.value });
+                          setUpdate({ ...update, title: e.target.value });
+                        }}
                       ></input>
                       <div
                         onClick={onClickHandlerEdit}
