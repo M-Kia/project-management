@@ -52,6 +52,9 @@
     &:hover {
       background-color: whitesmoke;
     }
+    &.selected {
+      background-color: rgb(216 199 221 / 63%);
+    }
     & .right {
       display: flex;
       // flex-direction: column;

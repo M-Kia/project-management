@@ -16,7 +16,7 @@ import setting from "../../assets/images/icons8-settings-48.png";
 import menu from "../../assets/images/icons8-menu-24.png";
 import logoutIcon from "../../assets/images/icons8-logout-50.png";
 const SideBar = () => {
-  const { chats, setChat } = useContext(MessangerContext);
+  const { chat, chats, setChat } = useContext(MessangerContext);
   const { userInfo, logout } = useContext(AuthenticationContext);
   const router = useRouter();
 
@@ -123,7 +123,11 @@ const SideBar = () => {
 
       {chats.map((value, index) => {
         return (
-          <div className="card" key={index} onClick={() => setChat(value)}>
+          <div
+            className={`card ${chat.id == value.id ? "selected" : ""}`}
+            key={index}
+            onClick={() => setChat(value)}
+          >
             <div className="col-12 description">
               <div className="right">
                 <div>

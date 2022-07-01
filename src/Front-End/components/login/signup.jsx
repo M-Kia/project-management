@@ -83,7 +83,7 @@ const Signup = ({ setShowFirst }) => {
       }
     ).then((res) => {
       if (res.data.status) {
-        setFileId(res.data.result[0].id);
+        setFileId(res.data.result[0].id.id);
       }
     });
   }

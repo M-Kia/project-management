@@ -13,7 +13,7 @@ const ShowPage = () => {
   const [newMessage, setNewMessage] = useState("");
   const [typeMessage, setTypeMessage] = useState(0);
   const [scrollHeight, setScrollHeight] = useState(false);
-  const { chat, replyId, updater, setUpdater, setChat } =
+  const { chat, replyId, updater, setUpdater, setChat, setReplyId } =
     useContext(MessangerContext);
   const { userInfo } = useContext(AuthenticationContext);
   const onClickHandlerSend = () => {
@@ -31,6 +31,7 @@ const ShowPage = () => {
       if (res.status) {
         setUpdater(!updater);
         setNewMessage("");
+        setReplyId(0);
       }
     });
   };
