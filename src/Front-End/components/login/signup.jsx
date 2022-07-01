@@ -108,7 +108,7 @@ const Signup = ({ setShowFirst }) => {
           />
         </div>
         <div className="mb-3">
-          <label for="firstname" className="form-label">
+          <label htmlFor="firstname" className="form-label">
             نام
           </label>
           <input
@@ -119,7 +119,7 @@ const Signup = ({ setShowFirst }) => {
           />
         </div>
         <div className="mb-3">
-          <label for="lastname" className="form-label">
+          <label htmlFor="lastname" className="form-label">
             نام خانوادگی
           </label>
           <input
@@ -130,7 +130,7 @@ const Signup = ({ setShowFirst }) => {
           />
         </div>
         <div className="mb-3">
-          <label for="username" className="form-label">
+          <label htmlFor="username" className="form-label">
             نام کاربری*
           </label>
           <input
@@ -141,7 +141,7 @@ const Signup = ({ setShowFirst }) => {
           />
         </div>
         <div className="mb-3">
-          <label for="email" className="form-label">
+          <label htmlFor="email" className="form-label">
             ایمیل
           </label>
           <input
@@ -154,7 +154,7 @@ const Signup = ({ setShowFirst }) => {
         </div>
         <div className="mb-3">
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <label for="password" className="form-label">
+            <label htmlFor="password" className="form-label">
               رمز عبور*
             </label>
             {eye ? (
@@ -176,7 +176,7 @@ const Signup = ({ setShowFirst }) => {
           />
         </div>
         <div className="mb-3">
-          <label for="password2" className="form-label">
+          <label htmlFor="password2" className="form-label">
             تکرار رمز عبور*
           </label>
           <input

@@ -1,25 +1,11 @@
-import React, { useState } from "react";
-import pic from "../Front-End/assets/images/blog-wp-login.png";
-import Signup from "../Front-End/components/login/signup";
-import Signin from "../Front-End/components/login/signin";
-const Login = () => {
-  const [showFirst, setShowFirst] = useState(false);
+import Login from "../Front-End/components/login/login";
+
+export default function index() {
   return (
     <>
-      <div className="col-4 col-md-6">
-        <img
-          src={pic.src}
-          alt="login"
-          style={{ marginTop: "150px" }}
-          className="col-7"
-        />
+      <div className="row" style={{ margin: "0px", justifyContent: "center" }}>
+        <Login />
       </div>
-      {showFirst ? (
-        <Signup setShowFirst={setShowFirst} />
-      ) : (
-        <Signin setShowFirst={setShowFirst} />
-      )}
     </>
   );
-};
-export default Login;
+}

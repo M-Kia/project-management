@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import { apiHandler } from "../../utilities/apihandler.ts";
@@ -6,11 +6,13 @@ import { apiHandler } from "../../utilities/apihandler.ts";
 import closeEye from "../../assets/images/icons8-closed-eye-24.png";
 import openEye from "../../assets/images/icons8-eye-24.png";
 import toastify from "../../utilities/toustify.ts";
+import AuthenticationContext from "../../context/Authentication.tsx";
 const Singin = ({ setShowFirst }) => {
   const router = useRouter();
   const [eye, setEye] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const { login } = useContext(AuthenticationContext);
   function showPassword() {
     var x = document.getElementById("password");
     if (x.type === "password") {
@@ -32,6 +34,7 @@ const Singin = ({ setShowFirst }) => {
       password: password,
     }).then((res) => {
       if (res.data.status) {
+        login(res.data.result);
         toastify("ورود با موفقیت انجام شد", "success");
         router.push("/panel");
       } else {

@@ -1,7 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { checkInputs, makeResponse } from "../../Back-End/helpers/functions";
-import Messages from "../../Back-End/models/Messages";
-import { ResponseData } from "../../Back-End/types/ActionRecordTypes";
+import { checkInputs, makeResponse } from "../../../Back-End/helpers/functions";
+import ChatUserLinks from "../../../Back-End/models/ChatUserLinks";
+import Messages from "../../../Back-End/models/Messages";
+import { ResponseData } from "../../../Back-End/types/ActionRecordTypes";
 
 export default async function handler(
   request: NextApiRequest,
@@ -12,6 +13,9 @@ export default async function handler(
     switch (request.method.toUpperCase()) {
       case "POST":
         result = await add(request.body);
+        break;
+      case "PATCH":
+        result = await update(request.body);
         break;
       default:
         throw new Error("Wrong Method!!");
@@ -41,5 +45,22 @@ async function add(data): Promise<ResponseData> {
     type,
     reply_id,
   });
+  return makeResponse();
+}
+
+async function update(data): Promise<ResponseData> {
+  let checker = checkInputs(["userId", "chat_id", "message_id"], req.body);
+  if (!checker.status) throw new Error(checker.missings);
+  let { userId, chat_id, message_id } = checker.data;
+
+  let cul = new ChatUserLinks();
+
+  await cul.update(
+    {
+      last_message_saw: message_id,
+    },
+    `user_id/=/${userId}&&chat_id/=/${chat_id}`
+  );
+
   return makeResponse();
 }

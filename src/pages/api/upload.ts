@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import formidable from "formidable";
 
 import FileController from "../../Back-End/library/FileControler";
-import { makeResponse } from "../../Back-End/helpers/functions";
+import { makePath, makeResponse } from "../../Back-End/helpers/functions";
 import { ResponseData } from "../../Back-End/types/ActionRecordTypes";
 import Images from "../../Back-End/models/Images";
 
@@ -20,6 +20,9 @@ export default async function hander(
   let result: ResponseData;
   let img = new Images();
   try {
+    if (req.method !== "POST") {
+      throw new Error("Wrong Method!");
+    }
     let controller = new FileController();
     let answer = [],
       theFields = [],
@@ -44,9 +47,12 @@ export default async function hander(
           // answer = await controller.groupUpload(files.files);
           filepaths = await controller.groupUpload(files.files);
         }
-        for(let i = 0; i < filepaths.length; i++) {
-          let x = await img.insert({path: filepaths[i]});
-          answer.push(x)
+        for (let i = 0; i < filepaths.length; i++) {
+          let x = await img.insert({ path: filepaths[i] });
+          answer.push({
+            id: x,
+            path: makePath(filepaths[i]),
+          });
         }
         resolve({ err, fields, files });
       });

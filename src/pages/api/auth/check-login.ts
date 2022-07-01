@@ -19,14 +19,18 @@ export default async function handler(
 ) {
   let result: Data;
   try {
-    let checker = checkInputs(["username", "password"], req.body);
+    let checker = checkInputs(["token"], req.body);
     if (!checker.status) throw new Error(checker.missings);
-    let { username, password } = checker.data;
+    let { token } = checker.data;
+
+    let temp = Encryption.decode(token).split("##");
+
+    let uid = temp[1];
 
     let u = new Users();
 
     let res = await u.find(
-      `username/=/${username}`,
+      `users\`.\`id/=/${uid}`,
       [
         "`users`.`id`",
         "`users`.`firstname`",
@@ -38,12 +42,7 @@ export default async function handler(
       ],
       [{ fieldName: "profile_img_id", type: "LEFT" }]
     );
-    let user;
-    for (let i = 0; i < res.length; i++) {
-      if (Encryption.decode(res[i].password) == password) {
-        user = res[i];
-      }
-    }
+    let user = res[0];
     if (typeof user === "undefined")
       throw new Error("Wrong username or password");
     user.profile = makePath(user.path);

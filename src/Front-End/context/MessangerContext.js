@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { apiHandler } from "../../Front-End/utilities/apihandler.ts";
+import AuthenticationContext from "./Authentication.tsx";
 
 const MessangerContext = React.createContext({
   show: "",
@@ -19,12 +20,15 @@ export const MessangerContextProvider = ({ children }) => {
   const [chat, setChat] = useState("");
   const [chats, setChats] = useState([]);
   const [replyId, setReplyId] = useState(0);
+  const { userInfo, isLogin } = useContext(AuthenticationContext);
 
   useEffect(() => {
-    apiHandler("chats", { userId: 1 }, "get").then((res) =>
-      setChats(res.data.result)
-    );
-  }, [updater]);
+    if (isLogin) {
+      apiHandler("chats", { userId: userInfo.id }, "get").then((res) =>
+        setChats(res.data.result)
+      );
+    }
+  }, [updater, userInfo]);
   useEffect(() => {
     if (chat.id) {
       let cf = chats.find((value) => value.id == chat.id);
