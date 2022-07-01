@@ -3,6 +3,7 @@ import {
   checkInputs,
   makeResponse,
   getData,
+  makePath,
 } from "../../Back-End/helpers/functions";
 import Users from "../../Back-End/models/Users";
 import { ResponseData } from "../../Back-End/types/ActionRecordTypes";
@@ -49,7 +50,7 @@ async function get(data): Promise<ResponseData> {
   return makeResponse(res);
 }
 
-function update(data) {
+async function update(data) {
   let checker = checkInputs(["userId"], data);
   if (!checker.status) throw new Error(checker.missings);
   let { userId } = checker.data;
