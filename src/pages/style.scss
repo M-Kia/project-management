@@ -52,6 +52,9 @@
     &:hover {
       background-color: whitesmoke;
     }
+    &.selected {
+      background-color: rgb(216 199 221 / 63%);
+    }
     & .right {
       display: flex;
       // flex-direction: column;
@@ -571,8 +574,8 @@
 }
 .chatinfo {
   & .profile_pic {
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
     &.member {
       width: 75px;
       height: 75px;

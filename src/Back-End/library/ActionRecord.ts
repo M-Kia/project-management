@@ -64,7 +64,7 @@ export default class ActionRecord {
     if (orderType !== "") {
       sql += orderType + " ";
     }
-    console.log("sql", sql);
+    // console.log("sql", sql);
     let r = await query(sql);
     return r;
   }
@@ -95,6 +95,7 @@ export default class ActionRecord {
       return `\`${value}\` = '${keyvalues[value]}'`;
     });
     let sql = `UPDATE ${this.tableName} SET ${kv.join(", ")}${con}`;
+    // console.log("sql", sql);
     await query(sql);
     return true;
   }

@@ -101,7 +101,7 @@ export function AuthenticationProvider({ children }) {
 
   return (
     <AuthenticationContext.Provider
-      value={{ userInfo, isLogin, isLoading, login, logout, changeLoading }}
+      value={{ userInfo, isLogin, isLoading, login, logout, changeLoading}}
     >
       {isLoading ? <Loader /> : null}
       {children}
