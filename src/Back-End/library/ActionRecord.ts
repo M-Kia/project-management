@@ -64,7 +64,7 @@ export default class ActionRecord {
     if (orderType !== "") {
       sql += orderType + " ";
     }
-    console.log("sql", sql);
+    // console.log("sql", sql);
     let r = await query(sql);
     return r;
   }

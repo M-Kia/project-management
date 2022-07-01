@@ -251,7 +251,7 @@ const ChatInfo = () => {
                     </div>
                   );
                 })}
-                <div
+                <button
                   className="btn"
                   style={{
                     fontWeight: "500",
@@ -260,89 +260,45 @@ const ChatInfo = () => {
                   onClick={AddHandler}
                 >
                   اضافه کردن کاربر
-                </div>
+                </button>
                 {add ? (
                   <div className="d-flex flex-column">
-                    {users.map((value) => {
-                      return chat.members.map((val) => {
-                        if (
-                          value.id != userInfo.id &&
-                          val.id != userInfo.id &&
-                          val.id != value.id
-                        ) {
-                          return (
-                            <div
-                              key={value.id}
-                              className={`d-flex align-items-center col-12 ${
-                                value.status ? "selected" : ""
-                              }`}
-                              onClick={(e) =>
-                                setUsers((user) =>
-                                  user.map((val) =>
-                                    val.id == value.id
-                                      ? { ...val, status: !val.status }
-                                      : val
-                                  )
-                                )
-                              }
-                            >
-                              <div className="profile_pic member">
-                                <img src={value.path} alt="profile_pic" />
-                              </div>
-                              <div
-                                className="name"
-                                style={{
-                                  fontSize: "20px",
-                                  marginRight: "15px",
-                                  fontWeight: "500",
-                                }}
-                              >
-                                {value.username}
-                              </div>
-                            </div>
-                          );
-                        } else {
-                          return "";
-                        }
-                      });
-                      // return chat.members.map((val) => {
-                      //   return value.id != userInfo.id &&
-                      //     val.id != userInfo.id &&
-                      //     value.id != val.id ? (
-                      //     <div
-                      //       key={value.id}
-                      //       className={`d-flex align-items-center col-12 ${
-                      //         value.status ? "selected" : ""
-                      //       }`}
-                      //       onClick={(e) =>
-                      //         setUsers((user) =>
-                      //           user.map((val) =>
-                      //             val.id == value.id
-                      //               ? { ...val, status: !val.status }
-                      //               : val
-                      //           )
-                      //         )
-                      //       }
-                      //     >
-                      //       <div className="profile_pic member">
-                      //         <img src={value.path} alt="profile_pic" />
-                      //       </div>
-                      //       <div
-                      //         className="name"
-                      //         style={{
-                      //           fontSize: "20px",
-                      //           marginRight: "15px",
-                      //           fontWeight: "500",
-                      //         }}
-                      //       >
-                      //         {value.username}
-                      //       </div>
-                      //     </div>
-                      //   ) : (
-                      //     ""
-                      //   );
-                      // });
-                    })}
+                    {users.reduce((total, user) => {
+                      if (chat.members.find((val) => val.id == user.id)) {
+                        return total;
+                      }
+                      return (
+                        <div
+                          key={user.id}
+                          className={`d-flex align-items-center col-12 ${
+                            user.status ? "selected" : ""
+                          }`}
+                          onClick={(e) =>
+                            setUsers((user) =>
+                              user.map((val) =>
+                                val.id == user.id
+                                  ? { ...val, status: !val.status }
+                                  : val
+                              )
+                            )
+                          }
+                        >
+                          <div className="profile_pic member">
+                            <img src={user.path} alt="profile_pic" />
+                          </div>
+                          <div
+                            className="name"
+                            style={{
+                              fontSize: "20px",
+                              marginRight: "15px",
+                              fontWeight: "500",
+                            }}
+                          >
+                            {user.username}
+                          </div>
+                        </div>
+                      );
+                    }, [])}
                   </div>
                 ) : (
                   ""
