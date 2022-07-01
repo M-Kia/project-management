@@ -20,6 +20,9 @@ export default async function hander(
   let result: ResponseData;
   let img = new Images();
   try {
+    if (req.method !== "POST") {
+      throw new Error("Wrong Method!");
+    }
     let controller = new FileController();
     let answer = [],
       theFields = [],
