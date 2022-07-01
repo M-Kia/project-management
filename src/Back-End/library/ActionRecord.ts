@@ -45,13 +45,6 @@ export default class ActionRecord {
               theField.dependency.table
             } ON ${`\`${this.tableName}\`.\`${theField.name}\` = \`${theField.dependency.table}\`.\`${theField.dependency.field}\` `}`
           );
-        // if (theField.dependency.type === "multifk")
-        // return (
-        //   total +
-        //   `${table.type} JOIN ${
-        //     theField.dependency.table
-        //   } ON ${`\`${theField.dependency.table}\`.\`${theField.dependency.field}\` IN (\`${this.tableName}\`.\`${theField.name}\`) `}`
-        // );
         return total;
       }, "");
     }
@@ -71,7 +64,7 @@ export default class ActionRecord {
     if (orderType !== "") {
       sql += orderType + " ";
     }
-    // console.log("sql", sql);
+    console.log("sql", sql);
     let r = await query(sql);
     return r;
   }
