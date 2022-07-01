@@ -4,6 +4,7 @@ import AuthenticationContext from "../../context/Authentication.tsx";
 
 import ImageInput from "../common/ImageInput";
 import { apiHandler, imageUploader } from "../../utilities/apihandler.ts";
+
 import editIcon from "../../assets/images/icons8-edit-64.png";
 import submitIcon from "../../assets/images/icons8-submit-58.png";
 import removeIcon from "../../assets/images/icons8-close-24.png";
@@ -49,8 +50,6 @@ const ChatInfo = () => {
     });
   }
   const onClickHandlerRemove = (id) => {
-    console.log(id);
-    console.log(chat.id);
     apiHandler(
       "chats/member",
       {
@@ -58,6 +57,20 @@ const ChatInfo = () => {
         chat_id: chat.id,
       },
       "delete"
+    ).then((res) => {
+      if (res.status) {
+        setUpdater(!updater);
+      }
+    });
+  };
+  const onClickHandlerAdd = (id) => {
+    apiHandler(
+      "chats/member",
+      {
+        user_id: id,
+        chat_id: chat.id,
+      },
+      "post"
     ).then((res) => {
       if (res.status) {
         setUpdater(!updater);
@@ -91,12 +104,6 @@ const ChatInfo = () => {
     });
     setAdd(!add);
   };
-  // console.log(temp);
-  // console.log(update);
-  // console.log(admin);
-  // console.log(chat);
-  // console.log(newName);
-  console.log(users);
   return (
     <div
       className="modal fade chatinfo"
@@ -273,15 +280,7 @@ const ChatInfo = () => {
                           className={`d-flex align-items-center col-12 ${
                             user.status ? "selected" : ""
                           }`}
-                          onClick={(e) =>
-                            setUsers((user) =>
-                              user.map((val) =>
-                                val.id == user.id
-                                  ? { ...val, status: !val.status }
-                                  : val
-                              )
-                            )
-                          }
+                          onClick={(e) => onClickHandlerAdd(user.id)}
                         >
                           <div className="profile_pic member">
                             <img src={user.path} alt="profile_pic" />

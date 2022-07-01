@@ -1,13 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import MessangerContext from "../../context/MessangerContext";
+import AuthenticationContext from "../../context/Authentication.tsx";
+
 import { apiHandler } from "../../utilities/apihandler.ts";
-import background from "../../assets/images/brandi-redd-aJTiW00qqtI-unsplash.png";
-import send from "../../assets/images/icons8-send-letter-50.png";
 import ShowMessage from "./ShowMessage";
-import back from "../../assets/images/icons8-back-50.png";
 import WithPortal from "../../hoc/WithPortal";
 import ChatInfo from "./ChatInfo";
-import AuthenticationContext from "../../context/Authentication.tsx";
+
+import background from "../../assets/images/brandi-redd-aJTiW00qqtI-unsplash.png";
+import send from "../../assets/images/icons8-send-letter-50.png";
+import back from "../../assets/images/icons8-back-50.png";
 
 const ShowPage = () => {
   const [newMessage, setNewMessage] = useState("");
