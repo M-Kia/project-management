@@ -65,6 +65,7 @@ const SettingModal = () => {
       if (res.status) {
         setUpdater(!updater);
         setEdit(!edit);
+        login({ ...userInfo, ...obj });
       }
     });
   };

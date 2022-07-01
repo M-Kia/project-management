@@ -128,7 +128,7 @@ const ChatInfo = () => {
           <div className="modal-body">
             <div className="d-flex align-items-center justify-content-between">
               <div className="d-flex align-items-center">
-                {edit ? (
+                {edit && chat.type == 1 ? (
                   <div
                     className="mb-3"
                     style={{
@@ -258,47 +258,57 @@ const ChatInfo = () => {
                     </div>
                   );
                 })}
-                <button
-                  className="btn"
-                  style={{
-                    fontWeight: "500",
-                    background: "rgb(225 211 225 / 43%)",
-                  }}
-                  onClick={AddHandler}
-                >
-                  اضافه کردن کاربر
-                </button>
-                {add ? (
-                  <div className="d-flex flex-column">
-                    {users.reduce((total, user) => {
-                      if (chat.members.find((val) => val.id == user.id)) {
-                        return total;
-                      }
-                      return (
-                        <div
-                          key={user.id}
-                          className={`d-flex align-items-center col-12 ${
-                            user.status ? "selected" : ""
-                          }`}
-                          onClick={(e) => onClickHandlerAdd(user.id)}
-                        >
-                          <div className="profile_pic member">
-                            <img src={user.path} alt="profile_pic" />
-                          </div>
-                          <div
-                            className="name"
-                            style={{
-                              fontSize: "20px",
-                              marginRight: "15px",
-                              fontWeight: "500",
-                            }}
-                          >
-                            {user.username}
-                          </div>
-                        </div>
-                      );
-                    }, [])}
-                  </div>
+                {admin ? (
+                  <>
+                    <button
+                      className="btn"
+                      style={{
+                        fontWeight: "500",
+                        background: "rgb(225 211 225 / 43%)",
+                      }}
+                      onClick={AddHandler}
+                    >
+                      اضافه کردن کاربر
+                    </button>
+                    {add ? (
+                      <div className="d-flex flex-column">
+                        {users.reduce((total, user) => {
+                          if (
+                            typeof chat.members.find(
+                              (val) => val.id == user.id
+                            ) === "undefined"
+                          ) {
+                            total.push(
+                              <div
+                                key={user.id}
+                                className={`d-flex align-items-center col-12 ${
+                                  user.status ? "selected" : ""
+                                }`}
+                                onClick={(e) => onClickHandlerAdd(user.id)}
+                              >
+                                <div className="profile_pic member">
+                                  <img src={user.path} alt="profile_pic" />
+                                </div>
+                                <div
+                                  className="name"
+                                  style={{
+                                    fontSize: "20px",
+                                    marginRight: "15px",
+                                    fontWeight: "500",
+                                  }}
+                                >
+                                  {user.username}
+                                </div>
+                              </div>
+                            );
+                          }
+                          return total;
+                        }, [])}
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                  </>
                 ) : (
                   ""
                 )}
