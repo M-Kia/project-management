@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from "react";
-import Cookie from "js-cookie";
+import Cookies from "js-cookie";
 import { apiHandler } from "../utilities/apihandler";
 
 import Loader from "../utilities/Loader.jsx";
@@ -60,7 +60,7 @@ export function AuthenticationProvider({ children }) {
   function login(userInformation: UserInfo) {
     setUserInfo(userInformation);
     setIsLogin(true);
-    Cookie.set("token", userInformation.token);
+    Cookies.set("token", userInformation.token, { expires: 7 });
   }
 
   function logout() {
@@ -74,20 +74,21 @@ export function AuthenticationProvider({ children }) {
       profile: "",
     });
     setIsLogin(false);
-    Cookie.set("token", null);
+    Cookies.remove("token");
   }
 
   async function checkLoginInfo() {
-    let token = Cookie.get("token");
+    let token = Cookies.get("token");
     changeLoading(true);
-    token = "U2FsdGVkX18WOcJOYDZPN4LNRO0L85YqihcKkci8P5EhXzZ7jAjfWlGIoul9JQs1";
+    // token = "U2FsdGVkX18WOcJOYDZPN4LNRO0L85YqihcKkci8P5EhXzZ7jAjfWlGIoul9JQs1";
 
     if (token) {
       let res = await apiHandler("auth/check-login", { token }, "post");
       if (res.data.status) {
         login(res.data.result);
+        Cookies.set("token", res.data.result.token, { expires: 7 });
       } else {
-        Cookie.set("token", null);
+        Cookies.remove("token");
       }
     }
     changeLoading(false);
