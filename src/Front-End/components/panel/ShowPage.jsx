@@ -18,7 +18,7 @@ const ShowPage = () => {
   const { userInfo } = useContext(AuthenticationContext);
   const onClickHandlerSend = () => {
     apiHandler(
-      "messages",
+      "chats/messages",
       {
         userId: userInfo.id,
         chat_id: chat.id,

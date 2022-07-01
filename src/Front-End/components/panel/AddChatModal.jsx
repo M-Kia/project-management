@@ -56,7 +56,7 @@ const AddChatModal = () => {
     }).then((res) => (res.data.status ? setUpdater(!updater) : ""));
   };
   useEffect(() => {
-    apiHandler("chats/get-users").then((res) =>
+    apiHandler("users", {}, "get").then((res) =>
       setUsers(
         res.data.result.map((value) => {
           if (value.id == userInfo.id) return { ...value, status: true };

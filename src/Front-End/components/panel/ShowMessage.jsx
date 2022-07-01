@@ -14,10 +14,14 @@ const ShowMessage = () => {
   const [todoStatus, setTodoStatus] = useState(false);
   const [messages, setMessages] = useState([]);
   const onClickHandler = (id, status) => {
-    apiHandler("chats/change-todo", {
-      message_id: id,
-      todo_status: status == 0 ? 1 : 0,
-    });
+    apiHandler(
+      "chats/change-todo",
+      {
+        message_id: id,
+        todo_status: status == 0 ? 1 : 0,
+      },
+      "patch"
+    );
     setUpdater(!updater);
   };
   useEffect(() => {
