@@ -11,17 +11,17 @@ import submitIcon from "../../assets/images/icons8-submit-58.png";
 import defaultImage from "../../assets/images/173-1731325_person-icon-png-transparent-png.png";
 
 const SettingModal = () => {
-  const { userInfo } = useContext(AuthenticationContext);
+  const { userInfo, login } = useContext(AuthenticationContext);
   const { updater, setUpdater } = useContext(MessangerContext);
   const [edit, setEdit] = useState(false);
   const [temp, setTemp] = useState({
     user_id: userInfo.id,
     firstname: userInfo.firstname,
-    lastname: userInfo.lastName,
-    username: userInfo.userName,
+    lastname: userInfo.lastname,
+    username: userInfo.username,
     email: userInfo.email,
-    // password
     profile_img_id: userInfo.profile,
+    // password
   });
   const [update, setUpdate] = useState({
     user_id: "",
@@ -64,6 +64,7 @@ const SettingModal = () => {
     apiHandler("users", obj, "patch").then((res) => {
       if (res.status) {
         setUpdater(!updater);
+        setEdit(!edit);
       }
     });
   };
@@ -85,8 +86,8 @@ const SettingModal = () => {
                   <div
                     className="mb-3"
                     style={{
-                      width: 120,
-                      height: 120,
+                      width: 150,
+                      height: 150,
                       fontSize: "20px",
                       margin: "0px auto",
                     }}
@@ -105,7 +106,7 @@ const SettingModal = () => {
                     data-bs-toggle="modal"
                     data-bs-target="#infoModal"
                   >
-                    <img src={userInfo.profile} alt="profilePic" />
+                    <img src={temp.profile_img_id} alt="profilePic" />
                   </div>
                 )}
                 <div
@@ -131,11 +132,12 @@ const SettingModal = () => {
                       ></input>
                     </div>
                   ) : (
-                    <div>{userInfo.username}</div>
+                    <div>{temp.username}</div>
                   )}
                 </div>
               </div>
-              <div className="d-flex">
+              {/* <div className="d-flex"> */}
+              {edit ? (
                 <div onClick={onClickHandlerEdit} style={{ cursor: "pointer" }}>
                   <img
                     src={submitIcon.src}
@@ -144,15 +146,21 @@ const SettingModal = () => {
                     height={35}
                   />
                 </div>
+              ) : (
                 <div
                   onClick={(e) => setEdit(!edit)}
                   style={{ cursor: "pointer" }}
                 >
                   <img src={editIcon.src} alt="edit" width={30} height={30} />
                 </div>
-              </div>
+              )}
+              {/* </div> */}
             </div>
-            <div className="d-flex">
+
+            <div
+              className={`d-flex ${edit ? "justify-content-between" : ""}`}
+              style={{ marginTop: "15px" }}
+            >
               <div
                 style={{
                   fontSize: "20px",
@@ -174,13 +182,13 @@ const SettingModal = () => {
                     }}
                   ></input>
                 ) : (
-                  <div>{userInfo.firstname}</div>
+                  <div>{temp.firstname}</div>
                 )}
               </div>
               <div
                 style={{
                   fontSize: "20px",
-                  marginRight: "15px",
+                  marginRight: "5px",
                   fontWeight: "500",
                 }}
               >
@@ -198,7 +206,7 @@ const SettingModal = () => {
                     }}
                   ></input>
                 ) : (
-                  <div>{userInfo.lastname}</div>
+                  <div>{temp.lastname}</div>
                 )}
               </div>
             </div>
@@ -206,6 +214,7 @@ const SettingModal = () => {
               style={{
                 fontSize: "20px",
                 marginRight: "15px",
+                marginTop: "15px",
                 fontWeight: "500",
               }}
             >
@@ -223,7 +232,7 @@ const SettingModal = () => {
                   }}
                 ></input>
               ) : (
-                <div>{userInfo.email}</div>
+                <div>{temp.email}</div>
               )}
             </div>
           </div>
