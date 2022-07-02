@@ -20,7 +20,7 @@ const SettingModal = () => {
     lastname: userInfo.lastname,
     username: userInfo.username,
     email: userInfo.email,
-    profile_img_id: userInfo.profile,
+    profile: userInfo.profile,
     // password
   });
   const [update, setUpdate] = useState({
@@ -65,11 +65,15 @@ const SettingModal = () => {
       if (res.status) {
         setUpdater(!updater);
         setEdit(!edit);
-        login({ ...userInfo, ...obj });
+        try {
+          delete obj.user_id;
+          delete obj.profile_img_id;
+        } catch (err) {}
+        setTemp({ ...temp, obj });
+        login({ ...userInfo, ...obj, profile: temp.profile });
       }
     });
   };
-  // console.log(userInfo);
   return (
     <div
       className="modal fade setting"
@@ -107,7 +111,7 @@ const SettingModal = () => {
                     data-bs-toggle="modal"
                     data-bs-target="#infoModal"
                   >
-                    <img src={temp.profile_img_id} alt="profilePic" />
+                    <img src={temp.profile} alt="profilePic" />
                   </div>
                 )}
                 <div
