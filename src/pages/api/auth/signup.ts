@@ -2,18 +2,13 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { checkInputs, makeResponse } from "../../../Back-End/helpers/functions";
 import Users from "../../../Back-End/models/Users";
 import Encryption from "../../../Back-End/library/Encryption";
-
-type Data = {
-  status: boolean;
-  errors?: string[];
-  result?: any;
-};
+import { ResponseData } from "../../../Back-End/types/ActionRecordTypes";
 
 export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
+  request: NextApiRequest,
+  response: NextApiResponse<ResponseData>
 ) {
-  let result: Data;
+  let result: ResponseData;
   try {
     // check entries
     let checker = checkInputs(
@@ -25,7 +20,7 @@ export default async function handler(
         "email",
         "profile_img_id",
       ],
-      req.body
+      request.body
     );
     if (!checker.status) throw new Error(checker.missings);
     // get values
@@ -47,10 +42,10 @@ export default async function handler(
     });
 
     result = makeResponse();
-    res.status(200).json(result);
+    response.status(200).json(result);
   } catch (err) {
     result = makeResponse(err.message, "error");
   }
 
-  res.status(200).json(result);
+  response.status(200).json(result);
 }
