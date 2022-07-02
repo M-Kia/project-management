@@ -11,7 +11,7 @@ export default async function handler(
   try {
     switch (request.method.toUpperCase()) {
       case "POST":
-        result = await add(request.query);
+        result = await add(request.body);
         break;
       case "DELETE":
         result = await remove(request.body);
@@ -33,10 +33,18 @@ async function add(data): Promise<ResponseData> {
 
   let cul = new ChatUserLinks();
 
+  let x = await cul.find(
+    `user_id/=/${user_id}&&chat_id/=/${chat_id}&&type/=/0`
+  );
+
+  if (x.length > 0) {
+    throw new Error("The user exist in the chat");
+  }
+
   await cul.insert({
     chat_id,
     user_id,
-    type: 1,
+    type: 0,
   });
 
   return makeResponse();

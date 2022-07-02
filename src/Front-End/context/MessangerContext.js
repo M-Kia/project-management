@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { apiHandler } from "../../Front-End/utilities/apihandler.ts";
+import useInterval from "../hooks/useInterval";
 import AuthenticationContext from "./Authentication.tsx";
 
 const MessangerContext = React.createContext({
@@ -22,13 +23,20 @@ export const MessangerContextProvider = ({ children }) => {
   const [replyId, setReplyId] = useState(0);
   const { userInfo, isLogin } = useContext(AuthenticationContext);
 
-  useEffect(() => {
-    if (isLogin) {
-      apiHandler("chats", { userId: userInfo.id }, "get").then((res) =>
-        setChats(res.data.result)
-      );
-    }
-  }, [updater, userInfo]);
+  function updateChats() {
+    apiHandler("chats", { userId: userInfo.id }, "get").then((res) =>
+      setChats(res.data.result)
+    );
+  }
+
+  // useEffect(() => {
+  //   if (isLogin) {
+  //     updateChats
+  //   }
+  // }, [updater, userInfo]);
+
+  useInterval(updateChats, 500);
+
   useEffect(() => {
     if (chat.id) {
       let cf = chats.find((value) => value.id == chat.id);

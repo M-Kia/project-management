@@ -6,20 +6,15 @@ import {
 } from "../../../Back-End/helpers/functions";
 import Encryption from "../../../Back-End/library/Encryption";
 import Users from "../../../Back-End/models/Users";
-
-type Data = {
-  status: boolean;
-  errors?: string[];
-  result?: any;
-};
+import { ResponseData } from "../../../Back-End/types/ActionRecordTypes";
 
 export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
+  request: NextApiRequest,
+  response: NextApiResponse<ResponseData>
 ) {
-  let result: Data;
+  let result: ResponseData;
   try {
-    let checker = checkInputs(["username", "password"], req.body);
+    let checker = checkInputs(["username", "password"], request.body);
     if (!checker.status) throw new Error(checker.missings);
     let { username, password } = checker.data;
 
@@ -55,5 +50,5 @@ export default async function handler(
     result = makeResponse(err.message, "error");
   }
 
-  res.status(200).json(result);
+  response.status(200).json(result);
 }

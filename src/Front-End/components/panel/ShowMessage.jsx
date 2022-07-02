@@ -28,7 +28,7 @@ const ShowMessage = () => {
     setMessages(chat.messages);
   }, [chat, updater]);
   // console.log(userInfo);
-  console.log(chat);
+  // console.log(chat);
   if (messages.length != 0)
     return (
       <div className="showMessage">

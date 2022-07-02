@@ -3,6 +3,7 @@ import MessangerContext from "../../context/MessangerContext";
 import AuthenticationContext from "../../context/Authentication.tsx";
 
 import ImageInput from "../common/ImageInput";
+import { apiHandler, imageUploader } from "../../utilities/apihandler.ts";
 
 import editIcon from "../../assets/images/icons8-edit-64.png";
 import submitIcon from "../../assets/images/icons8-submit-58.png";
@@ -11,10 +12,22 @@ import defaultImage from "../../assets/images/173-1731325_person-icon-png-transp
 
 const ChatInfo = () => {
   let admin;
-  const { chat } = useContext(MessangerContext);
+  const { chat, updater, setUpdater } = useContext(MessangerContext);
   const { userInfo } = useContext(AuthenticationContext);
   const [edit, setEdit] = useState(false);
+  const [add, setAdd] = useState(false);
+  const [users, setUsers] = useState([]);
 
+  // const [newName, setNewName] = useState(chat.title);
+  // const [fileId, setFileId] = useState("");
+  const [temp, setTemp] = useState({
+    title: chat.title,
+    profile: chat.profile,
+  });
+  const [update, setUpdate] = useState({
+    title: "",
+    profile: "",
+  });
   chat.members.map((value) => {
     if (value.type == 2) {
       if (value.id == userInfo.id) {
@@ -29,14 +42,68 @@ const ChatInfo = () => {
       files: event.target.files[0],
     }).then((res) => {
       if (res.data.status) {
-        setFileId(res.data.result[0].id);
+        console.log(res);
+        // setFileId(res.data.result[0].id);
+        setTemp({ ...temp, profile: res.data.result[0].path });
+        setUpdate({ ...update, profile: res.data.result[0].id.id });
       }
     });
   }
-  const onClickHandlerRemove = () => {};
-  const onClickHandlerEdit = () => {};
-  // console.log(admin);
-  // console.log(chat);
+  const onClickHandlerRemove = (id) => {
+    apiHandler(
+      "chats/member",
+      {
+        user_id: id,
+        chat_id: chat.id,
+      },
+      "delete"
+    ).then((res) => {
+      if (res.status) {
+        setUpdater(!updater);
+      }
+    });
+  };
+  const onClickHandlerAdd = (id) => {
+    apiHandler(
+      "chats/member",
+      {
+        user_id: id,
+        chat_id: chat.id,
+      },
+      "post"
+    ).then((res) => {
+      if (res.status) {
+        setUpdater(!updater);
+      }
+    });
+  };
+  const onClickHandlerEdit = () => {
+    let obj = {
+      chat_id: chat.id,
+    };
+    if (update.title !== "") {
+      obj.title = update.title;
+    }
+    if (update.profile !== "") {
+      obj.profile_id = update.profile;
+    }
+    apiHandler("chats", obj, "patch").then((res) => {
+      if (res.status) {
+        setUpdater(!updater);
+      }
+    });
+  };
+  const AddHandler = () => {
+    apiHandler("users", {}, "get").then((res) => {
+      setUsers(
+        res.data.result.map((value) => {
+          if (value.id == userInfo.id) return { ...value, status: true };
+          return { ...value, status: false };
+        })
+      );
+    });
+    setAdd(!add);
+  };
   return (
     <div
       className="modal fade chatinfo"
@@ -61,7 +128,7 @@ const ChatInfo = () => {
           <div className="modal-body">
             <div className="d-flex align-items-center justify-content-between">
               <div className="d-flex align-items-center">
-                {edit ? (
+                {edit && chat.type == 1 ? (
                   <div
                     className="mb-3"
                     style={{
@@ -104,6 +171,11 @@ const ChatInfo = () => {
                         placeholder={chat.title}
                         aria-label="Username"
                         aria-describedby="basic-addon1"
+                        value={temp.title}
+                        onChange={(e) => {
+                          setTemp({ ...temp, title: e.target.value });
+                          setUpdate({ ...update, title: e.target.value });
+                        }}
                       ></input>
                       <div
                         onClick={onClickHandlerEdit}
@@ -143,7 +215,7 @@ const ChatInfo = () => {
                     marginBottom: "10px",
                   }}
                 >
-                  اعضای گروه:
+                  اعضای گروه
                 </div>
                 {chat.members.map((value) => {
                   return (
@@ -176,7 +248,7 @@ const ChatInfo = () => {
                       {admin && value.id != userInfo.id ? (
                         <div
                           style={{ cursor: "pointer" }}
-                          onClick={onClickHandlerRemove}
+                          onClick={(e) => onClickHandlerRemove(value.id)}
                         >
                           <img src={removeIcon.src} alt="removeIcon" />
                         </div>
@@ -186,6 +258,60 @@ const ChatInfo = () => {
                     </div>
                   );
                 })}
+                {admin ? (
+                  <>
+                    <button
+                      className="btn"
+                      style={{
+                        fontWeight: "500",
+                        background: "rgb(225 211 225 / 43%)",
+                      }}
+                      onClick={AddHandler}
+                    >
+                      اضافه کردن کاربر
+                    </button>
+                    {add ? (
+                      <div className="d-flex flex-column">
+                        {users.reduce((total, user) => {
+                          if (
+                            typeof chat.members.find(
+                              (val) => val.id == user.id
+                            ) === "undefined"
+                          ) {
+                            total.push(
+                              <div
+                                key={user.id}
+                                className={`d-flex align-items-center col-12 ${
+                                  user.status ? "selected" : ""
+                                }`}
+                                onClick={(e) => onClickHandlerAdd(user.id)}
+                              >
+                                <div className="profile_pic member">
+                                  <img src={user.path} alt="profile_pic" />
+                                </div>
+                                <div
+                                  className="name"
+                                  style={{
+                                    fontSize: "20px",
+                                    marginRight: "15px",
+                                    fontWeight: "500",
+                                  }}
+                                >
+                                  {user.username}
+                                </div>
+                              </div>
+                            );
+                          }
+                          return total;
+                        }, [])}
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                  </>
+                ) : (
+                  ""
+                )}
               </div>
             ) : (
               ""
