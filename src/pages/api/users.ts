@@ -54,15 +54,19 @@ async function get(): Promise<ResponseData> {
 }
 
 async function update(data, headers) {
-  let checker = checkInputs(["user_id"], data);
-  if (!checker.status) throw new Error(checker.missings);
-  let { user_id } = checker.data;
+  // let checker = checkInputs(["userId"], data);
+  // if (!checker.status) throw new Error(checker.missings);
+  // let { userId } = checker.data;
 
   //todo
-  // let token = headers.authorization;
-  // token = Encryption.decode(token);
-  // token = token.split("##");
-  // let user_id = token[1];
+  let token = headers.authorization;
+  token = token.split(" ");
+  if (token.length !== 2) {
+    throw new Error("Invalid token");
+  }
+  token = Encryption.decode(token[1]);
+  token = token.split("##");
+  let user_id = token[1];
 
   let ul = new Users();
 
