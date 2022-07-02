@@ -4,8 +4,8 @@ import ChatUserLinks from "../../../Back-End/models/ChatUserLinks";
 import { ResponseData } from "../../../Back-End/types/ActionRecordTypes";
 
 export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<ResponseData>
+  request: NextApiRequest,
+  response: NextApiResponse<ResponseData>
 ): Promise<void> {
   let result: ResponseData;
   try {
@@ -19,7 +19,7 @@ export default async function handler(
   } catch (err) {
     result = makeResponse(err.message, "error");
   }
-  res.status(200).json(result);
+  response.status(200).json(result);
 }
 
 async function update(data): Promise<ResponseData> {
