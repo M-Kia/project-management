@@ -47,22 +47,26 @@ async function get(): Promise<ResponseData> {
   );
   for (let i = 0; i < res.length; i++) {
     // todo
-    // res[i].id = Encryption(`${Date.now()}##${res[i].id}`);
+    res[i].id = Encryption(`${Date.now()}##${res[i].id}`);
     res[i].path = makePath(res[i].path);
   }
   return makeResponse(res);
 }
 
 async function update(data, headers) {
-  let checker = checkInputs(["user_id"], data);
-  if (!checker.status) throw new Error(checker.missings);
-  let { user_id } = checker.data;
+  // let checker = checkInputs(["user_id"], data);
+  // if (!checker.status) throw new Error(checker.missings);
+  // let { user_id } = checker.data;
 
   //todo
-  // let token = headers.authorization;
-  // token = Encryption.decode(token);
-  // token = token.split("##");
-  // let user_id = token[1];
+  let token = headers.authorization;
+  token = token.split(" ");
+  if (token.length !== 2) {
+    throw new Error("Invalid token");
+  }
+  token = Encryption.decode(token[1]);
+  token = token.split("##");
+  let user_id = token[1];
 
   let ul = new Users();
 
@@ -73,7 +77,6 @@ async function update(data, headers) {
   if (x.length > 0) {
     throw new Error("There is a user with this username");
   }
-
   try {
     delete d.id;
   } catch (err) {}

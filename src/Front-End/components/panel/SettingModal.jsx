@@ -44,7 +44,7 @@ const SettingModal = () => {
   }
   const onClickHandlerEdit = () => {
     let obj = {
-      user_id: userInfo.id,
+      // user_id: userInfo.id,
     };
     if (update.username !== "") {
       obj.username = update.username;

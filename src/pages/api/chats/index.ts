@@ -214,8 +214,18 @@ async function add(data): Promise<ResponseData> {
     }
 
     // check if any pv between these members exist or not
+    uIds = uIds.map((value) => {
+      value = Encryption.decode(value);
+      if (value.length !== 2) {
+        throw new Error("Wrong User ID!");
+      }
+      return value[1];
+    });
+
     res = await cul.find(
-      `chats\`.\`type/=/0&&chat_user_links\`.\`user_id/in/${userIds}&&chat_user_links\`.\`type/=/0`,
+      `chats\`.\`type/=/0&&chat_user_links\`.\`user_id/in/${uIds.join(
+        ","
+      )}&&chat_user_links\`.\`type/=/0`,
       ["`chat_user_links`.`chat_id`"],
       [{ fieldName: "chat_id", type: "LEFT" }]
     );
@@ -245,6 +255,13 @@ async function add(data): Promise<ResponseData> {
     checker = checkInputs(["userIds", "ownerId", "profile_id", "title"], data);
     if (!checker.status) throw new Error(checker.missings);
     let { userIds, ownerId, profile_id, title } = checker.data;
+
+    ownerId = Encryption.decode(ownerId);
+    if (ownerId.length !== 2) {
+      throw new Error("Wrong User ID!");
+    }
+    ownerId = ownerId[1];
+
     // insert chat
     res = await c.insert({
       title,
@@ -254,10 +271,14 @@ async function add(data): Promise<ResponseData> {
     // link chat to users
     await Promise.all(
       userIds.split(",").map(async (value) => {
+        let x = Encryption.decode(value);
+        if (value.length !== 2) {
+          throw new Error("Wrong User ID!");
+        }
         await cul.insert({
           chat_id: res.id,
-          user_id: value,
-          user_type: value.toString() === ownerId.toString() ? 2 : 0,
+          user_id: value[1],
+          user_type: value[1].toString() === ownerId.toString() ? 2 : 0,
           type: 0,
         });
       })

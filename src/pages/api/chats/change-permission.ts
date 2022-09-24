@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { checkInputs, makeResponse } from "../../../Back-End/helpers/functions";
+import Encryption from "../../../Back-End/library/Encryption";
 import ChatUserLinks from "../../../Back-End/models/ChatUserLinks";
 import { ResponseData } from "../../../Back-End/types/ActionRecordTypes";
 
@@ -26,6 +27,18 @@ async function update(data): Promise<ResponseData> {
   let checker = checkInputs(["userId", "chat_id", "user_type"], data);
   if (!checker.status) throw new Error(checker.missings);
   let { userId, chat_id, user_type } = checker.data;
+
+  userId = Encryption.decode(userId);
+  if (userId.length !== 2) {
+    throw new Error("Wrong User ID!");
+  }
+  userId = userId[1];
+
+  chat_id = Encryption.decode(chat_id);
+  if (chat_id.length !== 2) {
+    throw new Error("Wrong User ID!");
+  }
+  chat_id = chat_id[1];
 
   let cul = new ChatUserLinks();
 
