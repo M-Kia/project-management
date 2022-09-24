@@ -7,6 +7,10 @@ export default function Management({ children }) {
   const router = useRouter();
   const auth = useContext(AuthenticationContext);
 
+  if (router.pathname === "/test"){
+    return <>{children}</>
+  }
+
   if (auth.isLogin) {
     if (router.pathname === "/") {
       return <>{children}</>;
