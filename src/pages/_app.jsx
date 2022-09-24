@@ -8,7 +8,6 @@ import "./style.scss";
 import Management from "../Front-End/components/common/Management";
 
 import { AuthenticationProvider } from "../Front-End/context/Authentication.tsx";
-import { MessangerContextProvider } from "../Front-End/context/MessangerContext";
 
 export default function MyApp({ Component, pageProps }) {
   useEffect(() => {
@@ -18,12 +17,10 @@ export default function MyApp({ Component, pageProps }) {
   return (
     <div dir="rtl">
       <AuthenticationProvider>
-        <MessangerContextProvider>
-          <Management>
-            <Component {...pageProps} />
-          </Management>
-          <ToastContainer />
-        </MessangerContextProvider>
+        <Management>
+          <Component {...pageProps} />
+        </Management>
+        <ToastContainer />
       </AuthenticationProvider>
     </div>
   );
